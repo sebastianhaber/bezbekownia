@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     font-size: 14px;
     opacity: 0;
     pointer-events: none;
+    cursor: auto;
 
     transition: opacity .2s ease;
     .wrapper{
@@ -19,8 +20,13 @@ const Wrapper = styled.div`
         border-radius: .5rem;
         padding: .5rem;
         background-color: ${({ theme }) => theme.colors.backgroundLighter};
+
         li{
             width: 100%;
+            ${({centerItems}) => centerItems && `
+                display: flex;
+                flex-direction: column;
+            `}
         }
         a{
             display: block;
@@ -46,9 +52,9 @@ const Wrapper = styled.div`
     }
 `;
 
-export default function DropdownMenu({children}) {
+export default function DropdownMenu({children, centerItems}) {
     return (
-        <Wrapper>
+        <Wrapper centerItems={centerItems}>
             <ul className="wrapper">
                 {children}
             </ul>

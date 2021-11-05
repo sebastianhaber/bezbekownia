@@ -7,5 +7,6 @@ export const theme = {
         accent: '#1D8FFB',
         accentDarker: '#0c6dd9',
         rgba: 'rgba(0,0,0,.8)',
+        rgbaHover: 'rgba(0,0,0,.9)',
     }
 }

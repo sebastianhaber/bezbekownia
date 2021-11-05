@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
 export const StyledNav = styled.nav`
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    z-index: 2;
+    background-color: ${({theme}) => theme.colors.background};
     width: 100%;
     height: 60px;
     display: grid;
@@ -20,11 +23,11 @@ export const StyledNav = styled.nav`
     .logo{
         font-weight: bold;
         font-size: 1rem;
-        margin-right: 2rem;
     }
     #search-box{
         position: relative;
         width: 100%;
+        margin-left: 1rem;
     }
     .search-box{
         position: fixed;
@@ -49,9 +52,10 @@ export const StyledNav = styled.nav`
     .right{
         display: flex;
         align-items: center;
-        margin-left: 1rem;
         .square{
-            margin-left: 1rem;
+            &:not(:last-child){
+                margin-right: 1rem;
+            }
             position: relative;
             &:hover > div{
                 opacity: 1;

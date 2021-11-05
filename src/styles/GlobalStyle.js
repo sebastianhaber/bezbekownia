@@ -14,6 +14,14 @@ export const GlobalStyle = createGlobalStyle`
         background-color: ${({theme}) => theme.colors.background};
         line-height: 1.5;
         letter-spacing: -0.022rem;
+        min-height: 100vh;
+        overflow-x: hidden;
+        &.no-scroll{
+            overflow-y: hidden;
+        }
+    }
+    main{
+        margin-top: calc(60px + 2rem);
     }
     button, input, textarea, select{
         outline: none;
@@ -30,6 +38,9 @@ export const GlobalStyle = createGlobalStyle`
     a{
         color: inherit;
         text-decoration: inherit;
+    }
+    img{
+        display: block;
     }
     .bold{
         font-weight: bold;

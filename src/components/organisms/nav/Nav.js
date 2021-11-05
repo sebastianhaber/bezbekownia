@@ -58,8 +58,8 @@ export default function Nav() {
                     ) : (
                         <li className="square buttons">
                             <Icon icon="akar-icons:people-group" />
-                            <DropdownMenu>
-                                <li onClick={()=>setUser(true)}><Button variant='ghost'>Zaloguj się</Button></li>
+                            <DropdownMenu centerItems>
+                                <li onClick={()=>setUser(true)}><Button variant='ghost' style={{marginBottom: '1rem'}}>Zaloguj się</Button></li>
                                 <li><Button>Zarejestruj się</Button></li>
                             </DropdownMenu>
                         </li>
