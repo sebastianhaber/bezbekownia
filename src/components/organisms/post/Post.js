@@ -34,11 +34,11 @@ export default function Post({ data }) {
                     <CommentsModal data={data} />
                 </Modal>
             )}
-            <Link to='/meme'><img src={`http://${API_IP}:1337` + data.image.url} alt={data.title} /></Link>
+            <Link to={`/meme/${data.slug}`}><img src={`http://${API_IP}:1337` + data.image.url} loading='lazy' alt={data.title} /></Link>
             <div className="header">
                 <div className="meta">
                     <div className="title">{data.title}</div>
-                    <div className="author"><Link to={`/` + data.user.username}>by <b>{ data.user.username }</b></Link></div>
+                    <div className="author"><Link to={`/uzytkownik/${data.user.username}`}>by <b>{ data.user.username }</b></Link></div>
                 </div>
                 <ul className="hashtags">
                     {hashtagsArray.map((hashtag, index) => (

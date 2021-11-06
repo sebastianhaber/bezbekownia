@@ -27,7 +27,7 @@ export const StyledNav = styled.nav`
     #search-box{
         position: relative;
         width: 100%;
-        margin-left: 1rem;
+        margin: 0 1rem;
     }
     .search-box{
         position: fixed;
@@ -35,7 +35,7 @@ export const StyledNav = styled.nav`
         left: 0;
         display: none;
         width: 100%;
-        background-color: ${({theme}) => theme.colors.backgroundLighter};
+        background-color: ${({ theme }) => theme.colors.backgroundLighter};
         &.active{
             display: block;
         }

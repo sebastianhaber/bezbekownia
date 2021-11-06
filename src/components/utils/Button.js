@@ -15,6 +15,9 @@ const StyledButton = styled.button`
     &:hover{
         background-color: ${({ theme }) => theme.colors.accentDarker};
     }
+    svg{
+        margin-right: .5rem;
+    }
 
     ${({ variant, theme }) => 
         variant && variant === 'ghost' &&

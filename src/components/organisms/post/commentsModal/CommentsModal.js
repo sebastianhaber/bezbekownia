@@ -14,7 +14,7 @@ export default function CommentsModal({ data }) {
             <div className="header">
                 <div className="user-info">
                     <img src={data.user.image || UserImage} alt={data.user.username} />
-                    <Link to={`/${data.user.username}`} className="username">{data.user.username}</Link>
+                    <Link to={`/uzytkownik/${data.user.username}`} className="username">{data.user.username}</Link>
                 </div>
                 <div className="buttons">
                     <Button variant='dark'>+{data.likes.length} byczku</Button>
@@ -28,7 +28,7 @@ export default function CommentsModal({ data }) {
                 <div className="image">
                     <img src={`http://${API_IP}:1337` + data.image.url} alt={data.title} />
                 </div>
-                <div className="comment-section">
+                <section className="comment-section">
                     <p className='section-title'>Komentarze</p>
                     <div className="input">
                         <div className="icon"><Icon icon="akar-icons:comment" /></div>
@@ -40,13 +40,13 @@ export default function CommentsModal({ data }) {
                             <center><p>Brak komentarzy.</p></center>
                         )}
                         {comments.map((comment, index) => (
-                            <div key={index}>
-                                {comment.author}
-                                {comment.message}
+                            <div key={index} className='comments_user'>
+                                <Link to={`/uzytkownik/${comment.author}`} className="author">{comment.author}</Link>
+                                <p className="content">{comment.message}</p>
                             </div>
                         ))}
                     </div>
-                </div>
+                </section>
             </div>
         </StyledCommentsModal>
     )

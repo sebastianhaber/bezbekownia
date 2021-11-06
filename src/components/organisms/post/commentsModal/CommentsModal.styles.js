@@ -7,7 +7,6 @@ export const StyledCommentsModal = styled.div`
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
-        /* margin-top: 4rem; */
         .user-info{
             display: flex;
             align-items: center;
@@ -15,7 +14,7 @@ export const StyledCommentsModal = styled.div`
             img{
                 width: 64px;
                 height: 64px;
-                border-radius: 1rem;
+                border-radius: 50%;
             }
             .username{
                 margin-left: 1rem;
@@ -36,6 +35,7 @@ export const StyledCommentsModal = styled.div`
         display: flex;
         flex-wrap: wrap;
         font-size: 14px;
+        padding: 0;
         .section-title{
             font-size: 1rem;
             font-weight: bold;
@@ -47,7 +47,7 @@ export const StyledCommentsModal = styled.div`
             max-height: 400px;
             background-color: ${({theme}) => theme.colors.background};
             flex: 1;
-            border-radius: .5rem;
+            border-radius: 3px;
             img{
                 width: 100%;
                 height: 100%;
@@ -56,7 +56,7 @@ export const StyledCommentsModal = styled.div`
             }
         }
         .comment-section{
-            margin: 1rem;
+            margin: 1rem 0;
             min-width: 300px;
             flex: 1;
             .input{
@@ -81,6 +81,13 @@ export const StyledCommentsModal = styled.div`
         }
         .comments{
             margin-top: 1rem;
+            &_user{
+                display: flex;
+                .author{
+                    font-weight: bold;
+                    margin-right: .5rem;
+                }
+            }
         }
     }
 
@@ -92,6 +99,11 @@ export const StyledCommentsModal = styled.div`
             .image{
                 max-width: 450px;
             }
+        }
+    }
+    @media screen and (min-width: 707px){
+        .wrapper .comment-section{
+            margin: 1rem;
         }
     }
 `;

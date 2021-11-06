@@ -49,6 +49,7 @@ export const Wrapper = styled.div`
         padding: 1rem;
         display: flex;
         justify-content: space-between;
+        font-size: 14px;
         .button, .likes{
             display: grid;
             place-items: center;
@@ -63,6 +64,7 @@ export const Wrapper = styled.div`
         }
         .button{
             width: 48px;
+            font-size: 1rem;
         }
         .likes{
             padding: 0 1rem;
