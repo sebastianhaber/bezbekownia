@@ -37,16 +37,26 @@ export const StyledNav = styled.nav`
         width: 100%;
         background-color: ${({ theme }) => theme.colors.backgroundLighter};
         &.active{
-            display: block;
+            display: flex;
+        }
+        .icon, button{
+            display: grid;
+            place-items: center;
+            width: 2rem;
+            font-size: 1rem;
         }
         input{
             border-radius: 0;
             width: 100%;
             background-color: transparent;
-            padding: 0 1rem;
+            /* padding: 0 .5rem; */
             font-weight: bold;
             color: inherit;
             transition: background-color .2s ease;
+        }
+        button{
+            background-color: transparent;
+            cursor: pointer;
         }
     }
     .right{
@@ -77,7 +87,7 @@ export const StyledNav = styled.nav`
             position: absolute;
             top: 50%;
             left: 50%;
-            display: block;
+            display: flex;
             max-width: 600px;
             border-radius: .5rem;
             transform: translate(-50%, -50%);

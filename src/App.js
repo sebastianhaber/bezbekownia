@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import Meme from "./components/views/Meme";
 import NotFound from "./components/views/NotFound";
 import Hashtag from "./components/views/Hashtag";
+import Search from "./components/organisms/search/Search";
 
 export const API_IP = '192.168.43.238';
 
@@ -31,6 +32,7 @@ function App() {
           </Helmet>} />
           <Route path='/meme/:slug' element={<Meme />} />
           <Route path='/hashtag/:hashtag' element={<Hashtag />} />
+          <Route path='/search/:value' element={<Search />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </main>

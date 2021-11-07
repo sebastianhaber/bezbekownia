@@ -1,31 +1,60 @@
-import React, { useEffect, useState } from 'react'
+import { useQuery, gql } from '@apollo/client';
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router';
-import { API_IP } from '../../App';
 import Loader from '../molecules/loader/Loader';
 import Post from '../organisms/post/Post';
+import ErrorWrapper from '../utils/ErrorWrapper';
 
 export default function Hashtag() {
-    const [posts, setPosts] = useState([]);
     const { hashtag } = useParams();
+    const { loading, error, data } = useQuery(gql`
+        query hashtagPosts{
+            hashtags(where:{value:"${hashtag}"}){
+                posts{
+                    user{
+                        username
+                    }
+                    hashtags{
+                        value
+                    }
+                    title
+                    image{
+                        url
+                    }
+                    slug
+                    likes{
+                        user{
+                            id
+                        }
+                    }
+                    comments{
+                        user{
+                            username
+                        }
+                        message
+                    }
+                }
+            }
+        }
+    `);
 
     useEffect(() => {
-        fetch('http://' + API_IP +':1337/posts')
-            .then(res => res.json())
-            .then(data => {
-                setPosts(data);
-            });
-    }, [])
+        window.scrollTo(0, 0);
+    }, []);
 
+    if (error) {
+        return <ErrorWrapper />
+    }
     return (
         <div>
             <Helmet>
-                <title>Bezbekownia | </title>
-                <meta name="description" content="Najlepsze memy na świecie" />
+                <title>Bezbekownia | { hashtag }</title>
+                <meta name="description" content={`Memy z tagiem ${hashtag}`} />
             </Helmet>
-            {posts.length === 0 && <Loader />}
-            {posts.map((post, index) => (
-                <Post data={post} key={index} />
+            {loading && <Loader />}
+            {data && data.hashtags[0].posts.map((data, index) => (
+                <Post data={data} key={index} />
             ))}
         </div>
     )

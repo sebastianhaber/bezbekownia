@@ -8,8 +8,7 @@ import { Wrapper } from './Post.styles'
 
 export default function Post({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
-    const hashtags = data.hashtags;
-    const hashtagsArray = hashtags.split(',');
+    let hashtags = data.hashtags;
 
     const handleOpenCommentsModal = () => {
         document.querySelector('html').classList.add('no-scroll');
@@ -41,8 +40,8 @@ export default function Post({ data }) {
                     <div className="author"><Link to={`/uzytkownik/${data.user.username}`}>by <b>{ data.user.username }</b></Link></div>
                 </div>
                 <ul className="hashtags">
-                    {hashtagsArray.map((hashtag, index) => (
-                        <li key={index}><Link to={`/hashtag/${hashtag.trim()}`}>#{ hashtag.trim() }</Link></li>
+                    {hashtags.map((hashtag, index) => (
+                        <li key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{ hashtag.value.trim() }</Link></li>
                     ))}
                 </ul>
             </div>

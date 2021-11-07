@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../utils/Button'
 import { StyledCommentsModal } from './CommentsModal.styles'
 import UserImage from '../../../../assets/user-image.png'
@@ -8,13 +8,26 @@ import { API_IP } from '../../../../App'
 
 export default function CommentsModal({ data }) {
     const comments = data.comments;
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        if (!data.user.username) {
+            fetch('http://' + API_IP +':1337/users/' + data.user)
+            .then(res => res.json())
+            .then(data => {
+                setUser(data);
+            });
+        } else {
+            setUser(data.user);
+        }
+    }, [data.user])
     
     return (
         <StyledCommentsModal>
             <div className="header">
                 <div className="user-info">
-                    <img src={data.user.image || UserImage} alt={data.user.username} />
-                    <Link to={`/uzytkownik/${data.user.username}`} className="username">{data.user.username}</Link>
+                    <img src={user.image || UserImage} alt={user.username} />
+                    <Link to={`/uzytkownik/${user.username}`} className="username">{user.username}</Link>
                 </div>
                 <div className="buttons">
                     <Button variant='dark'>+{data.likes.length} byczku</Button>

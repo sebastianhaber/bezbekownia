@@ -2,12 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Image = 'https://i.gifer.com/2rI.gif';
 export default function NotFound() {
     return (
         <Wrapper>
-            <img src={Image} alt="404" />
             <div>
+                <p className="number">#404</p>
                 <h1>Gdzie Cię wywiało, anonie?</h1>
                 <p>Wróć na <Link to='/'>stronę główną</Link></p>
             </div>
@@ -34,7 +33,8 @@ const Wrapper = styled.section`
             text-decoration: underline;
         }
     }
-    img{
-        border-radius: .5rem;
+    .number{
+        font-size: 6rem;
+        font-weight: bold;
     }
 `;
