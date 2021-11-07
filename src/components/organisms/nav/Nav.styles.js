@@ -35,6 +35,7 @@ export const StyledNav = styled.nav`
         left: 0;
         display: none;
         width: 100%;
+        height: 3rem;
         background-color: ${({ theme }) => theme.colors.backgroundLighter};
         &.active{
             display: flex;
@@ -43,13 +44,14 @@ export const StyledNav = styled.nav`
             display: grid;
             place-items: center;
             width: 2rem;
+            height: 100%;
             font-size: 1rem;
         }
         input{
             border-radius: 0;
             width: 100%;
+            height: 100%;
             background-color: transparent;
-            /* padding: 0 .5rem; */
             font-weight: bold;
             color: inherit;
             transition: background-color .2s ease;
@@ -90,6 +92,7 @@ export const StyledNav = styled.nav`
             display: flex;
             max-width: 600px;
             border-radius: .5rem;
+            height: 2rem;
             transform: translate(-50%, -50%);
         }
     }

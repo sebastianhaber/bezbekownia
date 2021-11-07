@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
     width: 100%;
     margin: 2rem auto;
     overflow: hidden;
+    user-select: none;
     img{
         position: relative;
         width: 100%;
@@ -68,6 +69,49 @@ export const Wrapper = styled.div`
         }
         .likes{
             padding: 0 1rem;
+        }
+        .more{
+            position: relative;
+            &::before{
+                content: '';
+                position: absolute;
+                top: -1rem;
+                right: 0;
+                width: 100%;
+                height: 1rem;
+            }
+            &:hover > ul{
+                display: flex;
+            }
+            ul{
+                position: absolute;
+                bottom: 100%;
+                right: 0;
+                z-index: 1;
+                background-color: ${({theme}) => theme.colors.rgba};
+                margin-bottom: 1rem;
+                flex-direction: column;
+                border-radius: .5rem;
+                font-size: 14px;
+                overflow: hidden;
+                display: none;
+
+                transition: opacity .2s ease, transform .2s ease;
+                li{
+                    display: flex;
+                    align-items: center;
+                    padding: .5rem 1rem;
+                    cursor: pointer;
+                    transition: background-color .2s ease;
+                    &:hover{
+                        background-color: ${({theme}) => theme.colors.rgbaHover};
+                    }
+                    svg{
+                        margin-right: .5rem;
+                    }
+                }
+            }
+            
         }
     }
 

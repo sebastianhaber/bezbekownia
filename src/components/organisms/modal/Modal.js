@@ -17,7 +17,7 @@ export default function Modal({children, onClose, isCommentsModal}) {
     }, [modalElement]);
 
     return reactDom.createPortal(
-        <Wrapper id='wrapper' className='hide'>
+        <Wrapper id='wrapper' className='hide' isCommentsModal={isCommentsModal}>
             <div className="overlay" onClick={onClose}></div>
             <div className="exit" onClick={onClose}>
                 <Icon icon="akar-icons:cross" />

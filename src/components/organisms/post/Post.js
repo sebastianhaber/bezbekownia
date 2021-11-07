@@ -54,6 +54,11 @@ export default function Post({ data }) {
                 </div>
                 <div className="button more">
                     <Icon icon="akar-icons:more-vertical" />
+                    <ul>
+                        <li><Icon icon="akar-icons:arrow-forward-thick" /> Udostępnij</li>
+                        <li><Icon icon="akar-icons:trash-can" /> Usuń</li>
+                        <li><Icon icon="akar-icons:flag" /> Zgłoś</li>
+                    </ul>
                 </div>
             </div>
         </Wrapper>

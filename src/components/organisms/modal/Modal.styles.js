@@ -22,8 +22,8 @@ export const Wrapper = styled.div`
     .exit{
         position: absolute;
         z-index: 4;
-        top: 2rem;
-        right: 2rem;
+        top: 1rem;
+        right: 1rem;
         background-color: ${({ theme }) => theme.colors.rgba};
         width: 2rem;
         height: 2rem;
@@ -31,6 +31,12 @@ export const Wrapper = styled.div`
         place-items: center;
         border-radius: .5rem;
         cursor: pointer;
+    }
+    @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
+        .exit{
+            top: 2rem;
+            right: 2rem;
+        }
     }
 `;
 export const ModalWrapper = styled.div`
@@ -41,6 +47,7 @@ export const ModalWrapper = styled.div`
     max-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'};
     width: 100%;
     min-height: 300px;
+    height: ${({isCommentsModal}) => isCommentsModal ? '100vh' : 'auto'};
     max-height: 100vh;
     background-color: ${({ theme }) => theme.colors.backgroundLighter};
     padding: 1rem;
@@ -52,5 +59,8 @@ export const ModalWrapper = styled.div`
         border-radius: .5rem;
         max-height: 80vh;
         padding-top: 1rem;
+    }
+    @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal && '636px'}){
+        max-height: 80vh;
     }
 `;

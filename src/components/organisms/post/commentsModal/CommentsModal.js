@@ -26,7 +26,7 @@ export default function CommentsModal({ data }) {
         <StyledCommentsModal>
             <div className="header">
                 <div className="user-info">
-                    <img src={user.image || UserImage} alt={user.username} />
+                    <img src={(user.image && `http://${API_IP}:1337${user.image?.url}`) || UserImage} alt={user.username} />
                     <Link to={`/uzytkownik/${user.username}`} className="username">{user.username}</Link>
                 </div>
                 <div className="buttons">

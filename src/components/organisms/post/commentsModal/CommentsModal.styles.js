@@ -12,8 +12,8 @@ export const StyledCommentsModal = styled.div`
             align-items: center;
             margin-bottom: 1rem;
             img{
-                width: 64px;
-                height: 64px;
+                width: 2rem;
+                height: 2rem;
                 border-radius: 50%;
             }
             .username{
@@ -99,11 +99,9 @@ export const StyledCommentsModal = styled.div`
             .image{
                 max-width: 450px;
             }
-        }
-    }
-    @media screen and (min-width: 707px){
-        .wrapper .comment-section{
-            margin: 1rem;
+            .comment-section{
+                margin: 1rem;
+            }
         }
     }
 `;

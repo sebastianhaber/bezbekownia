@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import UserImage from '../../../assets/user-image.png';
 import Button from '../../utils/Button';
 import DropdownMenu from '../../utils/DropdownMenu';
+import { API_IP } from '../../../App';
 
 export default function Nav() {
     const [isSearchBoxOpen, setSearchBoxOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function Nav() {
         navigate('search/' + searchValue)
 
         setSearchValue('');
+        setSearchBoxOpen(false);
     }
 
     return (
@@ -60,7 +62,7 @@ export default function Nav() {
                                 <Icon icon="akar-icons:plus" />
                             </li>
                             <li className="square profile">
-                                <img src={UserImage} alt="" />
+                                <img src={(user.image && `http://${API_IP}:1337${user.image?.url}`) || UserImage} alt="" />
                                 <DropdownMenu>
                                     <li><Link to='/'>Profil</Link></li>
                                     <li><Link to='/'>Ustawienia profilu</Link></li>
