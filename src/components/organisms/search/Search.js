@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Loader from '../../molecules/loader/Loader';
 import ErrorWrapper from '../../utils/ErrorWrapper';
 import UserImage from '../../../assets/user-image.png'
+import { API_IP } from '../../../App';
 
 export default function Search() {
     const { value } = useParams();
@@ -60,7 +61,7 @@ export default function Search() {
                     {data.users.length > 0 ? (
                         <ul>{data.users.map((user, index) => (
                             <li key={index}>
-                                {user.image ? <img src={user.image} alt={user.username} />
+                                {user.image ? <img src={`http://${API_IP}:1337${user.image.url}`} alt={user.username} />
                                 : <img src={UserImage} alt={user.username} />}
                                 <Link to={`/uzytkownik/${user.username}`}>{user.username}</Link>
                             </li>
