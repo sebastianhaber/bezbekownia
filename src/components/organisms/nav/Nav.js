@@ -17,11 +17,11 @@ const INIT_MODAL = {
     type: ''
 }
 export default function Nav() {
-    const [isSearchBoxOpen, setSearchBoxOpen] = useState(INIT_MODAL);
+    const [isSearchBoxOpen, setSearchBoxOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
     const { user, setUser } = useContext(AppContext);
-    const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState(INIT_MODAL);
 
     const logout = () => {
         AuthLogout();
@@ -71,7 +71,6 @@ export default function Nav() {
             }, 500);
         }
     }
-    // https://strapi.io/blog/nextjs-react-hooks-strapi-auth-4 -> rejestracja i logowanie
     return (
         <>
             <StyledNav>
@@ -80,7 +79,7 @@ export default function Nav() {
                         {modal.type === 'register' ? (
                             <Register changeModalType={changeModalType} closeModal={handleCloseLoginModal} />
                         ) : (
-                            <Login changeModalType={changeModalType} />
+                            <Login changeModalType={changeModalType} closeModal={handleCloseLoginModal} />
                         )}
                     </Modal>
                 )}
@@ -116,11 +115,11 @@ export default function Nav() {
                                 <li className="square profile">
                                     <img src={(user.image && `${API_IP}${user.image?.url}`) || UserImage} alt={user.username} />
                                     <DropdownMenu>
-                                        <li><Link to='/'>Profil</Link></li>
-                                        <li><Link to='/'>Ustawienia profilu</Link></li>
+                                        <li><Link to={`/uzytkownik/${user.username}`}>Profil</Link></li>
+                                        <li><Link to={`/uzytkownik/${user.username}/edytuj`}>Ustawienia profilu</Link></li>
                                         <hr />
-                                        <li><Link to='/'>Moje memy</Link></li>
-                                        <li><Link to='/'>Moje polubienia</Link></li>
+                                        <li><Link to='/moje-memy'>Moje memy</Link></li>
+                                        <li><Link to='/moje-polubienia'>Moje polubienia</Link></li>
                                         <hr />
                                         <li onClick={()=>logout()}><Link to='/'>Wyloguj się</Link></li>
                                     </DropdownMenu>

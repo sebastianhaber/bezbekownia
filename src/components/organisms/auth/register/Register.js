@@ -52,14 +52,14 @@ export default function Register({ changeModalType, closeModal }) {
             return false;
         }
         errorArray = [];
-        registerUser( values.username, values.email, values.password)
+        registerUser(values.username, values.email, values.password)
             .then(res => {
                 appContext.setUser(res.data.user);
                 setValues(INIT_VALUES);
                 closeModal();
             }).catch(error => {
                 console.log(error.response)
-                error.response.data.message.map(message => {
+                return error.response.data.message.map(message => {
                     message.messages.map(value => {
                         if (value.id === 'Auth.form.error.email.taken') {
                             errorArray = [...errorArray, {

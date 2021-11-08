@@ -9,8 +9,10 @@ import Hashtag from "./components/views/Hashtag";
 import Search from "./components/organisms/search/Search";
 import Cookies from "js-cookie";
 import AppContext from "./context/AppContext";
+import Profile from "./components/views/Profile/Profile";
+import EditProfile from "./components/views/Profile/EditProfile";
 
-export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.0.45:1337';
+export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.43.238:1337';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -27,7 +29,7 @@ function App() {
       }).then(async (res) => {
         if (!res.ok) {
           Cookies.remove("token");
-          setUser({});
+          setUser(null);
           return null;
         }
         const user = await res.json();
@@ -58,6 +60,8 @@ function App() {
             <Route path='/meme/:slug' element={<Meme />} />
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
             <Route path='/search/:value' element={<Search />} />
+            <Route path='/uzytkownik/:username' element={<Profile />} />
+            <Route path='/uzytkownik/:username/edycja' element={<EditProfile />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </main>

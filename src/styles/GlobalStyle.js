@@ -15,13 +15,14 @@ export const GlobalStyle = createGlobalStyle`
         line-height: 1.5;
         letter-spacing: -0.022rem;
         min-height: 100vh;
+        min-width: 360px;
         overflow-x: hidden;
         &.no-scroll{
             overflow-y: hidden;
         }
     }
     main{
-        margin-top: calc(60px + 2rem);
+        margin-top: 60px;
     }
     button, input, textarea, select{
         outline: none;
@@ -38,6 +39,10 @@ export const GlobalStyle = createGlobalStyle`
     a{
         color: inherit;
         text-decoration: inherit;
+        &.clickable{
+            color: ${({ theme }) => theme.colors.accent};
+            text-decoration: underline;
+        }
     }
     img{
         display: block;

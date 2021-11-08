@@ -8,7 +8,7 @@ import { API_IP } from '../../../../App'
 import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
 
-export default function CommentsModal({ data }) {
+export default function CommentsModal({ data, closeModal }) {
     const comments = data.comments;
     const { user } = useContext(AppContext);
     const [author, setAuthor] = useState({});
@@ -24,13 +24,17 @@ export default function CommentsModal({ data }) {
             setAuthor(data.user);
         }
     }, [data.user])
+
+    const handleCloseModal = () => {
+        if(closeModal) closeModal();
+    }
     
     return (
         <StyledCommentsModal>
             <div className="header">
                 <div className="user-info">
                     <img src={(author.image && `${API_IP}${author.image?.url}`) || UserImage} alt={author.username} />
-                    <Link to={`/uzytkownik/${author.username}`} className="username">{author.username}</Link>
+                    <Link to={`/uzytkownik/${author.username}`} onClick={handleCloseModal} className="username">{author.username}</Link>
                 </div>
                 <div className="buttons">
                     <Button variant='dark'>+{data.likes.length} byczku</Button>
@@ -62,7 +66,7 @@ export default function CommentsModal({ data }) {
                         {comments.map((comment, index) => (
                             <div key={index} className='comments_user'>
                                 <div className="box">
-                                    <Link to={`/uzytkownik/${comment.author}`} className={author.username === comment.author ? `author logged` : `author`}>
+                                    <Link to={`/uzytkownik/${comment.author}`} onClick={handleCloseModal} className={author.username === comment.author ? `author logged` : `author`}>
                                         {comment.author}
                                     </Link>
                                     <p className="content">{comment.message}</p>

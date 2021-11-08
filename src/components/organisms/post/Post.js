@@ -13,7 +13,7 @@ export default function Post({ data }) {
     const handleOpenCommentsModal = () => {
         document.querySelector('html').classList.add('no-scroll');
         setModalOpen(true)
-         setTimeout(() => {
+        setTimeout(() => {
             document.getElementById('wrapper').classList.remove('hide');
         }, 100);
     }
@@ -30,7 +30,7 @@ export default function Post({ data }) {
         <Wrapper>
             {modalOpen && (
                 <Modal isCommentsModal onClose={()=>handleCloseModal()}>
-                    <CommentsModal data={data} />
+                    <CommentsModal data={data} closeModal={()=>handleCloseModal()} />
                 </Modal>
             )}
             <Link to={`/meme/${data.slug}`}><img src={`${API_IP}${data.image.url}`} loading='lazy' alt={data.title} /></Link>

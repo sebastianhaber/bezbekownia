@@ -13,8 +13,7 @@ export default function Meme() {
     
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetch('http://' + API_IP + ':1337/posts/' + slug)
-            // .then(res => res.json())
+        fetch(API_IP + '/posts/' + slug)
             .then(res => {
                 if (res.status === 404) {
                     navigate('404');
@@ -23,7 +22,6 @@ export default function Meme() {
                 }
             })
             .then(data => {
-                console.log('data', data)
                 setPost(data);
         })
     }, [slug, navigate]);

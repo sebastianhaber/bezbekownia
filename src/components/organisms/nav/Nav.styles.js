@@ -22,7 +22,6 @@ export const StyledNav = styled.nav`
     }
     .logo{
         font-weight: bold;
-        font-size: 1rem;
     }
     #search-box{
         position: relative;
@@ -65,10 +64,10 @@ export const StyledNav = styled.nav`
         display: flex;
         align-items: center;
         .square{
+            position: relative;
             &:not(:last-child){
                 margin-right: 1rem;
             }
-            position: relative;
             &:hover > div{
                 opacity: 1;
                 pointer-events: all;
@@ -82,6 +81,9 @@ export const StyledNav = styled.nav`
         }
     }
     @media screen and (min-width: 600px){
+        .logo{
+            font-size: 1rem;
+        }
         .search{
             display: none;
         }
