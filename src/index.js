@@ -7,7 +7,7 @@ import { GlobalStyle } from './styles/GlobalStyle';
 import { theme } from './styles/theme';
 
 const client = new ApolloClient({
-  uri: `http://${API_IP}:1337/graphql`,
+  uri: `${API_IP}/graphql`,
   cache: new InMemoryCache()
 });
 

@@ -59,7 +59,7 @@ export const StyledCommentsModal = styled.div`
             margin: 1rem 0;
             min-width: 300px;
             flex: 1;
-            .input{
+            /* .input{
                 display: flex;
                 width: 100%;
                 border-radius: 3px;
@@ -77,7 +77,7 @@ export const StyledCommentsModal = styled.div`
                 .send{
                     cursor: pointer;
                 }
-            }
+            } */
         }
         .comments{
             margin-top: 1rem;
@@ -86,6 +86,20 @@ export const StyledCommentsModal = styled.div`
                 .author{
                     font-weight: bold;
                     margin-right: .5rem;
+                }
+                .logged{
+                    color: ${({theme}) => theme.colors.accent};
+                }
+                .box{
+                    display: flex;
+                    width: 100%;
+                }
+                .delete{
+                    display: grid;
+                    place-items: center;
+                    width: 2rem;
+                    font-size: 1rem;
+                    cursor: pointer;
                 }
             }
         }

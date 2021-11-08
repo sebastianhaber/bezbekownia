@@ -5,7 +5,7 @@ import { ModalWrapper, Wrapper } from './Modal.styles';
 
 const modalContainer = document.getElementById('modal-container');
 
-export default function Modal({children, onClose, isCommentsModal}) {
+export default function Modal({children, onClose, isCommentsModal = false}) {
     const modalElement = document.createElement('div');
     useEffect(() => {
         modalElement.id = 'modal';

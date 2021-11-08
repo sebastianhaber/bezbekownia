@@ -33,7 +33,7 @@ export default function Post({ data }) {
                     <CommentsModal data={data} />
                 </Modal>
             )}
-            <Link to={`/meme/${data.slug}`}><img src={`http://${API_IP}:1337` + data.image.url} loading='lazy' alt={data.title} /></Link>
+            <Link to={`/meme/${data.slug}`}><img src={`${API_IP}${data.image.url}`} loading='lazy' alt={data.title} /></Link>
             <div className="header">
                 <div className="meta">
                     <div className="title">{data.title}</div>
