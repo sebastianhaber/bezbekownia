@@ -28,7 +28,7 @@ const Wrapper = styled.div`
                 flex-direction: column;
             `}
         }
-        a{
+        a, p{
             display: block;
             position: relative;
             width: 100%;

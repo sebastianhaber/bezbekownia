@@ -18,19 +18,17 @@ export default function Profile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!appContext.user || appContext.user.username !== username) {
-            fetch(`${API_IP}/users?username=${username}`)
-                .then(res => res.json())
-                .then(user => {
-                    if (user.length === 0) {
-                        navigate('/');
-                    } else {
-                        setUser(user[0]);
-                    }
-                }).catch(error => {
-                    console.log('error', error);
-                })
-        } else setUser(appContext.user);
+        fetch(`${API_IP}/users?username=${username}`)
+        .then(res => res.json())
+        .then(user => {
+            if (user.length === 0) {
+                navigate('/');
+            } else {
+                setUser(user[0]);
+            }
+        }).catch(error => {
+            console.log('error', error);
+        })
     }, [appContext.user, username, navigate])
 
     useEffect(() => {
@@ -47,7 +45,7 @@ export default function Profile() {
         return (
             <Blocked>
                 <Helmet>
-                    <title>Bezbekownia | Użytkownik { username }</title>
+                    <title>Bezbekownia | @{ username }</title>
                     <meta name="description" content={`Profil użytkownika ${username} na Bezbekownia.pl`} />
                     <meta name='robots' content='noindex' />
                 </Helmet>

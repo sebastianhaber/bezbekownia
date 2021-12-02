@@ -69,6 +69,9 @@ export const Wrapper = styled.div`
         }
         .likes{
             padding: 0 1rem;
+            &.liked{
+                background-color: ${({theme}) => theme.colors.accentDarker};
+            }
         }
         .more{
             position: relative;

@@ -14,6 +14,8 @@ export default function Login({ changeModalType, closeModal }) {
     const [values, setValues] = useState(INIT_VALUES);
     const [error, setError] = useState('');
     const appContext = useContext(AppContext);
+    const [loading, setLoading] = useState('');
+    let errorArray = [];
 
     const handleChangeValue = (e) => {
         setValues({
@@ -23,21 +25,23 @@ export default function Login({ changeModalType, closeModal }) {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        let errorArray = [];
+        setLoading('Logowanie')
 
         if (errorArray.length > 0) {
             setError(errorArray)
+            setLoading('')
             return false;
         }
         errorArray = [];
-        login( values.email, values.password)
+        login(values.email, values.password)
             .then(res => {
                 appContext.setUser(res.data.user);
                 setValues(INIT_VALUES);
+                setLoading('');
                 closeModal();
             }).catch(error => {
                 setValues({ ...values, password: '' })
-                // console.log(error.response)
+                setLoading('');
                 return error.response.data.message.map(message => {
                     message.messages.map(value => {
                         if (value.id === 'Auth.form.error.blocked') {
@@ -70,6 +74,7 @@ export default function Login({ changeModalType, closeModal }) {
                         placeholder='Email'
                         name='email'
                         value={values.email}
+                        required
                         onChange={handleChangeValue} />
                 </Input>
                 <Input>
@@ -81,9 +86,10 @@ export default function Login({ changeModalType, closeModal }) {
                         placeholder='Hasło'
                         name='password'
                         value={values.password}
+                        required
                         onChange={handleChangeValue} />
                 </Input>
-                <Button type='submit'>Zaloguj się</Button>
+                <Button type='submit' loading={loading}>Zaloguj się</Button>
             </form>
             <div className="footer">
                 <p>Nie masz konta? <span onClick={() => changeModalType()}>Zarejestruj się</span></p>

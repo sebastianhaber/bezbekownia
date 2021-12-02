@@ -1,22 +1,46 @@
+import { Icon } from '@iconify/react';
 import React from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
+const rotate = keyframes`
+    to{
+        transform: rotate(360deg);
+    }
+`;
 const StyledButton = styled.button`
-    display: flex;
-    align-items: center;
     background-color: ${({ theme }) => theme.colors.accent};
     font-weight: bold;
     padding: 0 1rem;
     cursor: pointer;
     transition: background-color .2s ease;
     min-width: 100px;
-    text-align: center;
     white-space: nowrap;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    border-radius: .5rem;
     &:hover{
         background-color: ${({ theme }) => theme.colors.accentDarker};
     }
+    &:disabled{
+        background-color: ${({theme}) => theme.colors.gray};
+        cursor: not-allowed;
+    }
+    div{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .loadingText{
+            margin-left: .5rem;
+        }
+    }
     svg{
         margin-right: .5rem;
+        &.loading{
+            margin: 0;
+            font-size: 1rem;
+            animation: ${rotate} 1s linear infinite;
+        }
     }
 
     ${({ variant, theme }) => 
@@ -39,8 +63,17 @@ const StyledButton = styled.button`
 
 export default function Button(props) {
     return (
-        <StyledButton variant={props.variant} {...props}>
-            {props.children}
+        <StyledButton variant={props.variant} {...props} disabled={props.loading}>
+            {props.loading ? (
+                <div>
+                    <Icon className='loading' icon="akar-icons:arrow-clockwise" />
+                    <p className='loadingText'>{props.loading}</p>
+                </div>
+            ) : (
+                <div>
+                    {props.children}
+                </div>
+            )}
         </StyledButton>
     )
 }

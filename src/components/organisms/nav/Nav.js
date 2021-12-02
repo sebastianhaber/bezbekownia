@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { StyledNav } from './Nav.styles'
 import { Icon } from '@iconify/react';
 import UserImage from '../../../assets/user-image.png';
-import Button from '../../utils/Button';
 import DropdownMenu from '../../utils/DropdownMenu';
 import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
@@ -113,10 +112,10 @@ export default function Nav() {
                                     <Icon icon="akar-icons:plus" />
                                 </li>
                                 <li className="square profile">
-                                    <img src={(user.image && `${API_IP}${user.image?.url}`) || UserImage} alt={user.username} />
+                                    <img src={user.image ? `${API_IP}${user.image?.url}` : UserImage} alt={user.username} />
                                     <DropdownMenu>
-                                        <li><Link to={`/uzytkownik/${user.username}`}>Profil</Link></li>
-                                        <li><Link to={`/uzytkownik/${user.username}/edytuj`}>Ustawienia profilu</Link></li>
+                                        <li><Link to={`/@${user.username}`}>Profil</Link></li>
+                                        <li><Link to={`/@${user.username}/edytuj`}>Ustawienia profilu</Link></li>
                                         <hr />
                                         <li><Link to='/moje-memy'>Moje memy</Link></li>
                                         <li><Link to='/moje-polubienia'>Moje polubienia</Link></li>
@@ -129,8 +128,8 @@ export default function Nav() {
                             <li className="square buttons">
                                 <Icon icon="akar-icons:people-group" />
                                 <DropdownMenu centerItems>
-                                    <li onClick={()=>handleOpenLoginModal('login')}><Button variant='ghost' style={{marginBottom: '1rem'}}>Zaloguj się</Button></li>
-                                    <li><Button onClick={()=>handleOpenLoginModal('register')}>Zarejestruj się</Button></li>
+                                    <li onClick={()=>handleOpenLoginModal('login')}><p>Zaloguj się</p></li>
+                                    <li onClick={()=>handleOpenLoginModal('register')}><p>Zarejestruj się</p></li>
                                 </DropdownMenu>
                             </li>
                         )}

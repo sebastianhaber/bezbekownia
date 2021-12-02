@@ -17,6 +17,7 @@ export default function Register({ changeModalType, closeModal }) {
     const [error, setError] = useState([]);
     const appContext = useContext(AppContext);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState('');
 
     const [values, setValues] = useState(INIT_VALUES);
     const handleChangeValue = (e) => {
@@ -25,9 +26,10 @@ export default function Register({ changeModalType, closeModal }) {
             [e.target.name]: e.target.value.replace(/\s/g, "")
         })
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let errorArray = [];
+        setLoading('Rejestrowanie')
 
         if (values.username.length < 3) {
             errorArray = [...errorArray, {
@@ -49,16 +51,20 @@ export default function Register({ changeModalType, closeModal }) {
 
         if (errorArray.length > 0) {
             setError(errorArray)
+            setLoading('')
             return false;
         }
         errorArray = [];
-        registerUser(values.username, values.email, values.password)
+        const asyncRegister = await registerUser(values.username, values.email, values.password)
             .then(res => {
                 appContext.setUser(res.data.user);
                 setValues(INIT_VALUES);
                 closeModal();
+                setLoading('');
             }).catch(error => {
+                // todo
                 console.log(error.response)
+                setLoading('');
                 return error.response.data.message.map(message => {
                     message.messages.map(value => {
                         if (value.id === 'Auth.form.error.email.taken') {
@@ -78,6 +84,7 @@ export default function Register({ changeModalType, closeModal }) {
                     return false;
                 })
             })
+        return asyncRegister;
     }
     const togglePassword = () => {
         let passwordField = document.getElementById('password');
@@ -112,6 +119,7 @@ export default function Register({ changeModalType, closeModal }) {
                         placeholder='Nazwa użytkownika'
                         name='username'
                         minLength='3'
+                        required
                         value={values.username}
                         onChange={handleChangeValue} />
                 </Input>
@@ -123,6 +131,7 @@ export default function Register({ changeModalType, closeModal }) {
                         type="email"
                         placeholder='Email'
                         name='email'
+                        required
                         value={values.email}
                         onChange={handleChangeValue} />
                 </Input>
@@ -137,6 +146,7 @@ export default function Register({ changeModalType, closeModal }) {
                         maxLength='64'
                         name='password'
                         id='password'
+                        required
                         value={values.password}
                         onChange={handleChangeValue} />
                     <div className="icon pointer" onClick={()=>togglePassword()}>
@@ -144,7 +154,7 @@ export default function Register({ changeModalType, closeModal }) {
                     </div>
                     
                 </Input>
-                <Button type='submit'>Zarejestruj się</Button>
+                <Button type='submit' loading={loading}>Zarejestruj się</Button>
             </form>
             <div className="footer">
                 <p>Masz konto? <span onClick={() => changeModalType()}>Zaloguj się</span></p>

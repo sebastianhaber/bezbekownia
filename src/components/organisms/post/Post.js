@@ -1,13 +1,17 @@
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useContext, useEffect } from 'react/cjs/react.development';
 import { API_IP } from '../../../App';
+import AppContext from '../../../context/AppContext';
 import Modal from '../modal/Modal';
 import CommentsModal from './commentsModal/CommentsModal';
 import { Wrapper } from './Post.styles'
 
 export default function Post({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
+    const [liked, setLiked] = useState(false);
+    const { user } = useContext(AppContext);
     let hashtags = data.hashtags;
 
     const handleOpenCommentsModal = () => {
@@ -26,18 +30,30 @@ export default function Post({ data }) {
         }, 500);
     }
 
+    useEffect(() => {
+        if (user) {
+            data.likes.map(like => {
+                if (like.user === user.id) {
+                    setLiked(true);
+                    return true;
+                }
+                return false;
+            })
+        }
+    }, [user, data])
+
     return (
         <Wrapper>
             {modalOpen && (
                 <Modal isCommentsModal onClose={()=>handleCloseModal()}>
-                    <CommentsModal data={data} closeModal={()=>handleCloseModal()} />
+                    <CommentsModal data={data} setLiked={setLiked} liked={liked} closeModal={()=>handleCloseModal()} />
                 </Modal>
             )}
             <Link to={`/meme/${data.slug}`}><img src={`${API_IP}${data.image.url}`} loading='lazy' alt={data.title} /></Link>
             <div className="header">
                 <div className="meta">
                     <div className="title">{data.title}</div>
-                    <div className="author"><Link to={`/uzytkownik/${data.user.username}`}>by <b>{ data.user.username }</b></Link></div>
+                    <div className="author"><Link to={`/@${data.user.username}`}>by <b>{ data.user.username }</b></Link></div>
                 </div>
                 <ul className="hashtags">
                     {hashtags.map((hashtag, index) => (
@@ -49,7 +65,7 @@ export default function Post({ data }) {
                 <div className="button comments" onClick={()=>handleOpenCommentsModal()}>
                     <Icon icon="akar-icons:comment" />
                 </div>
-                <div className="likes">
+                <div className={liked ? `likes liked` : `likes`}>
                     +{data.likes.length} byczku
                 </div>
                 <div className="button more">

@@ -17,6 +17,9 @@ const Wrapper = styled.div`
         background-color: transparent;
         flex: 1;
     }
+    button{
+        background-color: transparent;
+    }
     .icon{
         width: 2rem;
         font-size: 1rem;

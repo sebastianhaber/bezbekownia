@@ -12,7 +12,7 @@ import AppContext from "./context/AppContext";
 import Profile from "./components/views/Profile/Profile";
 import EditProfile from "./components/views/Profile/EditProfile";
 
-export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.43.238:1337';
+export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.0.45:1337';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -36,17 +36,22 @@ function App() {
         setUser(user);
       });
     }
-    fetch(API_IP +'/posts')
+    fetch(API_IP +'/posts?_sort=created_at:DESC')
       .then(res => res.json())
       .then(data => {
         setPosts(data);
       });
   }, []);
+  useEffect(() => {
+    console.log('new posts')
+  }, [posts])
   return (
     <AppContext.Provider value={{
       user,
       isAuthenticated: !!user,
-      setUser
+      setUser,
+      posts,
+      setPosts
     }}>
       <Router>
         <Nav />
@@ -60,8 +65,8 @@ function App() {
             <Route path='/meme/:slug' element={<Meme />} />
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
             <Route path='/search/:value' element={<Search />} />
-            <Route path='/uzytkownik/:username' element={<Profile />} />
-            <Route path='/uzytkownik/:username/edycja' element={<EditProfile />} />
+            <Route path='/@:username' element={<Profile />} />
+            <Route path='/@:username/edytuj' element={<EditProfile />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </main>

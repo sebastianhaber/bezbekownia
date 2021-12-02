@@ -31,7 +31,10 @@ export const GlobalStyle = createGlobalStyle`
         color: inherit;
         height: 2rem;
         border: 0;
-        border-radius: .5rem;
+        &:autofill{
+            box-shadow: none;
+            background: transparent;
+        }
     }
     ul, ol{
         list-style: none;
