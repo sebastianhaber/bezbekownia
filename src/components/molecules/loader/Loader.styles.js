@@ -14,8 +14,14 @@ export const Wrapper = styled.div`
     display: grid;
     place-items: center;
     font-size: 2rem;
-    svg{
-        animation: ${spin} 1s linear infinite;
+    div{
+        text-align: center;
+        p{
+            font-size: 14px;
+        }
+        svg{
+            animation: ${spin} 1s linear infinite;
+        }
     }
     #logo{
         position: absolute;

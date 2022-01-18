@@ -19,8 +19,11 @@ export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168
 function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
+  const [isUnderMaintenance, setMaintenance] = useState(null);
+  const [loaderMessage, setLoaderMessage] = useState('');
 
   const fetchPosts = () => {
+    setLoaderMessage('Pobieranie memów...')
     axios.get(`/posts?_sort=created_at:DESC`)
     .then(res => {
       setPosts(res.data);
@@ -30,6 +33,7 @@ function App() {
   const fetchMe = () => {
     const token = Cookies.get("token");
 
+    setLoaderMessage('Pobieranie danych urzytkownika...')
     axios.get(`/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -45,21 +49,35 @@ function App() {
           setUser(res.data);
       })
   }
+  const checkMaintenanceMode = () => {
+    axios.get(`/maintenance-mode`)
+      .then(res => {
+        if (res.data.isUnderMaintenance) setLoaderMessage('Trwają prace administracyjne.');
+        setMaintenance(res.data.isUnderMaintenance);
+      });
+  }
+
   useEffect(() => {
-    const token = Cookies.get("token");
     axios.defaults.baseURL = API_IP;
 
-    if (token) {
-      fetchMe();
-    }
-    fetchPosts();
+    setLoaderMessage('Łączenie z serwerem...')
+    checkMaintenanceMode();
   }, []);
+  useEffect(() => {
+    const token = Cookies.get("token");
 
+    if (isUnderMaintenance === false) {
+      if (token) {
+        fetchMe();
+      }
+      fetchPosts();
+    }
+  }, [isUnderMaintenance])
   useEffect(() => {
     console.log(posts)
   }, [posts])
 
-  if (posts.length === 0) return <Loader />
+  if (posts.length === 0) return <Loader message={loaderMessage} />
 
   return (
     <AppContext.Provider value={{
