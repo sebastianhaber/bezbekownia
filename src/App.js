@@ -31,7 +31,6 @@ function App() {
     const token = Cookies.get("token");
 
     axios.get(`/users/me`, {
-      // cancelToken: source.cancel(),
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,10 +46,7 @@ function App() {
   }
   useEffect(() => {
     const token = Cookies.get("token");
-    // const token = localStorage.getItem("token");
     axios.defaults.baseURL = API_IP;
-    // const source = axios.CancelToken.source();
-    
 
     if (token) {
       fetchMe();
@@ -76,7 +72,7 @@ function App() {
         <Nav />
         <main>
           <Routes>
-            <Route path='/' element={<HomePage posts={posts} />} />
+            <Route path='/' element={<HomePage posts={posts} fetchPosts={fetchPosts} />} />
             <Route path='pomoc' element={<Helmet>
                   <title>Bezbekownia | Pomoc</title>
                   <meta name="description" content="Pomoc w serwisie Bezbekownia.pl" />
