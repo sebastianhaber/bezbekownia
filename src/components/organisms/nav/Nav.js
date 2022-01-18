@@ -103,7 +103,7 @@ export default function Nav() {
                                 <li><Link to='/pomoc'>Polityka prywatności</Link></li>
                             </DropdownMenu>
                         </li>
-                        {user ? (
+                        {user && user.username ? (
                             <>
                                 <li className="square plus" title='Dodaj mema'>
                                     <Icon icon="akar-icons:plus" />

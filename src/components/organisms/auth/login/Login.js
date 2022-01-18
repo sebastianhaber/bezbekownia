@@ -33,10 +33,9 @@ export default function Login({ changeModalType, closeModal }) {
             return false;
         }
         errorArray = [];
-        login(values.email, values.password)
+        const loginUser = () => login(values.email, values.password)
             .then(res => {
                 appContext.setUser(res.data.user);
-                localStorage.setItem('token', res.data.jwt);
                 setValues(INIT_VALUES);
                 setLoading('');
                 closeModal();
@@ -56,6 +55,7 @@ export default function Login({ changeModalType, closeModal }) {
                     return false;
                 })
             })
+        return loginUser();
     }
     return (
         <AuthWrapper>

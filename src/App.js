@@ -35,11 +35,12 @@ function App() {
         Authorization: `Bearer ${token}`,
       },
       })
-        .then(res => {
-          if (!res.ok) {
+      .then(res => {
+          console.log('res', res)
+          if (res.status !== 200) {
             Cookies.remove("token");
             setUser(null);
-            return null;
+            return false;
           }
           setUser(res.data);
       })

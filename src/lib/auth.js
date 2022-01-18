@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_IP } from "../App";
 import Cookie from 'js-cookie'
+import Cookies from "js-cookie";
 
 export const registerUser = (username, email, password) => {
     if (typeof window === "undefined") {
@@ -28,11 +29,11 @@ export const login = (identifier, password) => {
         axios
             .post(`/auth/local/`, { identifier, password })
             .then((res) => {
-                // Cookie.withAttributes({
-                //     sameSite: "lax",
-                // }).set("token", res.data.jwt);
-                document.cookie = `token=${res.data.jwt}; SameSite=None; Secure`;
-
+                Cookies.set("token", res.data.jwt, {
+                    path: "/",
+                    expires: 3600*1000,
+                    secure: true,
+                });
                 resolve(res);
             })
             .catch((error) => {
