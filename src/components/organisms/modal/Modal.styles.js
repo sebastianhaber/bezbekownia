@@ -9,9 +9,9 @@ export const Wrapper = styled.div`
     height: 100vh;
     
     transition: opacity .2s ease;
-    &.hide{
+    /* &.hide{
         opacity: 0;
-    }
+    } */
 
     .overlay{
         background-color: ${({ theme }) => theme.colors.rgba};

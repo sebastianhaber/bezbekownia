@@ -29,7 +29,7 @@ export default function Nav() {
     const handleChangeSearchValue = (target) => {
         setSearchValue(target.target.value)
     }
-    const handleSubmit = (event) => {
+    const handleSearchSubmit = (event) => {
         event.preventDefault();
         if (searchValue.trim().length === 0) {
             return;
@@ -45,29 +45,18 @@ export default function Nav() {
             isOpen: true,
             type: type
         })
-         setTimeout(() => {
-            document.getElementById('wrapper').classList.remove('hide');
-        }, 100);
     }
     const handleCloseLoginModal = () => {
-        document.getElementById('wrapper').classList.add('hide');
         document.querySelector('html').classList.remove('no-scroll');
-
-        setTimeout(() => {
-            setModal(INIT_MODAL)
-        }, 500);
+        setModal(INIT_MODAL)
     }
     const changeModalType = () => {
         if (modal.type === 'register') {
             handleCloseLoginModal();
-            setTimeout(() => {
-                handleOpenLoginModal('login')
-            }, 500);
+            handleOpenLoginModal('login')
         } else {
             handleCloseLoginModal();
-            setTimeout(() => {
-                handleOpenLoginModal('register')
-            }, 500);
+            handleOpenLoginModal('register')
         }
     }
     return (
@@ -84,7 +73,7 @@ export default function Nav() {
                 )}
                 <div className="wrapper">
                     <Link to='/' className='logo'>Bezbekownia</Link>
-                    <form onSubmit={handleSubmit} id="search-box" data-testid="search-box">
+                    <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                         <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                             <div className="icon"><Icon icon="akar-icons:search" /></div>
                             <input type="search" autoComplete='off' placeholder='Szukaj...' value={searchValue} onChange={handleChangeSearchValue} />
