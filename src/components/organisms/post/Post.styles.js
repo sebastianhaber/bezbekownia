@@ -12,7 +12,8 @@ export const Wrapper = styled.div`
         width: 100%;
         max-height: 1000px;
         object-fit: contain;
-        &:hover{
+        cursor: pointer;
+        &.z-index{
             z-index: 1;
         }
     }

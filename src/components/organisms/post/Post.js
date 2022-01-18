@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react/cjs/react.development';
 import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
@@ -11,7 +11,9 @@ import { Wrapper } from './Post.styles'
 export default function Post({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [liked, setLiked] = useState(false);
+    const [isHudVisible, setHudVisible] = useState(true);
     const { user } = useContext(AppContext);
+    const navigate = useNavigate();
     let hashtags = data.hashtags;
 
     const handleOpenCommentsModal = () => {
@@ -29,9 +31,20 @@ export default function Post({ data }) {
             setModalOpen(false)
         }, 500);
     }
+    const handleToggleHud = (image) => {
+        if (isHudVisible) {
+            image.target.className = 'z-index'
+        } else {
+            image.target.className = ''
+        }
+        setHudVisible(prevState => !prevState)
+    }
+    const handleNavigateTo = () => {
+        navigate(`/meme/${ data.slug }`)
+    }
 
     useEffect(() => {
-        if (user) {
+        if (user && user.id) {
             data.likes.map(like => {
                 if (like.user === user.id) {
                     setLiked(true);
@@ -39,7 +52,6 @@ export default function Post({ data }) {
                 }
                 return false;
             })
-            console.log('data', data);
         }
     }, [user, data])
 
@@ -50,7 +62,12 @@ export default function Post({ data }) {
                     <CommentsModal data={data} setLiked={setLiked} liked={liked} closeModal={()=>handleCloseModal()} />
                 </Modal>
             )}
-            <Link to={`/meme/${data.slug}`}><img src={`${API_IP}${data.image.url}`} loading='lazy' alt={data.title} /></Link>
+            <img
+                src={`${API_IP}${data.image.url}`}
+                loading='lazy' alt={data.title}
+                onClick={handleToggleHud}
+                onDoubleClick={() => handleNavigateTo()}
+            />
             <div className="header">
                 <div className="meta">
                     <div className="title">{data.title}</div>
@@ -73,7 +90,7 @@ export default function Post({ data }) {
                     <Icon icon="akar-icons:more-vertical" />
                     <ul>
                         <li><Icon icon="akar-icons:arrow-forward-thick" /> Udostępnij</li>
-                        <li><Icon icon="akar-icons:trash-can" /> Usuń</li>
+                        {user && user.id === data.user.id && <li><Icon icon="akar-icons:trash-can" /> Usuń</li>}
                         <li><Icon icon="akar-icons:flag" /> Zgłoś</li>
                     </ul>
                 </div>
