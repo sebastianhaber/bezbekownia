@@ -1,29 +1,12 @@
 import { Icon } from '@iconify/react';
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import { Wrapper } from './Loader.styles';
 
 export default function Loader() {
     return (
         <Wrapper>
-            <Icon icon="akar-icons:arrow-clockwise" />
+            <Icon icon="ri:loader-3-fill" data-testid="loader" />
+            <p id="logo">Bezbekownia</p>
         </Wrapper>
     )
 }
-const spin = keyframes`
-    to{
-        transform: rotate(360deg);
-    }
-`;
-const Wrapper = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    font-size: 2rem;
-    svg{
-        animation: ${spin} 1s linear infinite;
-    }
-`;

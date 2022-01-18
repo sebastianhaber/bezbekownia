@@ -8,6 +8,7 @@ import { API_IP } from '../../../../App'
 import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
 import { addLike, deleteComment, postComment, removeLike } from '../../../../lib/auth'
+import axios from 'axios'
 
 export default function CommentsModal({ data, closeModal, liked, setLiked }) {
     const [comments, setComments] = useState(data.comments);
@@ -17,15 +18,23 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
 
     // fetch author data
     useEffect(() => {
-        if (!data.user.username) {
-            fetch(API_IP +'/users/' + data.user)
-            .then(res => res.json())
-            .then(data => {
-                setAuthor(data.user);
-            });
-        } else {
-            setAuthor(data.user);
+        const source = axios.CancelToken.source();
+        const fetchAuthor = async () => {
+            try {
+                await axios.get(`/users?username=${data.user.username}`, {
+                    cancelToken: source.cancel()
+                })
+                    .then(res => {
+                        setAuthor(res.data[0]);
+                })
+            } catch (error) {
+                if (!axios.isCancel(error)) {
+                    throw error
+                }
+                // setFetchingError(true);
+            }
         }
+        fetchAuthor()
     }, [data.user])
 
     const handleCloseModal = () => {
@@ -112,7 +121,6 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
             return false;
         })
     }
-
     return (
         <StyledCommentsModal>
             <div className="header">

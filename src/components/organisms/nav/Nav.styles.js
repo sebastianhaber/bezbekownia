@@ -15,10 +15,13 @@ export const StyledNav = styled.nav`
         width: 100%;
         max-width: 1440px;
         height: 100%;
-        padding: 0 1rem;
+        padding: .5rem 1rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        li{
+            cursor: pointer;
+        }
     }
     .logo{
         font-weight: bold;

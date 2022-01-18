@@ -1,5 +1,6 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
 import { useContext } from 'react/cjs/react.development';
 import styled from 'styled-components';
@@ -14,48 +15,62 @@ export default function Meme() {
     const navigate = useNavigate();
     const { user } = useContext(AppContext);
     const [liked, setLiked] = useState(false);
-    
+
     useEffect(() => {
+        const source = axios.CancelToken.source();
+        
         window.scrollTo(0, 0);
-        fetch(API_IP + '/posts/' + slug)
-            .then(res => {
-                if (res.status === 404) {
-                    navigate('404');
-                } else {
-                    return res.json();
+        const fetchPost = async () => {
+            try {
+                await axios.get(`/posts?slug=${slug}`, {
+                    cancelToken: source.cancel()
+                })
+                    .then(res => {
+                        if (res.status === 404) {
+                            navigate('404');
+                        } else {
+                            console.log('res', res.data)
+                            setPost(res.data[0]);
+                        }
+                    })
+            } catch (error) {
+                if (!axios.isCancel(error)) {
+                    throw error
                 }
-            })
-            .then(data => {
-                setPost(data);
-        })
-    }, [slug, navigate]);
+            }
+        }
+        fetchPost()
+    }, [slug, navigate])
 
     // check if liked post
     useEffect(() => {
         if (user) {
-            post.likes.map(like => {
-                if (like.user === user.id) {
-                    setLiked(true);
-                    return true;
-                }
-                return false;
-            })
+            if (post.likes) {
+                post.likes.map(like => {
+                    if (like.user === user.id) {
+                        setLiked(true);
+                        return true;
+                    }
+                    return false;
+                })
+            }
         }
-    }, [post.likes, user])
+    }, [post, user])
 
     if (Object.keys(post).length === 0) return <Loader />;
-
     return (
         <Wrapper>
-            <Helmet>
-                <title>Bezbekownia | {post.title}</title>
-                <meta name="description" content={`Mem użytkownika ${post.user.username}: ${post.title}`} />
-                <meta property="og:title" content={`Bezbekownia | ${post.title}`} />
-                <meta property="og:type" content="image" />
-                <meta property="og:image" content={`${API_IP}${post.image.url}`} />
-                <meta property='og:image:alt' content={`Mem użytkownika ${post.user.username}`} />
-                <meta property="og:url" content={`https://www.bezbekownia.pl/meme/${slug}/`} />
-            </Helmet>
+            {post && post.user && (
+                <Helmet>
+                    <title>Bezbekownia | {post.title}</title>
+                    <meta name="description" content={`Mem użytkownika ${post.user.username}: ${post.title}`} />
+                    <meta property="og:title" content={`Bezbekownia | ${post.title}`} />
+                    <meta property="og:type" content="image" />
+                    <meta property="og:image" content={`${API_IP}${post.image.url}`} />
+                    <meta property='og:image:alt' content={`Mem użytkownika ${post.user.username}`} />
+                    <meta property="og:url" content={`https://www.bezbekownia.pl/meme/${slug}/`} />
+                </Helmet>
+            )}
             <div className="wrapper">
                 <CommentsModal data={post} setLiked={setLiked} liked={liked} />
             </div>

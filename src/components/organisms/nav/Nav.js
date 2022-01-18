@@ -84,7 +84,7 @@ export default function Nav() {
                 )}
                 <div className="wrapper">
                     <Link to='/' className='logo'>Bezbekownia</Link>
-                    <form onSubmit={handleSubmit} id="search-box">
+                    <form onSubmit={handleSubmit} id="search-box" data-testid="search-box">
                         <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                             <div className="icon"><Icon icon="akar-icons:search" /></div>
                             <input type="search" autoComplete='off' placeholder='Szukaj...' value={searchValue} onChange={handleChangeSearchValue} />
@@ -99,11 +99,8 @@ export default function Nav() {
                             <Icon icon="akar-icons:more-horizontal" />
                             <DropdownMenu>
                                 <li><Link to='/pomoc'>O Bezbekowni</Link></li>
-                                <li>
-                                    <Link to='/generator'>
-                                        <p>Meme Generator <span className="soon">Wkrótce</span></p>
-                                    </Link>
-                                </li>
+                                <li><Link to='/pomoc'>Regulamin</Link></li>
+                                <li><Link to='/pomoc'>Polityka prywatności</Link></li>
                             </DropdownMenu>
                         </li>
                         {user ? (

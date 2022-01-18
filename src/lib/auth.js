@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_IP } from "../App";
 import Cookie from 'js-cookie'
-import Cookies from "js-cookie";
 
 export const registerUser = (username, email, password) => {
     if (typeof window === "undefined") {
@@ -27,9 +26,12 @@ export const login = (identifier, password) => {
 
     return new Promise((resolve, reject) => {
         axios
-            .post(`${API_IP}/auth/local/`, { identifier, password })
+            .post(`/auth/local/`, { identifier, password })
             .then((res) => {
-                Cookie.set("token", res.data.jwt);
+                // Cookie.withAttributes({
+                //     sameSite: "lax",
+                // }).set("token", res.data.jwt);
+                document.cookie = `token=${res.data.jwt}; SameSite=None; Secure`;
 
                 resolve(res);
             })
@@ -48,7 +50,7 @@ export const deleteComment = (id) => {
     if (typeof window === "undefined") {
         return;
     }
-    const token = Cookies.get("token");
+    const token = Cookie.get("token");
 
     return new Promise((resolve, reject) => {
         axios
@@ -69,7 +71,7 @@ export const postComment = (id, message) => {
     if (typeof window === "undefined") {
         return;
     }
-    const token = Cookies.get("token");
+    const token = Cookie.get("token");
     return new Promise((resolve, reject) => {
         axios
             .post(`${API_IP}/posts/${id}/comment`, {
@@ -91,7 +93,7 @@ export const addLike = (postId, userId) => {
     if (typeof window === "undefined") {
         return;
     }
-    const token = Cookies.get("token");
+    const token = Cookie.get("token");
     return new Promise((resolve, reject) => {
         axios
             .post(`${API_IP}/likes`, {
@@ -115,7 +117,7 @@ export const removeLike = (likeId) => {
     if (typeof window === "undefined") {
         return;
     }
-    const token = Cookies.get("token");
+    const token = Cookie.get("token");
 
     return new Promise((resolve, reject) => {
         axios

@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import React, { useEffect } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router';
 import Loader from '../molecules/loader/Loader';
 import Post from '../organisms/post/Post';

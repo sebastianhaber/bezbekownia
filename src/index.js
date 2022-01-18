@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import App, { API_IP } from './App';
 import { GlobalStyle } from './styles/GlobalStyle';
 import { theme } from './styles/theme';
+import { HelmetProvider } from 'react-helmet-async'
 
 const client = new ApolloClient({
   uri: `${API_IP}/graphql`,
@@ -12,13 +13,16 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <HelmetProvider>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <App />
       </ThemeProvider>
     </ApolloProvider>
-  </React.StrictMode>,
+    </HelmetProvider>
+  // {/* </React.StrictMode> */}
+  ,
   document.getElementById('root')
 );

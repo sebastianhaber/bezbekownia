@@ -2,7 +2,7 @@ import Nav from "./components/organisms/nav/Nav";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from "./components/views/HomePage";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Meme from "./components/views/Meme";
 import NotFound from "./components/views/NotFound";
 import Hashtag from "./components/views/Hashtag";
@@ -11,40 +11,59 @@ import Cookies from "js-cookie";
 import AppContext from "./context/AppContext";
 import Profile from "./components/views/Profile/Profile";
 import EditProfile from "./components/views/Profile/EditProfile";
+import Loader from "./components/molecules/loader/Loader";
+import axios from "axios";
 
-export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.0.45:1337';
+export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  const fetchPosts = () => {
+    axios.get(`/posts?_sort=created_at:DESC`)
+    .then(res => {
+      setPosts(res.data);
+    });
+  }
+  
+  const fetchMe = () => {
     const token = Cookies.get("token");
 
-    if (token) {
-      fetch(`${API_IP}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(async (res) => {
-        if (!res.ok) {
-          Cookies.remove("token");
-          setUser(null);
-          return null;
-        }
-        const user = await res.json();
-        setUser(user);
-      });
-    }
-    fetch(API_IP +'/posts?_sort=created_at:DESC')
-      .then(res => res.json())
-      .then(data => {
-        setPosts(data);
-      });
-  }, []);
+    axios.get(`/users/me`, {
+      // cancelToken: source.cancel(),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      })
+        .then(res => {
+          if (!res.ok) {
+            Cookies.remove("token");
+            setUser(null);
+            return null;
+          }
+          setUser(res.data);
+      })
+  }
   useEffect(() => {
-    console.log('new posts')
+    const token = Cookies.get("token");
+    // const token = localStorage.getItem("token");
+    axios.defaults.baseURL = API_IP;
+    // const source = axios.CancelToken.source();
+    
+
+    if (token) {
+      fetchMe();
+    }
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    console.log(posts)
   }, [posts])
+
+  if (posts.length === 0) return <Loader />
+
   return (
     <AppContext.Provider value={{
       user,

@@ -39,6 +39,7 @@ export default function Post({ data }) {
                 }
                 return false;
             })
+            console.log('data', data);
         }
     }, [user, data])
 

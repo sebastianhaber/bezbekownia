@@ -36,6 +36,7 @@ export default function Login({ changeModalType, closeModal }) {
         login(values.email, values.password)
             .then(res => {
                 appContext.setUser(res.data.user);
+                localStorage.setItem('token', res.data.jwt);
                 setValues(INIT_VALUES);
                 setLoading('');
                 closeModal();

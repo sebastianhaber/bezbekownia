@@ -6,7 +6,7 @@ import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
 import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import Post from '../../organisms/post/Post';
 import { Blocked, UserSection } from './Profile.styles';
 
