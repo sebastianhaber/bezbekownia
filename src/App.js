@@ -13,6 +13,7 @@ import Profile from "./components/views/Profile/Profile";
 import EditProfile from "./components/views/Profile/EditProfile";
 import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
+import 'simplebar/dist/simplebar.min.css';
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 
@@ -21,10 +22,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
+  const [page, setPage] = useState(1);
 
   const fetchPosts = () => {
-    setLoaderMessage('Pobieranie memów...')
-    axios.get(`/posts?_sort=created_at:DESC`)
+    const limitPosts = 10;
+    axios.get(`/posts?_start=${page}&_limit=${limitPosts}&_sort=created_at:DESC`)
     .then(res => {
       setPosts(res.data);
     });
@@ -40,7 +42,6 @@ function App() {
       },
       })
       .then(res => {
-          console.log('res', res)
           if (res.status !== 200) {
             Cookies.remove("token");
             setUser(null);
@@ -70,6 +71,7 @@ function App() {
       if (token) {
         fetchMe();
       }
+      setLoaderMessage('Pobieranie memów...')
       fetchPosts();
     }
   }, [isUnderMaintenance])
