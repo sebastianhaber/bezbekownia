@@ -9,44 +9,92 @@ import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
 import { addLike, deleteComment, postComment, removeLike } from '../../../../lib/auth'
 import axios from 'axios'
+import Loader from '../../../molecules/loader/Loader'
+import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgreeDisagree'
 
 export default function CommentsModal({ data, closeModal, liked, setLiked }) {
-    const [comments, setComments] = useState(data.comments);
+    const [comments, setComments] = useState([]);
+    const [visibleComments, setVisibleComments] = useState({
+        page: 1,
+        visible: 10,
+        content: []
+    });
     const [commentValue, setCommentValue] = useState('');
     const { user, posts } = useContext(AppContext);
     const [author, setAuthor] = useState({});
+    const [error, setError] = useState({
+        status: false,
+        message: 'Nie można znaleźć nazwy użytkownika.'
+    });
+    const [isDeleteModalActive, setDeleteModalActive] = useState(false);
+    const [deletingComment, setDeletingComment] = useState({
+        loading: {
+            loadingText: 'Usuwanie',
+            isLoading: false,
+        },
+        error: {
+            message: 'Nie można usunąć komentarza. Spróbuj odświeżyć stronę.',
+            isError: false,
+        },
+        deletingCommentID: null
+    });
 
-    // fetch author data
     useEffect(() => {
-        const source = axios.CancelToken.source();
-        const fetchAuthor = async () => {
-            try {
-                await axios.get(`/users?username=${data.user.username}`, {
-                    cancelToken: source.cancel()
-                })
-                    .then(res => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        (async () => {
+            await axios.get(`/users?username=${data.user.username}`, {
+                signal: signal
+            })
+                .then(res => {
+                    if (res.data.length > 0) {
                         setAuthor(res.data[0]);
+                    } else {
+                        setError({ ...error, status: true })
+                    }
                 })
-            } catch (error) {
-                if (!axios.isCancel(error)) {
-                    throw error
-                }
-                // setFetchingError(true);
-            }
-        }
-        fetchAuthor()
-    }, [data.user])
+        })();
+        return () => controller.abort();
+    }, [error, data.user])
+    useEffect(() => {
+        setComments(data.comments.reverse())
+    }, [data])
+    useEffect(() => {
+        setVisibleComments({...visibleComments, content: data.comments.reverse().slice(0, visibleComments.visible)})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.comments])
 
     const handleCloseModal = () => {
         if(closeModal) closeModal();
     }
-    const handleDeleteComment = async (id) => {
-        if (await deleteComment(id)) {
-            const filteredComments = comments.filter(comment => {
-                return comment.id !== id
-            });
-            setComments(filteredComments);
-        }
+    const handleDeleteComment = (id) => {
+        setDeleteModalActive(true);
+        setDeletingComment({...deletingComment, deletingCommentID: id})
+    }
+    const handleUserAgreeToDeleteComment = async () => {
+        await deleteComment(deletingComment.deletingCommentID)
+            .then(() => {
+                const filteredComments = comments.filter(comment => {
+                    return comment.id !== deletingComment.deletingCommentID
+                });
+                setComments(filteredComments);
+
+                const slicedArray = filteredComments.slice(0, visibleComments.page * visibleComments.visible)
+                setVisibleComments({ content: slicedArray })
+                setDeletingComment({...deletingComment, deletingCommentID: null})
+                handleCloseAgreeModal();
+                posts.map(post => {
+                    if (post.id === data.id) {
+                        post.comments = filteredComments
+                        return true;
+                    }
+                    return false;
+                })
+            })
+            .catch(() => {
+                setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: true } })
+            })
     }
     const handleChange = (e) => {
         setCommentValue(e.target.value);
@@ -62,9 +110,19 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
             message: commentValue,
             post: data.id,
         }
-        postComment(data.id, commentValue).then(res => {
-            comments.push(newComment);
+        postComment(data.id, commentValue).then(() => {
+            setComments([newComment, ...comments])
+            setVisibleComments({
+                ...visibleComments, content: [newComment, ...visibleComments.content]
+            })
             setCommentValue('');
+            posts.map(post => {
+                if (post.id === data.id) {
+                    post.comments = [newComment, ...comments]
+                    return true;
+                }
+                return false;
+            })
         })
     }
     const likePost = () => {
@@ -121,8 +179,35 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
             return false;
         })
     }
+    const handleCheckMoreComments = () => {
+        if (visibleComments.content.length < comments.length) {
+            let difference = comments.length - visibleComments.content.length;
+            let number = difference;
+            if (difference > visibleComments.visible) number = visibleComments.visible;
+            return <p className='loadmore' onClick={()=>handleLoadMoreComments()}>Załaduj więcej komentarzy ({number})</p>
+        }
+    }
+    const handleLoadMoreComments = () => {
+        const slicedArray = comments.slice(0, ++visibleComments.page * visibleComments.visible)
+        setVisibleComments({...visibleComments, page: visibleComments.page++ ,content: slicedArray})
+    }
+    const handleCloseAgreeModal = () => {
+        setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: false } })
+        setDeleteModalActive(false)
+    }
+    if (error.status) {
+        return <Loader message={error.message} />
+    }
     return (
         <StyledCommentsModal>
+            {isDeleteModalActive && (
+                <ModalAgreeDisagree
+                    title='Czy na pewno chcesz usunąć komentarz?'
+                    agreeText='Usuń'
+                    errorText={deletingComment.error.isError && deletingComment.error.message}
+                    onAgree={() => handleUserAgreeToDeleteComment()}
+                    onClose={() => handleCloseAgreeModal()} />
+            )}
             <div className="header">
                 <div className="user-info">
                     <img src={(author.image && `${API_IP}${author.image?.url}`) || UserImage} alt={author.username} />
@@ -157,7 +242,7 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                         {comments.length === 0 && (
                             <center><p>Brak komentarzy.</p></center>
                         )}
-                        {comments.map((comment, index) => (
+                        {visibleComments.content.map((comment, index) => (
                             <div key={index} className='comments_user'>
                                 <div className="box">
                                     <Link to={`/@${comment.author}`} onClick={handleCloseModal} className={author.username === comment.author ? `author logged` : `author`}>
@@ -172,6 +257,7 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                                 )}
                             </div>
                         ))}
+                        {handleCheckMoreComments()}
                     </div>
                 </section>
             </div>

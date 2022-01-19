@@ -62,6 +62,7 @@ export const deleteComment = (id) => {
             })
             .then((res) => {
                 resolve(res);
+                return true;
             })
             .catch((error) => {
                 reject(error);

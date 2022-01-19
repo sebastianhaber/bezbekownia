@@ -7,11 +7,6 @@ export const Wrapper = styled.div`
     z-index: 4;
     width: 100%;
     height: 100vh;
-    
-    transition: opacity .2s ease;
-    /* &.hide{
-        opacity: 0;
-    } */
 
     .overlay{
         background-color: ${({ theme }) => theme.colors.rgba};
@@ -50,10 +45,14 @@ export const ModalWrapper = styled.div`
     height: ${({isCommentsModal}) => isCommentsModal ? '100vh' : 'auto'};
     max-height: 100vh;
     background-color: ${({ theme }) => theme.colors.backgroundLighter};
-    padding: 1rem;
-    padding-top: 4rem;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
+    #simplebar{
+        padding: 1rem;
+        max-height: 100%;
+        .simplebar-scrollbar:before {
+            background-color: ${({theme}) => theme.colors.gray};
+        }
+    }
 
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
         border-radius: .5rem;

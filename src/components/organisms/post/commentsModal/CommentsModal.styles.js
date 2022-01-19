@@ -34,6 +34,7 @@ export const StyledCommentsModal = styled.div`
     .wrapper{
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         font-size: 14px;
         padding: 0;
         .section-title{
@@ -42,42 +43,19 @@ export const StyledCommentsModal = styled.div`
             margin-bottom: 1rem;
         }
         .image{
-            min-width: 300px;
-            width: 100%;
+            min-width: 350px;
             max-height: 400px;
-            background-color: ${({theme}) => theme.colors.background};
             flex: 1;
-            border-radius: 3px;
             img{
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
-                border-radius: .5rem;
             }
         }
         .comment-section{
             margin: 1rem 0;
-            min-width: 300px;
+            min-width: 350px;
             flex: 1;
-            /* .input{
-                display: flex;
-                width: 100%;
-                border-radius: 3px;
-                background-color: ${({ theme }) => theme.colors.background};
-                input{
-                    background-color: transparent;
-                    flex: 1;
-                }
-                .icon{
-                    width: 2rem;
-                    font-size: 1rem;
-                    display: grid;
-                    place-items: center;
-                }
-                .send{
-                    cursor: pointer;
-                }
-            } */
         }
         .comments{
             margin-top: 1rem;
@@ -102,6 +80,11 @@ export const StyledCommentsModal = styled.div`
                     cursor: pointer;
                 }
             }
+        }
+        .loadmore{
+            margin-top: .5rem;
+            cursor: pointer;
+            padding: .5rem 0;
         }
     }
 

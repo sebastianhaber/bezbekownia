@@ -26,7 +26,7 @@ function App() {
 
   const fetchPosts = () => {
     const limitPosts = 10;
-    axios.get(`/posts?_start=${page}&_limit=${limitPosts}&_sort=created_at:DESC`)
+    axios.get(`/posts?_start=${page-1}&_limit=${limitPosts}&_sort=created_at:DESC`)
     .then(res => {
       setPosts(res.data);
     });
@@ -74,6 +74,7 @@ function App() {
       setLoaderMessage('Pobieranie memów...')
       fetchPosts();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUnderMaintenance])
   useEffect(() => {
     console.log(posts)
@@ -87,7 +88,8 @@ function App() {
       isAuthenticated: !!user,
       setUser,
       posts,
-      setPosts
+      setPosts,
+      fetchPosts
     }}>
       <Router>
         <Nav />

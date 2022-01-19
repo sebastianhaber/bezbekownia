@@ -19,17 +19,10 @@ export default function Post({ data }) {
     const handleOpenCommentsModal = () => {
         document.querySelector('html').classList.add('no-scroll');
         setModalOpen(true)
-        setTimeout(() => {
-            document.getElementById('wrapper').classList.remove('hide');
-        }, 100);
     }
     const handleCloseModal = () => {
-        document.getElementById('wrapper').classList.add('hide');
         document.querySelector('html').classList.remove('no-scroll');
-
-        setTimeout(() => {
-            setModalOpen(false)
-        }, 500);
+        setModalOpen(false)
     }
     const handleToggleHud = (image) => {
         if (isHudVisible) {

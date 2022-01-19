@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react';
 import React, { useEffect } from 'react'
 import reactDom from 'react-dom'
 import { ModalWrapper, Wrapper } from './Modal.styles';
+import SimpleBar from 'simplebar-react'
 
 const modalContainer = document.getElementById('modal-container');
 
@@ -17,13 +18,15 @@ export default function Modal({children, onClose, isCommentsModal = false}) {
     }, [modalElement]);
 
     return reactDom.createPortal(
-        <Wrapper id='wrapper' className='hide' isCommentsModal={isCommentsModal}>
+        <Wrapper id='wrapper' isCommentsModal={isCommentsModal}>
             <div className="overlay" onClick={onClose}></div>
             <div className="exit" onClick={onClose}>
                 <Icon icon="akar-icons:cross" />
             </div>
             <ModalWrapper isCommentsModal={isCommentsModal}>
-                {children}
+                <SimpleBar forceVisible='y' id='simplebar'>
+                    {children}
+                </SimpleBar>
             </ModalWrapper>
         </Wrapper>,
         modalElement

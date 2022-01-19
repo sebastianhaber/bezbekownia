@@ -4,9 +4,11 @@ export const Wrapper = styled.div`
     position: relative;
     max-width: 600px;
     width: 100%;
+    min-height: 300px;
     margin: 2rem auto;
     overflow: hidden;
     user-select: none;
+    background-color: ${({theme}) => theme.colors.backgroundLighter};
     img{
         position: relative;
         width: 100%;
