@@ -230,7 +230,9 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                         <p className="title">{ data.title }</p>
                         <ul className="hashtags">
                             {data.hashtags.map((hashtag, index) => (
-                                <li key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{ hashtag.value.trim() }</Link></li>
+                                <li
+                                    onClick={handleCloseModal}
+                                    key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{hashtag.value.trim()}</Link></li>
                             ))}
                         </ul>
                     </div>
