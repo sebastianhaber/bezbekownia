@@ -88,10 +88,14 @@ export const Wrapper = styled.div`
         background-color: ${({ theme }) => theme.colors.backgroundLighter};
         overflow-y: auto;
         overflow-x: hidden;
+        padding: 1rem 0;
         .header{
             padding: 1rem;
         }
         .comment-section{
+            padding: 0 1rem;
+        }
+        .image{
             padding: 0 1rem;
         }
     }
@@ -99,6 +103,13 @@ export const Wrapper = styled.div`
     @media screen and (min-width: 1000px){
         .wrapper{
             border-radius: .5rem;
+        }
+    }
+    @media screen and (max-width: 550px){
+        .wrapper{
+            .image{
+                padding: 0;
+            }
         }
     }
 `;
