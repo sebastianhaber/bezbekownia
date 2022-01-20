@@ -45,6 +45,8 @@ export default function Post({ data }) {
                 }
                 return false;
             })
+        } else {
+            setLiked(false);
         }
     }, [user, data])
 
