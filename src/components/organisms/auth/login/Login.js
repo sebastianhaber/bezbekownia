@@ -35,10 +35,10 @@ export default function Login({ changeModalType, closeModal }) {
         errorArray = [];
         const loginUser = () => login(values.email, values.password)
             .then(res => {
-                closeModal();
                 setValues(INIT_VALUES);
                 setLoading('');
                 appContext.setUser(res.data.user);
+                closeModal();
             }).catch(error => {
                 setValues({ ...values, password: '' })
                 setLoading('');

@@ -11,7 +11,11 @@ export const registerUser = (username, email, password) => {
     axios
         .post(`${API_IP}/auth/local/register`, { username, email, password })
         .then((res) => {
-            Cookie.set("token", res.data.jwt);
+            Cookies.set("token", res.data.jwt, {
+                path: "/",
+                expires: 3600*1000,
+                // secure: true,
+            });
 
             resolve(res);
         })
@@ -32,7 +36,7 @@ export const login = (identifier, password) => {
                 Cookies.set("token", res.data.jwt, {
                     path: "/",
                     expires: 3600*1000,
-                    secure: true,
+                    // secure: true,
                 });
                 resolve(res);
             })
