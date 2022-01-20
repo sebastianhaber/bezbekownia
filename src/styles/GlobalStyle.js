@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
         min-height: 100vh;
         min-width: 360px;
         overflow-x: hidden;
+        scroll-behavior: smooth;
         &.no-scroll{
             overflow-y: hidden;
         }

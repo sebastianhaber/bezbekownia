@@ -72,7 +72,7 @@ export default function Nav() {
                     </Modal>
                 )}
                 <div className="wrapper">
-                    <Link to='/' className='logo'>Bezbekownia</Link>
+                    <Link to='/strona/1' className='logo'>Bezbekownia</Link>
                     <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                         <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                             <div className="icon"><Icon icon="akar-icons:search" /></div>

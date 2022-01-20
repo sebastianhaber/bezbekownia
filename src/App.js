@@ -16,19 +16,24 @@ import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
+export const limitPosts = 10;
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [totalPostsLength, setTotalPostsLength] = useState(0);
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
   const [page, setPage] = useState(1);
 
   const fetchPosts = () => {
-    const limitPosts = 10;
-    axios.get(`/posts?_start=${page-1}&_limit=${limitPosts}&_sort=created_at:DESC`)
+    axios.get(`/posts?_start=${(page-1)*limitPosts}&_limit=${limitPosts}&_sort=created_at:DESC`)
     .then(res => {
       setPosts(res.data);
+    });
+    axios.get(`/posts/count`)
+    .then(res => {
+      setTotalPostsLength(res.data);
     });
   }
   
@@ -72,13 +77,14 @@ function App() {
         fetchMe();
       }
       setLoaderMessage('Pobieranie memów...')
-      fetchPosts();
+      // fetchPosts();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUnderMaintenance])
   useEffect(() => {
-    console.log(posts)
-  }, [posts])
+    fetchPosts()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   if (posts.length === 0) return <Loader message={loaderMessage} />
 
@@ -95,7 +101,22 @@ function App() {
         <Nav />
         <main>
           <Routes>
-            <Route path='/' element={<HomePage posts={posts} fetchPosts={fetchPosts} />} />
+            <Route path='/' element={
+              <HomePage
+                posts={posts}
+                page={ page }
+                setPage={setPage}
+                totalPostsLength={totalPostsLength}
+                fetchPosts={fetchPosts} />
+            } />
+            <Route path='strona/:searchPage' element={
+              <HomePage
+                posts={posts}
+                page={ page }
+                setPage={setPage}
+                totalPostsLength={totalPostsLength}
+                fetchPosts={fetchPosts} />
+            } />
             <Route path='pomoc' element={<Helmet>
                   <title>Bezbekownia | Pomoc</title>
                   <meta name="description" content="Pomoc w serwisie Bezbekownia.pl" />

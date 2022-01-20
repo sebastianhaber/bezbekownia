@@ -25,6 +25,9 @@ const StyledButton = styled.button`
     &:disabled{
         background-color: ${({theme}) => theme.colors.gray};
         cursor: not-allowed;
+        &:hover{
+            background-color: ${({ theme }) => theme.colors.gray};
+        }
     }
     div{
         display: flex;
@@ -63,7 +66,7 @@ const StyledButton = styled.button`
 
 export default function Button(props) {
     return (
-        <StyledButton variant={props.variant} {...props} disabled={props.loading}>
+        <StyledButton variant={props.variant} {...props} disabled={props.loading || props.disabled}>
             {props.loading ? (
                 <div>
                     <Icon className='loading' icon="akar-icons:arrow-clockwise" />
