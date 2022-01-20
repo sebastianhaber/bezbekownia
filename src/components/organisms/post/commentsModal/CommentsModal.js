@@ -226,6 +226,14 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                     <img src={`${API_IP}` + data.image.url} alt={data.title} />
                 </div>
                 <section className="comment-section">
+                    <div className="meme-data">
+                        <p className="title">{ data.title }</p>
+                        <ul className="hashtags">
+                            {data.hashtags.map((hashtag, index) => (
+                                <li key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{ hashtag.value.trim() }</Link></li>
+                            ))}
+                        </ul>
+                    </div>
                     <p className='section-title'>Komentarze</p>
                     {user ? (
                         <form onSubmit={handleSubmit}>

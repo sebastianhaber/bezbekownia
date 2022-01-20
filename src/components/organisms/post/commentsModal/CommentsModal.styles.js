@@ -56,6 +56,20 @@ export const StyledCommentsModal = styled.div`
             margin: 1rem 0;
             min-width: 300px;
             flex: 1;
+            .meme-data{
+                margin-bottom: 1rem;
+                .title{
+                    font-size: 1rem;
+                    font-weight: bold;
+                }
+                .hashtags{
+                    display: flex;
+                    li{
+                        margin-right: .5rem;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
         .comments{
             margin-top: 1rem;
@@ -97,7 +111,7 @@ export const StyledCommentsModal = styled.div`
                 max-width: 450px;
             }
             .comment-section{
-                margin: 1rem;
+                margin: 0 1rem;
             }
         }
     }
