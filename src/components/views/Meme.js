@@ -86,9 +86,14 @@ export const Wrapper = styled.div`
         max-width: 1000px;
         width: 100%;
         background-color: ${({ theme }) => theme.colors.backgroundLighter};
-        padding: 1rem;
         overflow-y: auto;
         overflow-x: hidden;
+        .header{
+            padding: 1rem;
+        }
+        .comment-section{
+            padding: 0 1rem;
+        }
     }
 
     @media screen and (min-width: 1000px){

@@ -54,7 +54,7 @@ export const StyledCommentsModal = styled.div`
         }
         .comment-section{
             margin: 1rem 0;
-            min-width: 350px;
+            min-width: 300px;
             flex: 1;
         }
         .comments{
