@@ -61,7 +61,7 @@ export default function Search() {
                     {data.users.length > 0 ? (
                         <ul>{data.users.map((user, index) => (
                             <li key={index}>
-                                {user.image ? <img src={`${API_IP}/${user.image.url}`} alt={user.username} />
+                                {user.image ? <img src={`${API_IP}${user.image.url}`} alt={user.username} />
                                 : <img src={UserImage} alt={user.username} />}
                                 <Link to={`/uzytkownik/${user.username}`}>{user.username}</Link>
                             </li>
