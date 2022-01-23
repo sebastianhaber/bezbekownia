@@ -47,11 +47,6 @@ export default function HomePage({ posts, fetchPosts, totalPostsLength, page, se
         window.scrollTo(0, 0)
         setFetching(true)
     }
-    useEffect(() => {
-        console.log((totalPostsLength / (Number.parseInt(page) * limitPosts)));
-
-        // console.log(totalPostsLength - posts.length, (totalPostsLength - limitPosts/(Number.parseInt(page)*limitPosts)));
-    }, [page])
     
     if(notFound) return <NotFound />
     if(fetching) return <Loader />
