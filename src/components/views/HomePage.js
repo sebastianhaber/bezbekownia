@@ -47,6 +47,11 @@ export default function HomePage({ posts, fetchPosts, totalPostsLength, page, se
         window.scrollTo(0, 0)
         setFetching(true)
     }
+    useEffect(() => {
+        console.log((totalPostsLength / (Number.parseInt(page) * limitPosts)));
+
+        // console.log(totalPostsLength - posts.length, (totalPostsLength - limitPosts/(Number.parseInt(page)*limitPosts)));
+    }, [page])
     
     if(notFound) return <NotFound />
     if(fetching) return <Loader />
@@ -60,16 +65,16 @@ export default function HomePage({ posts, fetchPosts, totalPostsLength, page, se
             {posts.map((post, index) => (
                 <Post data={post} key={index} />
             ))}
-            {totalPostsLength - page - 1 + limitPosts > 0 ? (
+            {(totalPostsLength - Number.parseInt(page) - 1 + limitPosts) > 0 ? (
                 <Pagination>
-                    {page > 1 && (
+                    {Number.parseInt(page) > 1 && (
                         <Button variant='dark' onClick={()=>prevPage()}>Poprzednia strona</Button>
                     )}
-                    {totalPostsLength > 10 && <Button onClick={()=>nextPage()}>Następna strona</Button> }
+                    {totalPostsLength - ((Number.parseInt(page)-1) * limitPosts) > 1 && <Button onClick={()=>nextPage()}>Następna strona</Button> }
                 </Pagination>
             ) : (
                 <Pagination>
-                    {page > 1 && (
+                    {Number.parseInt(page) > 1 && (
                         <Button variant='dark' onClick={()=>prevPage()}>Poprzednia strona</Button>
                     )}
                 </Pagination>
