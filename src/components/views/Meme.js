@@ -85,7 +85,7 @@ export const Wrapper = styled.div`
     .wrapper{
         max-width: 1000px;
         width: 100%;
-        background-color: ${({ theme }) => theme.colors.backgroundLighter};
+        background-color: ${({ theme }) => theme.colors.background.light};
         overflow-y: auto;
         overflow-x: hidden;
         padding: 1rem 0;

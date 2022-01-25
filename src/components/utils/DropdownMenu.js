@@ -19,7 +19,7 @@ const Wrapper = styled.div`
         margin-top: 1rem;
         border-radius: .5rem;
         padding: .5rem;
-        background-color: ${({ theme }) => theme.colors.backgroundLighter};
+        background-color: ${({ theme }) => theme.colors.background.light};
 
         li{
             width: 100%;
@@ -41,13 +41,13 @@ const Wrapper = styled.div`
             }
             
             &:hover{
-                background-color: ${({theme}) => theme.colors.background};
+                background-color: ${({theme}) => theme.colors.background.dark};
             }
         }
         hr{
             width: 100%;
             margin: .5rem auto;
-            background-color: ${({theme}) => theme.colors.backgroundLighter};
+            background-color: ${({theme}) => theme.colors.background.light};
         }
     }
 `;

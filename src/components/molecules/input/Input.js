@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     display: flex;
     width: 100%;
     border-radius: 3px;
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.background.dark};
     input{
         background-color: transparent;
         flex: 1;

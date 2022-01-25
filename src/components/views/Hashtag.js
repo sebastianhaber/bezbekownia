@@ -1,10 +1,11 @@
 import { useQuery, gql } from '@apollo/client';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router';
+import { FLOATING_NOTIFICATION_INITIALS } from '../../App';
+import FloatingNotification from '../molecules/floating-notification/FloatingNotification';
 import Loader from '../molecules/loader/Loader';
 import Post from '../organisms/post/Post';
-import ErrorWrapper from '../utils/ErrorWrapper';
 
 export default function Hashtag() {
     const { hashtag } = useParams();
@@ -38,16 +39,24 @@ export default function Hashtag() {
             }
         }
     `);
+    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     if (error) {
-        return <ErrorWrapper />
+        return setFloatingNotification({
+            isActive: true,
+            message: 'Wystąpił błąd.',
+            type: 'error',
+        })
     }
     return (
         <div>
+            {floatingNotification.isActive && (
+                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(FLOATING_NOTIFICATION_INITIALS)} />
+            )}
             <Helmet>
                 <title>Bezbekownia | { hashtag }</title>
                 <meta name="description" content={`Memy z tagiem ${hashtag}`} />

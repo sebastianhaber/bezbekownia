@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
         font-size: 18px;
         font-family: 'Inter', sans-serif;
         color: ${({theme}) => theme.colors.white};
-        background-color: ${({theme}) => theme.colors.background};
+        background-color: ${({theme}) => theme.colors.background.dark};
         line-height: 1.5;
         letter-spacing: -0.022rem;
         min-height: 100vh;
@@ -44,7 +44,7 @@ export const GlobalStyle = createGlobalStyle`
         color: inherit;
         text-decoration: inherit;
         &.clickable{
-            color: ${({ theme }) => theme.colors.accent};
+            color: ${({ theme }) => theme.colors.accent.light};
             text-decoration: underline;
         }
     }
@@ -57,7 +57,7 @@ export const GlobalStyle = createGlobalStyle`
     .square{
         width: 2rem;
         height: 2rem;
-        background-color: ${({ theme }) => theme.colors.backgroundLighter};
+        background-color: ${({ theme }) => theme.colors.background.light};
         font-size: 1rem;
         display: grid;
         place-items: center;
@@ -65,7 +65,7 @@ export const GlobalStyle = createGlobalStyle`
         cursor: pointer;
         transition: background-color .2s ease;
         &.active{
-            background-color: ${({ theme }) => theme.colors.accent};
+            background-color: ${({ theme }) => theme.colors.accent.light};
         }
     }
     .soon{
@@ -73,7 +73,7 @@ export const GlobalStyle = createGlobalStyle`
         top: 0;
         left: 102%;
         font-size: .5rem;
-        color: ${({ theme }) => theme.colors.accent};
+        color: ${({ theme }) => theme.colors.accent.light};
         text-transform: uppercase;
         font-weight: bold;
     }

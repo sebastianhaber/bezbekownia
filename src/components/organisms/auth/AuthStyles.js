@@ -4,7 +4,7 @@ export const AuthWrapper = styled.div`
     user-select: none;
     form{
         .errors{
-            color: ${({ theme }) => theme.colors.red};
+            color: ${({ theme }) => theme.colors.red.light};
             font-size: 14px;
             text-align: center;
             margin-bottom: .5rem;
@@ -28,7 +28,7 @@ export const AuthWrapper = styled.div`
         font-size: 14px;
         text-align: center;
         span{
-            color: ${({ theme }) => theme.colors.accent};
+            color: ${({ theme }) => theme.colors.accent.light};
             cursor: pointer;
             &:hover{
                 text-decoration: underline;

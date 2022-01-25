@@ -5,9 +5,10 @@ import { useParams } from 'react-router'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../../molecules/loader/Loader';
-import ErrorWrapper from '../../utils/ErrorWrapper';
 import UserImage from '../../../assets/user-image.png'
-import { API_IP } from '../../../App';
+import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../App';
+import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
+import { useState } from 'react/cjs/react.development';
 
 export default function Search() {
     const { value } = useParams();
@@ -27,6 +28,7 @@ export default function Search() {
             }
             }
     `);
+    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -35,11 +37,18 @@ export default function Search() {
     if (loading) return <Loader />;
 
     if (error) {
-        return <ErrorWrapper />
+        return setFloatingNotification({
+            isActive: true,
+            message: 'Wystąpił błąd.',
+            type: 'error',
+        })
     }
 
     return (
         <div>
+            {floatingNotification.isActive && (
+                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(FLOATING_NOTIFICATION_INITIALS)} />
+            )}
             <Helmet>
                 <title>Bezbekownia | Szukaj {value}</title>
                 <meta name="description" content={`Szukaj ${value} na Bezbekownia.pl`} />
@@ -91,12 +100,12 @@ const Wrapper = styled.section`
         li{
             display: flex;
             align-items: center;
-            background-color: ${({ theme }) => theme.colors.accent};
+            background-color: ${({ theme }) => theme.colors.accent.light};
             transition: background-color .2s ease;
             border-radius: .5rem;
             padding: 3px .5rem;
             &:hover{
-                background-color: ${({ theme }) => theme.colors.accentDarker};
+                background-color: ${({ theme }) => theme.colors.accent.dark};
             }
             img{
                 width: 2rem;

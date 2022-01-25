@@ -30,7 +30,7 @@ export const StyledNotification = styled.div`
         `
     } else {
         return `
-            background-color: ${theme.colors.accent};
+            background-color: ${theme.colors.accent.light};
             color: ${theme.colors.white};
         `
     }

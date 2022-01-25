@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
         font-size: 14px;
         text-align: center;
         margin-top: 1rem;
-        color: ${({theme}) => theme.colors.red};
+        color: ${({theme}) => theme.colors.red.light};
     }
     .buttons{
         display: flex;

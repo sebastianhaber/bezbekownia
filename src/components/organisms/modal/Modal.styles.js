@@ -44,7 +44,7 @@ export const ModalWrapper = styled.div`
     min-height: 300px;
     height: ${({isCommentsModal}) => isCommentsModal ? '100vh' : 'auto'};
     max-height: 100vh;
-    background-color: ${({ theme }) => theme.colors.backgroundLighter};
+    background-color: ${({ theme }) => theme.colors.background.light};
     overflow: hidden;
     .heading{
         font-size: 1.5rem;
@@ -67,7 +67,6 @@ export const ModalWrapper = styled.div`
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
         border-radius: .5rem;
         max-height: 80vh;
-        /* padding-top: 1rem; */
     }
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal && '636px'}){
         max-height: 80vh;

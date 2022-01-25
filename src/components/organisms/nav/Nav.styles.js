@@ -5,7 +5,7 @@ export const StyledNav = styled.nav`
     top: 0;
     left: 0;
     z-index: 4;
-    background-color: ${({theme}) => theme.colors.background};
+    background-color: ${({theme}) => theme.colors.background.dark};
     width: 100%;
     height: 60px;
     display: grid;
@@ -38,7 +38,7 @@ export const StyledNav = styled.nav`
         display: none;
         width: 100%;
         height: 3rem;
-        background-color: ${({ theme }) => theme.colors.backgroundLighter};
+        background-color: ${({ theme }) => theme.colors.background.light};
         &.active{
             display: flex;
         }

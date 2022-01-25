@@ -8,7 +8,7 @@ const rotate = keyframes`
     }
 `;
 const StyledButton = styled.button`
-    background-color: ${({ theme }) => theme.colors.accent};
+    background-color: ${({ theme }) => theme.colors.accent.light};
     font-weight: bold;
     padding: 0 1rem;
     cursor: pointer;
@@ -20,7 +20,7 @@ const StyledButton = styled.button`
     place-items: center;
     border-radius: .5rem;
     &:hover{
-        background-color: ${({ theme }) => theme.colors.accentDarker};
+        background-color: ${({ theme }) => theme.colors.accent.dark};
     }
     &:disabled{
         background-color: ${({theme}) => theme.colors.gray};
@@ -48,17 +48,17 @@ const StyledButton = styled.button`
 
     ${({ variant, theme }) => 
         variant && variant === 'ghost' &&
-        `background-color: ${theme.colors.backgroundLighter};
+        `background-color: ${theme.colors.background.light};
         border: 2px solid transparent;
         &:hover{
-            border-color: ${theme.colors.background};
-            background-color: ${theme.colors.backgroundLighter};
+            border-color: ${theme.colors.background.dark};
+            background-color: ${theme.colors.background.light};
     }`}
     ${({ variant, theme }) =>
         variant && variant === 'dark' &&
-        `background-color: ${theme.colors.background};
+        `background-color: ${theme.colors.background.dark};
         &:hover{
-            background-color: ${theme.colors.background};
+            background-color: ${theme.colors.background.dark};
         }`
     }
     

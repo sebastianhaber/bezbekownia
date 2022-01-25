@@ -28,7 +28,7 @@ const Wrapper = styled.section`
         padding: 1rem;
         text-align: center;
         a{
-            color: ${({ theme }) => theme.colors.accent};
+            color: ${({ theme }) => theme.colors.accent.light};
             font-weight: bold;
             text-decoration: underline;
         }
