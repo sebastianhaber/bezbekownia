@@ -17,6 +17,7 @@ import 'simplebar/dist/simplebar.min.css';
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
+export const APP_URL = 'https://bezbekownia.pl';
 
 function App() {
   const [posts, setPosts] = useState([]);

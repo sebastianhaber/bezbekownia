@@ -117,11 +117,26 @@ export const Wrapper = styled.div`
                     }
                 }
             }
-            
         }
     }
 
     @media screen and (min-width: 600px){
         border-radius: .5rem;
+    }
+`;
+export const Share = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    gap: 2rem;
+    button{
+        width: 3rem;
+        height: 3rem;
+        svg{
+            width: 100%;
+            height: 100%;
+        }
     }
 `;

@@ -46,6 +46,16 @@ export const ModalWrapper = styled.div`
     max-height: 100vh;
     background-color: ${({ theme }) => theme.colors.backgroundLighter};
     overflow: hidden;
+    .heading{
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    .top{
+        p{
+            text-align: center;
+            font-size: 14px;
+        }
+    }
     #simplebar{
         padding: 1rem;
         max-height: 100%;
@@ -57,7 +67,7 @@ export const ModalWrapper = styled.div`
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
         border-radius: .5rem;
         max-height: 80vh;
-        padding-top: 1rem;
+        /* padding-top: 1rem; */
     }
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal && '636px'}){
         max-height: 80vh;
