@@ -11,6 +11,7 @@ import { addLike, deleteComment, postComment, removeLike } from '../../../../lib
 import axios from 'axios'
 import Loader from '../../../molecules/loader/Loader'
 import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgreeDisagree'
+import ShareModal from '../ShareModal'
 
 export default function CommentsModal({ data, closeModal, liked, setLiked }) {
     const [comments, setComments] = useState([]);
@@ -37,6 +38,11 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
             isError: false,
         },
         deletingCommentID: null
+    });
+    const [shareModal, setShareModal] = useState(false);
+    const [hashtags, setHashtags] = useState({
+        array: [],
+        string: ''
     });
 
     useEffect(() => {
@@ -195,11 +201,31 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
         setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: false } })
         setDeleteModalActive(false)
     }
+    const handleOpenShareModal = () => {
+        setShareModal(true)
+        let hashtagArray = [];
+        let hashtagString = '';
+
+        data.hashtags.map(hashtag => {
+            hashtagArray.push(`${hashtag.value}`)
+            return true;
+        })
+        hashtagString = '#' + hashtagArray.join(', #')
+
+        setHashtags({
+            array: hashtagArray,
+            string: hashtagString
+        })
+    }
+
     if (error.status) {
         return <Loader message={error.message} />
     }
     return (
         <StyledCommentsModal>
+            {shareModal && (
+                <ShareModal data={data} hashtags={hashtags} onClose={()=>setShareModal(false)} />
+            )}
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
                     title='Czy na pewno chcesz usunąć komentarz?'
@@ -215,7 +241,7 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                 </div>
                 <div className="buttons">
                     <Button variant={liked ? `` : `dark`} onClick={likePost}>+{data.likes.length} byczku</Button>
-                    <Button variant='dark'>
+                    <Button variant='dark' onClick={()=>handleOpenShareModal()}>
                         <Icon icon="akar-icons:arrow-forward-thick" />
                         <p>Udostępnij</p>
                     </Button>

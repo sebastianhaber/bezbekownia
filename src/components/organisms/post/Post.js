@@ -1,15 +1,15 @@
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 import { useContext, useEffect } from 'react/cjs/react.development';
-import { API_IP, APP_URL } from '../../../App';
+import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
 import { deletePost } from '../../../lib/auth';
 import ModalAgreeDisagree from '../../molecules/modal-agree-disagree/ModalAgreeDisagree';
 import Modal from '../modal/Modal';
 import CommentsModal from './commentsModal/CommentsModal';
-import { Share, Wrapper } from './Post.styles'
+import { Wrapper } from './Post.styles'
+import ShareModal from './ShareModal';
 
 export default function Post({ data, removePostFromArray }) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -114,29 +114,7 @@ export default function Post({ data, removePostFromArray }) {
                 </Modal>
             )}
             {shareModal && (
-                <Modal onClose={() => setShareModal(false)}>
-                    <div className='top'>
-                        <h1 className="heading">Udostępnij</h1>
-                        <p>Wybierz serwis</p>
-                    </div>
-                    <Share>
-                        <FacebookShareButton
-                            url={`${APP_URL}/meme/${data.slug}`}
-                            quote={data.title}
-                            hashtag={data.hashtags[0] && hashtags.string}>
-                            <FacebookIcon round />
-                        </FacebookShareButton>
-                        <FacebookMessengerShareButton url={`${APP_URL}/meme/${data.slug}`}>
-                            <FacebookMessengerIcon round />
-                        </FacebookMessengerShareButton>
-                        <TwitterShareButton
-                            url={`${APP_URL}/meme/${data.slug}`}
-                            title={data.title}
-                            hashtags={hashtags.array}>
-                            <TwitterIcon round />
-                        </TwitterShareButton>
-                    </Share>
-                </Modal>
+                <ShareModal data={data} hashtags={hashtags} onClose={()=>setShareModal(false)} />
             )}
             <img
                 src={`${API_IP}${data.image.url}`}
