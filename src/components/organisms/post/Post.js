@@ -2,11 +2,12 @@ import { Icon } from '@iconify/react';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react/cjs/react.development';
-import { API_IP } from '../../../App';
+import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../App';
 import AppContext from '../../../context/AppContext';
-import { deletePost } from '../../../lib/auth';
+import { deletePost, submitReport } from '../../../lib/auth';
 import ModalAgreeDisagree from '../../molecules/modal-agree-disagree/ModalAgreeDisagree';
 import Modal from '../modal/Modal';
+import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
 import CommentsModal from './commentsModal/CommentsModal';
 import { Wrapper } from './Post.styles'
 import ShareModal from './ShareModal';
@@ -22,6 +23,7 @@ export default function Post({ data, removePostFromArray }) {
         isError: false,
         message: 'Nie można usunąć mema. Spróbuj ponownie załadować stronę.'
     })
+    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const navigate = useNavigate();
     const [hashtags, setHashtags] = useState({
         array: [],
@@ -66,6 +68,15 @@ export default function Post({ data, removePostFromArray }) {
         setDeleteModalActive(false);
         setDeletingError({...deletingError, isError: false})
     }
+    const handleReportPost = () => {
+        submitReport(data.id, user.id).then(() => {
+            setFloatingNotification({
+                isActive: true,
+                message: 'Zgłoszono mema.',
+                type: 'success'
+            })
+        })
+    }
 
     useEffect(() => {
         if (user && user.id) {
@@ -99,7 +110,9 @@ export default function Post({ data, removePostFromArray }) {
 
     return (
         <Wrapper>
-            
+            {floatingNotification.isActive && (
+                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(false)} />
+            )}
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
                     title='Czy na pewno chcesz usunąć mema?'
@@ -110,7 +123,12 @@ export default function Post({ data, removePostFromArray }) {
             )}
             {modalOpen && (
                 <Modal isCommentsModal onClose={()=>handleCloseModal()}>
-                    <CommentsModal data={data} setLiked={setLiked} liked={liked} closeModal={()=>handleCloseModal()} />
+                    <CommentsModal
+                        data={data}
+                        setLiked={setLiked}
+                        liked={liked}
+
+                        closeModal={() => handleCloseModal()} />
                 </Modal>
             )}
             {shareModal && (
@@ -145,7 +163,7 @@ export default function Post({ data, removePostFromArray }) {
                     <ul>
                         <li onClick={()=> handleOpenShareModal()}><Icon icon="akar-icons:arrow-forward-thick" /> Udostępnij</li>
                         {user && ((user.id === data.user.id) || user.isAdmin) && <li onClick={()=>handleBeforeDeletingPost()}><Icon icon="akar-icons:trash-can" /> Usuń</li>}
-                        <li><Icon icon="akar-icons:flag" /> Zgłoś</li>
+                        <li onClick={()=>handleReportPost()}><Icon icon="akar-icons:flag" /> Zgłoś</li>
                     </ul>
                 </div>
             </div>

@@ -154,7 +154,6 @@ export const deletePost = (id) => {
                 },
             })
             .then(async (res) => {
-                await deleteLikes(id);
                 resolve(res);
                 return true;
             })
@@ -163,18 +162,20 @@ export const deletePost = (id) => {
             });
         });
 };
-export const deleteLikes = (postId) => {
+export const submitReport = (postId, userId) => {
     if (typeof window === "undefined") {
         return;
     }
     const token = Cookie.get("token");
-
     return new Promise((resolve, reject) => {
         axios
-            .delete(`${API_IP}/likes?post.id=${postId}`, {
+            .post(`${API_IP}/reports`, {
+                postID: postId,
+                userID: userId,
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                },
+                }
             })
             .then((res) => {
                 resolve(res);

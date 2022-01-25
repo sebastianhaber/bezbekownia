@@ -4,14 +4,15 @@ import Button from '../../../utils/Button'
 import { StyledCommentsModal } from './CommentsModal.styles'
 import UserImage from '../../../../assets/user-image.png'
 import { Link } from 'react-router-dom'
-import { API_IP } from '../../../../App'
+import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../../App'
 import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
-import { addLike, deleteComment, postComment, removeLike } from '../../../../lib/auth'
+import { addLike, deleteComment, postComment, removeLike, submitReport } from '../../../../lib/auth'
 import axios from 'axios'
 import Loader from '../../../molecules/loader/Loader'
 import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgreeDisagree'
 import ShareModal from '../ShareModal'
+import FloatingNotification from '../../../molecules/floating-notification/FloatingNotification'
 
 export default function CommentsModal({ data, closeModal, liked, setLiked }) {
     const [comments, setComments] = useState([]);
@@ -44,6 +45,7 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
         array: [],
         string: ''
     });
+    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
 
     useEffect(() => {
         const controller = new AbortController();
@@ -217,12 +219,24 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
             string: hashtagString
         })
     }
+    const handleReportPost = () => {
+        submitReport(data.id, user.id).then(() => {
+            setFloatingNotification({
+                isActive: true,
+                message: 'Zgłoszono mema.',
+                type: 'success'
+            })
+        })
+    }
 
     if (error.status) {
         return <Loader message={error.message} />
     }
     return (
         <StyledCommentsModal>
+            {floatingNotification.isActive && (
+                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(false)} />
+            )}
             {shareModal && (
                 <ShareModal data={data} hashtags={hashtags} onClose={()=>setShareModal(false)} />
             )}
@@ -244,6 +258,10 @@ export default function CommentsModal({ data, closeModal, liked, setLiked }) {
                     <Button variant='dark' onClick={()=>handleOpenShareModal()}>
                         <Icon icon="akar-icons:arrow-forward-thick" />
                         <p>Udostępnij</p>
+                    </Button>
+                    <Button variant='dark' onClick={()=>handleReportPost()}>
+                        <Icon icon="akar-icons:flag" />
+                        <p>Zgłoś</p>
                     </Button>
                 </div>
             </div>

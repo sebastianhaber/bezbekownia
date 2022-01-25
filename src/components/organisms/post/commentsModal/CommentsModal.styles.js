@@ -11,6 +11,7 @@ export const StyledCommentsModal = styled.div`
             display: flex;
             align-items: center;
             margin-bottom: 1rem;
+            margin-right: 1rem;
             img{
                 width: 2rem;
                 height: 2rem;
@@ -24,10 +25,13 @@ export const StyledCommentsModal = styled.div`
         .buttons{
             display: flex;
             justify-content: right;
-            flex: 1;
+            gap: 1rem;
             margin-bottom: 1rem;
             button{
-                margin-left: 1rem;
+                transition: transform .2s ease;
+                &:active{
+                    transform: scale(.95);
+                }
             }
         }
     }
@@ -113,6 +117,12 @@ export const StyledCommentsModal = styled.div`
             .comment-section{
                 margin: 0 1rem;
             }
+        }
+    }
+    @media screen and (max-width: 600px){
+        .header .buttons{
+            width: 100%;
+            flex-wrap: wrap;
         }
     }
 `;
