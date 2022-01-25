@@ -24,7 +24,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(null);
 
   const fetchPosts = () => {
     axios.get(`/posts?_start=${(page-1)*limitPosts}&_limit=${limitPosts}&_sort=created_at:DESC`)
@@ -58,7 +58,11 @@ function App() {
   const checkMaintenanceMode = () => {
     axios.get(`/maintenance-mode`)
       .then(res => {
-        if (res.data.isUnderMaintenance) setLoaderMessage('Trwają prace administracyjne.');
+        if (res.data.isUnderMaintenance) {
+          setLoaderMessage('Trwają prace administracyjne.');
+        } else {
+          setPage(1)
+        }
         setMaintenance(res.data.isUnderMaintenance);
       });
   }
@@ -82,7 +86,7 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUnderMaintenance])
   useEffect(() => {
-    fetchPosts()
+    if(page) fetchPosts()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 

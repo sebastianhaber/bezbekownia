@@ -140,3 +140,47 @@ export const removeLike = (likeId) => {
             });
         });
 };
+export const deletePost = (id) => {
+    if (typeof window === "undefined") {
+        return;
+    }
+    const token = Cookie.get("token");
+
+    return new Promise((resolve, reject) => {
+        axios
+            .delete(`${API_IP}/posts/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then(async (res) => {
+                await deleteLikes(id);
+                resolve(res);
+                return true;
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        });
+};
+export const deleteLikes = (postId) => {
+    if (typeof window === "undefined") {
+        return;
+    }
+    const token = Cookie.get("token");
+
+    return new Promise((resolve, reject) => {
+        axios
+            .delete(`${API_IP}/likes?post.id=${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                resolve(res);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        });
+};

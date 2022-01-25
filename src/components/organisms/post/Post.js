@@ -4,15 +4,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react/cjs/react.development';
 import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
+import { deletePost } from '../../../lib/auth';
+import ModalAgreeDisagree from '../../molecules/modal-agree-disagree/ModalAgreeDisagree';
 import Modal from '../modal/Modal';
 import CommentsModal from './commentsModal/CommentsModal';
 import { Wrapper } from './Post.styles'
 
-export default function Post({ data }) {
+export default function Post({ data, removePostFromArray }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [liked, setLiked] = useState(false);
     const [isHudVisible, setHudVisible] = useState(true);
-    const { user } = useContext(AppContext);
+    const { user, fetchPosts } = useContext(AppContext);
+    const [isDeleteModalActive, setDeleteModalActive] = useState(false);
+    const [deletingError, setDeletingError] = useState({
+        isError: false,
+        message: 'Nie można usunąć mema. Spróbuj ponownie załadować stronę.'
+    })
     const navigate = useNavigate();
     let hashtags = data.hashtags;
 
@@ -35,6 +42,25 @@ export default function Post({ data }) {
     const handleNavigateTo = () => {
         navigate(`/meme/${ data.slug }`)
     }
+    const handleBeforeDeletingPost = () => {
+        if (user && ((user.id === data.user.id) || user.isAdmin)) {
+            setDeleteModalActive(true);
+        }
+    }
+    const handleDeletePost = () => {
+        deletePost(data.id).then(() => {
+            handleCloseAgreeModal();
+            fetchPosts();
+            if (removePostFromArray) {
+                removePostFromArray(data.id);
+            }
+            // todo: delete all likes and comments which are assigned to this post from db
+        })
+    }
+    const handleCloseAgreeModal = () => {
+        setDeleteModalActive(false);
+        setDeletingError({...deletingError, isError: false})
+    }
 
     useEffect(() => {
         if (user && user.id) {
@@ -52,6 +78,14 @@ export default function Post({ data }) {
 
     return (
         <Wrapper>
+            {isDeleteModalActive && (
+                <ModalAgreeDisagree
+                    title='Czy na pewno chcesz usunąć mema?'
+                    agreeText='Usuń'
+                    errorText={deletingError.isError && deletingError.message}
+                    onAgree={() => handleDeletePost()}
+                    onClose={() => handleCloseAgreeModal()} />
+            )}
             {modalOpen && (
                 <Modal isCommentsModal onClose={()=>handleCloseModal()}>
                     <CommentsModal data={data} setLiked={setLiked} liked={liked} closeModal={()=>handleCloseModal()} />
@@ -85,7 +119,7 @@ export default function Post({ data }) {
                     <Icon icon="akar-icons:more-vertical" />
                     <ul>
                         <li><Icon icon="akar-icons:arrow-forward-thick" /> Udostępnij</li>
-                        {user && user.id === data.user.id && <li><Icon icon="akar-icons:trash-can" /> Usuń</li>}
+                        {user && ((user.id === data.user.id) || user.isAdmin) && <li onClick={()=>handleBeforeDeletingPost()}><Icon icon="akar-icons:trash-can" /> Usuń</li>}
                         <li><Icon icon="akar-icons:flag" /> Zgłoś</li>
                     </ul>
                 </div>

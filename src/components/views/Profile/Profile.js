@@ -9,6 +9,7 @@ import UserImage from '../../../assets/user-image.png'
 import { Helmet } from 'react-helmet-async';
 import Post from '../../organisms/post/Post';
 import { Blocked, UserSection } from './Profile.styles';
+import axios from 'axios';
 
 export default function Profile() {
     const { username } = useParams();
@@ -18,26 +19,28 @@ export default function Profile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`${API_IP}/users?username=${username}`)
-        .then(res => res.json())
-        .then(user => {
-            if (user.length === 0) {
-                navigate('/');
-            } else {
+        axios.get(`/users?username=${username}`)
+            .then(res => {
+                const user = res.data;
+                if (user.length === 0) {
+                    return navigate('/');
+                }
                 setUser(user[0]);
-            }
-        }).catch(error => {
-            console.log('error', error);
-        })
+            });
     }, [appContext.user, username, navigate])
 
     useEffect(() => {
-        fetch(`${API_IP}/posts?user.username=${username}`)
-            .then(res => res.json())
-            .then(data => {
-                setPosts(data)
+        axios.get(`/posts?user.username=${username}`)
+            .then(res => {
+                setPosts(res.data)
         })
     }, [username])
+    const removePostFromArray = (id) => {
+        const filteredPosts = posts.filter(post => {
+            return post.id !== id
+        });
+        setPosts(filteredPosts);
+    }
 
     if (!user) return <Loader />
     
@@ -77,7 +80,7 @@ export default function Profile() {
             </UserSection>
             <section>
                 {posts.map((post, index) => (
-                    <Post data={post} key={index} />
+                    <Post data={post} key={index} removePostFromArray={removePostFromArray} />
                 ))}
             </section>
         </div>
