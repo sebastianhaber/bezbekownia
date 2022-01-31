@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
     margin: 2rem auto;
     overflow: hidden;
     user-select: none;
-    background-color: ${({theme}) => theme.colors.background.light};
+    background-color: ${({ theme }) => theme.colors.background.light};
     img{
         position: relative;
         width: 100%;
@@ -118,9 +118,5 @@ export const Wrapper = styled.div`
                 }
             }
         }
-    }
-
-    @media screen and (min-width: 600px){
-        border-radius: .5rem;
     }
 `;
