@@ -16,36 +16,49 @@ export default function HomePage({ posts, fetchPosts, totalPostsLength, page, se
     const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
-        setNotFound(false);
         let searchPageNumber = Number(searchPage);
         if (Number.isInteger(searchPageNumber)) {
-            if (searchPage < 1) {
-                return setNotFound(true)
+            if (searchPageNumber < 1) {
+                setFetching(false);
+                setPage(1);
+                navigate('/')
+                return false;
             }
-            if (totalPostsLength > 10) {
-                if(searchPageNumber > (totalPostsLength / limitPosts)) return setNotFound(true)
+            if (totalPostsLength - (limitPosts * Number.parseInt(page)) > 0) {
+                setFetching(false);
+                setPage(searchPageNumber)
+                fetchPosts();
+                return;
+            } else {
+                if (totalPostsLength < limitPosts) {
+                    setFetching(false);
+                    setPage(searchPageNumber)
+                    fetchPosts();
+                    return;
+                }
             }
-            setPage(searchPage)
+            setNotFound(true)
+            setFetching(false);
         }
-        fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchPage])
+
     useEffect(() => {
         setFetching(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posts])
     
     const prevPage = () => {
+        setFetching(true)
         navigate(`/strona/${--page}`)
         setPage(page)
         window.scrollTo(0, 0)
-        setFetching(true)
     }
     const nextPage = () => {
+        setFetching(true)
         navigate(`/strona/${++page}`)
         setPage(page)
         window.scrollTo(0, 0)
-        setFetching(true)
     }
     
     if(notFound) return <NotFound />
@@ -60,7 +73,7 @@ export default function HomePage({ posts, fetchPosts, totalPostsLength, page, se
             {posts.map((post, index) => (
                 <Post data={post} key={index} />
             ))}
-            {(totalPostsLength - Number.parseInt(page) - 1 + limitPosts) > 0 ? (
+            {(totalPostsLength - (Number.parseInt(page) * limitPosts)) > 0 ? (
                 <Pagination>
                     {Number.parseInt(page) > 1 && (
                         <Button variant='dark' onClick={()=>prevPage()}>Poprzednia strona</Button>
