@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react/cjs/react.development';
 import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../App';
 import AppContext from '../../../context/AppContext';
-import { deletePost, submitReport } from '../../../lib/auth';
+import { addLike, deletePost, removeLike, submitReport } from '../../../lib/auth';
 import ModalAgreeDisagree from '../../molecules/modal-agree-disagree/ModalAgreeDisagree';
 import Modal from '../modal/Modal';
 import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
@@ -17,7 +17,7 @@ export default function Post({ data, removePostFromArray }) {
     const [shareModal, setShareModal] = useState(false);
     const [liked, setLiked] = useState(false);
     const [isHudVisible, setHudVisible] = useState(true);
-    const { user, fetchPosts } = useContext(AppContext);
+    const { user, fetchPosts, posts } = useContext(AppContext);
     const [isDeleteModalActive, setDeleteModalActive] = useState(false);
     const [deletingError, setDeletingError] = useState({
         isError: false,
@@ -37,6 +37,7 @@ export default function Post({ data, removePostFromArray }) {
     const handleCloseModal = () => {
         document.querySelector('html').classList.remove('no-scroll');
         setModalOpen(false)
+        fetchPosts();
     }
     const handleToggleHud = (image) => {
         if (isHudVisible) {
@@ -77,20 +78,41 @@ export default function Post({ data, removePostFromArray }) {
             })
         })
     }
-
-    useEffect(() => {
+    const handleLike = () => {
         if (user && user.id) {
-            data.likes.map(like => {
+            let likedIndex, likeId;
+            const hasLiked = data.likes.find((like, index) => {
                 if (like.user === user.id) {
-                    setLiked(true);
+                    likeId = like.id;
+                    likedIndex = index;
                     return true;
                 }
                 return false;
-            })
-        } else {
-            setLiked(false);
+            });
+
+            if (hasLiked) {
+                removeLike(likeId).then((res) => {
+                    data.likes.splice(likedIndex, 1);
+                    posts.map((post, i) => {
+                        if (post.id === data.id) {
+                            posts[i] = data;
+                            return true;
+                        }
+                        return false;
+                    })
+                    setLiked(false);
+                }).catch(err => {
+                    return console.log(err);
+                })
+            } else {
+                addLike(data.id, user.id).then(async (res) => {
+                    await fetchPosts();
+                }).catch(err => {
+                    return console.log(err);
+                })
+            }
         }
-    }, [user, data])
+    }
     const handleOpenShareModal = () => {
         setShareModal(true)
         let hashtagArray = [];
@@ -107,6 +129,22 @@ export default function Post({ data, removePostFromArray }) {
             string: hashtagString
         })
     }
+    const refreshData = () => {
+        if (user && user.id) {
+            data.likes.find((like) => {
+                if (like.user === user.id) {
+                    setLiked(true);
+                    return true;
+                }
+                setLiked(false);
+                return false;
+            });
+        }
+    }
+    useEffect(() => {
+        refreshData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, user])
 
     return (
         <Wrapper>
@@ -124,10 +162,7 @@ export default function Post({ data, removePostFromArray }) {
             {modalOpen && (
                 <Modal isCommentsModal onClose={()=>handleCloseModal()}>
                     <CommentsModal
-                        data={data}
-                        setLiked={setLiked}
-                        liked={liked}
-
+                        externalData={data}
                         closeModal={() => handleCloseModal()} />
                 </Modal>
             )}
@@ -155,7 +190,7 @@ export default function Post({ data, removePostFromArray }) {
                 <div className="button comments" onClick={()=>handleOpenCommentsModal()}>
                     <Icon icon="akar-icons:comment" />
                 </div>
-                <div className={liked ? `likes liked` : `likes`}>
+                <div className={liked ? `likes liked` : `likes`} onClick={()=>handleLike()}>
                     +{data.likes.length} byczku
                 </div>
                 <div className="button more">

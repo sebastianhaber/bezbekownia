@@ -2,10 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
-import { useContext } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import { API_IP } from '../../App';
-import AppContext from '../../context/AppContext';
 import Loader from '../molecules/loader/Loader';
 import CommentsModal from '../organisms/post/commentsModal/CommentsModal';
 
@@ -13,51 +11,22 @@ export default function Meme() {
     const { slug } = useParams();
     const [post, setPost] = useState({});
     const navigate = useNavigate();
-    const { user } = useContext(AppContext);
-    const [liked, setLiked] = useState(false);
 
     useEffect(() => {
-        const source = axios.CancelToken.source();
-        
         window.scrollTo(0, 0);
-        const fetchPost = async () => {
-            try {
-                await axios.get(`/posts?slug=${slug}`, {
-                    cancelToken: source.cancel()
-                })
-                    .then(res => {
-                        if (res.status === 404) {
-                            navigate('404');
-                        } else {
-                            console.log('res', res.data)
-                            setPost(res.data[0]);
-                        }
-                    })
-            } catch (error) {
-                if (!axios.isCancel(error)) {
-                    throw error
+        axios.get(`/posts/${slug}`)
+            .then(res => {
+                console.log(res);
+                if (res.status === 404) {
+                    navigate('404');
+                } else {
+                    setPost(res.data);
                 }
-            }
-        }
-        fetchPost()
+            })
     }, [slug, navigate])
 
-    // check if liked post
-    useEffect(() => {
-        if (user) {
-            if (post.likes) {
-                post.likes.map(like => {
-                    if (like.user === user.id) {
-                        setLiked(true);
-                        return true;
-                    }
-                    return false;
-                })
-            }
-        }
-    }, [post, user])
 
-    if (Object.keys(post).length === 0) return <Loader />;
+    if (!post || (Object.keys(post).length === 0)) return <Loader />;
     return (
         <Wrapper>
             {post && post.user && (
@@ -72,7 +41,7 @@ export default function Meme() {
                 </Helmet>
             )}
             <div className="wrapper">
-                <CommentsModal data={post} setLiked={setLiked} liked={liked} />
+                <CommentsModal externalData={post} />
             </div>
         </Wrapper>
     )
