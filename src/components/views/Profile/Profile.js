@@ -30,7 +30,7 @@ export default function Profile() {
     }, [appContext.user, username, navigate])
 
     useEffect(() => {
-        axios.get(`/posts?user.username=${username}`)
+        axios.get(`/posts?user.username=${username}&_sort=created_at:DESC`)
             .then(res => {
                 setPosts(res.data)
         })
