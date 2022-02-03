@@ -25,10 +25,7 @@ export default function Post({ data, removePostFromArray }) {
     })
     const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const navigate = useNavigate();
-    const [hashtags, setHashtags] = useState({
-        array: [],
-        string: ''
-    })
+    const [hashtags, setHashtags] = useState([])
 
     const handleOpenCommentsModal = () => {
         document.querySelector('html').classList.add('no-scroll');
@@ -48,7 +45,7 @@ export default function Post({ data, removePostFromArray }) {
         setHudVisible(prevState => !prevState)
     }
     const handleNavigateTo = () => {
-        navigate(`/meme/${ data.slug }`)
+        navigate(`/meme/${data.slug}`)
     }
     const handleBeforeDeletingPost = () => {
         if (user && ((user.id === data.user.id) || user.isAdmin)) {
@@ -67,7 +64,7 @@ export default function Post({ data, removePostFromArray }) {
     }
     const handleCloseAgreeModal = () => {
         setDeleteModalActive(false);
-        setDeletingError({...deletingError, isError: false})
+        setDeletingError({ ...deletingError, isError: false })
     }
     const handleReportPost = () => {
         submitReport(data.id, user.id).then(() => {
@@ -143,8 +140,20 @@ export default function Post({ data, removePostFromArray }) {
     }
     useEffect(() => {
         refreshData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, user])
+    useEffect(() => {
+        if (data.hashtags && data.hashtags[0]) {
+            let array = data.hashtags[0].value.replaceAll(" ", "").split("#");
+            array.map((hashtag, index) => {
+                if (hashtag.length === 0) {
+                    return array.splice(index, 1)
+                }
+                return false;
+            })
+            setHashtags(array)
+        }
+    }, [data])
 
     return (
         <Wrapper>
@@ -181,8 +190,8 @@ export default function Post({ data, removePostFromArray }) {
                     <div className="author"><Link to={`/@${data.user.username}`}>by <b>{ data.user.username }</b></Link></div>
                 </div>
                 <ul className="hashtags">
-                    {data.hashtags.map((hashtag, index) => (
-                        <li key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{ hashtag.value.trim() }</Link></li>
+                    {hashtags.map((hashtag, index) => (
+                        <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag }</Link></li>
                     ))}
                 </ul>
             </div>
