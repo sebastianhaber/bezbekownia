@@ -28,6 +28,10 @@ export default function Post({ data, removePostFromArray }) {
     const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const navigate = useNavigate();
     const [hashtags, setHashtags] = useState([])
+    const [shareHashtags, setShareHashtags] = useState({
+        array: [],
+        string: ''
+    })
 
     const handleOpenCommentsModal = () => {
         document.querySelector('html').classList.add('no-scroll');
@@ -123,13 +127,13 @@ export default function Post({ data, removePostFromArray }) {
         let hashtagArray = [];
         let hashtagString = '';
 
-        data.hashtags.map(hashtag => {
-            hashtagArray.push(`${hashtag.value}`)
+        hashtags.map(hashtag => {
+            hashtagArray.push(`${hashtag}`)
             return true;
         })
         hashtagString = '#' + hashtagArray.join(', #')
 
-        setHashtags({
+        setShareHashtags({
             array: hashtagArray,
             string: hashtagString
         })
@@ -189,7 +193,7 @@ export default function Post({ data, removePostFromArray }) {
                 </Modal>
             )}
             {shareModal && (
-                <ShareModal data={data} hashtags={hashtags} onClose={()=>setShareModal(false)} />
+                <ShareModal data={data} hashtags={shareHashtags} onClose={()=>setShareModal(false)} />
             )}
             <img
                 src={`${API_IP}${data.image.url}`}

@@ -50,6 +50,7 @@ const Share = styled.ul`
         padding: .5rem;
         border: 1px solid transparent;
         border-radius: 1rem;
+        cursor: pointer;
         &:hover{
             border-color: ${({theme}) => theme.colors.gray};
         }
