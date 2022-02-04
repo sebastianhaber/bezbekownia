@@ -10,6 +10,8 @@ import Modal from '../modal/Modal';
 import Register from '../auth/register/Register';
 import Login from '../auth/login/Login';
 import { logout as AuthLogout } from '../../../lib/auth'; 
+import AddMeme from '../addMeme/AddMeme';
+import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
 
 const INIT_MODAL = {
     isOpen: false,
@@ -19,8 +21,10 @@ export default function Nav() {
     const [isSearchBoxOpen, setSearchBoxOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useContext(AppContext);
+    const { user, setUser, page, fetchPosts } = useContext(AppContext);
     const [modal, setModal] = useState(INIT_MODAL);
+    const [addMemeModal, setMemeModal] = useState(false);
+    const [popNotification, setPopNotification] = useState(false);
 
     const logout = () => {
         AuthLogout();
@@ -46,9 +50,23 @@ export default function Nav() {
             type: type
         })
     }
+    const handleOpenAddMemeModal= () => {
+        document.querySelector('html').classList.add('no-scroll');
+        setMemeModal(true)
+    }
     const handleCloseLoginModal = () => {
         document.querySelector('html').classList.remove('no-scroll');
         setModal(INIT_MODAL)
+    }
+    const handleCloseAddMemeModal = (success) => {
+        document.querySelector('html').classList.remove('no-scroll');
+        setMemeModal(false)
+        if (success) {
+            setPopNotification(true)
+            setTimeout(() => {
+                setPopNotification(false)
+            }, 3000);
+        }
     }
     const changeModalType = () => {
         if (modal.type === 'register') {
@@ -71,8 +89,25 @@ export default function Nav() {
                         )}
                     </Modal>
                 )}
+                {addMemeModal && (
+                    <Modal onClose={() => handleCloseAddMemeModal()}>
+                        <AddMeme onClose={() => handleCloseAddMemeModal()} />
+                    </Modal>
+                )}
+                {popNotification && (
+                    <FloatingNotification
+                        onClose={()=>setPopNotification(false)}
+                        notification={{
+                            type: 'success',
+                            message: 'Udało się dodać mema!'
+                    }} />
+                )}
                 <div className="wrapper">
-                    <Link to='/strona/1' className='logo'>Bezbekownia</Link>
+                    {page && page === 1 ? (
+                        <Link to='/strona/1' className='logo' onClick={()=>fetchPosts()}>Bezbekownia</Link>
+                    ) : (
+                        <Link to='/strona/1' className='logo'>Bezbekownia</Link>
+                    )}
                     <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                         <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                             <div className="icon"><Icon icon="akar-icons:search" /></div>
@@ -94,7 +129,7 @@ export default function Nav() {
                         </li>
                         {user && user.username ? (
                             <>
-                                <li className="square plus" title='Dodaj mema'>
+                                <li className="square plus" title='Dodaj mema' onClick={()=>handleOpenAddMemeModal()}>
                                     <Icon icon="akar-icons:plus" />
                                 </li>
                                 <li className="square profile">

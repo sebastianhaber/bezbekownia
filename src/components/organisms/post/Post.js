@@ -147,7 +147,7 @@ export default function Post({ data, removePostFromArray }) {
             let array = data.hashtags
                 .replaceAll(" ", "")
                 // eslint-disable-next-line no-useless-escape
-                .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split("#");
+                .replace(/[`~!@$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split("#");
             array.map((hashtag, index) => {
                 if (hashtag.length === 0) {
                     return array.splice(index, 1)

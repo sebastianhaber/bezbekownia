@@ -66,7 +66,7 @@ const StyledButton = styled.button`
 
 export default function Button(props) {
     return (
-        <StyledButton variant={props.variant} {...props} disabled={props.loading || props.disabled}>
+        <StyledButton variant={props.variant} disabled={props.loading || props.disabled} {...props}>
             {props.loading ? (
                 <div>
                     <Icon className='loading' icon="akar-icons:arrow-clockwise" />

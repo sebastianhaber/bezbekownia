@@ -66,7 +66,7 @@ export const ModalWrapper = styled.div`
 
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
         border-radius: .5rem;
-        max-height: 80vh;
+        /* max-height: 80vh; */
     }
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal && '636px'}){
         max-height: 80vh;

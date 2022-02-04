@@ -5,7 +5,7 @@ import { StyledNotification } from './FloatingNotification.styles';
 
 const notificationContainer = document.getElementById('notification-container');
 
-export default function FloatingNotification({children, onClose, notification}) {
+export default function FloatingNotification({onClose, notification}) {
   const notificationElement = document.createElement('div');
     useEffect(() => {
         notificationElement.id = 'notification';
