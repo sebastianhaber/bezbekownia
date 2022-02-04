@@ -245,8 +245,8 @@ const StyledForm = styled.form`
             height: 300px;
             img{
                 display: none;
-                width: 100%;
-                height: 100%;
+                width: 300px;
+                height: 300px;
                 object-fit: contain;
                 object-position: center;
             }

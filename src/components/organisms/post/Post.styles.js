@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
         position: relative;
         width: 100%;
         max-height: 1000px;
-        object-fit: contain;
+        object-fit: cover;
         cursor: pointer;
         &.z-index{
             z-index: 1;
