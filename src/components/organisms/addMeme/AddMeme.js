@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import styled from 'styled-components';
 import Input from '../../molecules/input/Input';
 import Button from '../../utils/Button';
 import { useForm } from 'react-hook-form'
@@ -9,6 +8,8 @@ import { useState } from 'react/cjs/react.development';
 import AppContext from '../../../context/AppContext';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import removeDiacritics from './RemoveDiacritics'
+import { StyledForm } from './AddMeme.styles';
 
 const MAX_FILESIZE_AFTER_COMPRESSION = 500; // KB
 
@@ -50,6 +51,8 @@ export default function AddMeme({onClose}) {
             })
         
         // upload meme
+        const noDiacriticsTitle = removeDiacritics(data.title)
+        const slug = `${noDiacriticsTitle.replaceAll(" ", "-")}${imageID}`;
         let uploadData = {
             "title": `${data.title}`,
             "description": `${data.description}`,
@@ -60,7 +63,7 @@ export default function AddMeme({onClose}) {
                 "id": imageID
             },
             "hashtags": `${data.hashtags}`,
-            "slug": `${data.title.replaceAll(" ", "-")}${imageID}`
+            "slug": slug
         }
 
         axios.post('/posts', uploadData, {
@@ -70,26 +73,25 @@ export default function AddMeme({onClose}) {
             }
         }).then(() => {
                 fetchPosts();
-                onClose();
-            }).catch(() => {
-                axios.delete('/upload/files/' + imageID, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                }).then(() => {
-                    setError('upload', {
-                        type: 'upload',
-                        message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#002)'
-                    })
-                }).catch(() => {
-                    setError('upload', {
-                        type: 'upload',
-                        message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#002)'
-                    })
-                })
-                setLoading(false);
-                return false;
+                onClose('success');
+        }).catch(() => {
+            setError('upload', {
+                type: 'upload',
+                message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#002)'
             })
+            axios.delete('/upload/files/' + imageID, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }).catch(() => {
+                setError('upload', {
+                    type: 'upload',
+                    message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#004)'
+                })
+            })
+            setLoading(false);
+            return false;
+        })
         setLoading(false);
     }
     const checkImage = (e) => {
@@ -212,97 +214,3 @@ export default function AddMeme({onClose}) {
         </StyledForm>
   );
 }
-const StyledForm = styled.form`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    .inputs, .image{
-        width: 50%;
-    }
-    .inputs{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        width: 100%;
-        input{
-            margin-left: 1rem;
-        }
-    }
-    .image{
-        position: relative;
-        display: grid;
-        place-items: center;
-        background-color: ${({theme}) => theme.colors.background.dark};
-        width: 300px;
-        height: 300px;
-        border-radius: .5rem;
-        .preview{
-            display: grid;
-            place-items: center;
-            height: 300px;
-            img{
-                display: none;
-                width: 300px;
-                height: 300px;
-                object-fit: contain;
-                object-position: center;
-            }
-        }
-        label{
-            position: absolute;
-            width: 100%;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            cursor: pointer;
-            background-color: ${({ theme }) => theme.colors.rgba};
-            border: 1px solid transparent;
-            padding: 1rem;
-            transition: background-color .2s ease, color .2s ease;
-            &:hover{
-                background-color: transparent;
-                color: transparent;
-                span.error{
-                    color: transparent;
-                }
-            }
-            &.error{
-                border-color: ${({ theme }) => theme.colors.red.dark};
-            }
-            span.error{
-                font-size: 14px;
-                color: ${({ theme }) => theme.colors.red.light};
-                text-align: center;
-                transition: color .2s ease;
-            }
-            div{
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                svg{
-                    font-size: 1.5rem;
-                }
-                p{
-                    display: flex;
-                    flex-direction: column;
-                }
-                span{
-                    font-size: 14px;
-                }
-            }
-        }
-        #image-input{
-            display: none;
-        }
-    }
-    .buttons{
-        display: flex;
-        gap: 1rem;
-    }
-`;
