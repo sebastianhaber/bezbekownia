@@ -16,7 +16,6 @@ export default function Meme() {
         window.scrollTo(0, 0);
         axios.get(`/posts/${slug}`)
             .then(res => {
-                console.log(res);
                 if (res.status === 404) {
                     navigate('404');
                 } else {
