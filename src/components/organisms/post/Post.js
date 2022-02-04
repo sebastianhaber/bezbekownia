@@ -11,6 +11,8 @@ import FloatingNotification from '../../molecules/floating-notification/Floating
 import CommentsModal from './commentsModal/CommentsModal';
 import { Wrapper } from './Post.styles'
 import ShareModal from './ShareModal';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function Post({ data, removePostFromArray }) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -53,13 +55,19 @@ export default function Post({ data, removePostFromArray }) {
         }
     }
     const handleDeletePost = () => {
+        const token = Cookies.get('token');
+
         deletePost(data.id).then(() => {
             handleCloseAgreeModal();
             fetchPosts();
             if (removePostFromArray) {
                 removePostFromArray(data.id);
             }
-            // todo: delete all likes and comments which are assigned to this post from db
+            axios.delete('/upload/files/' + data.image.id, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
         })
     }
     const handleCloseAgreeModal = () => {
