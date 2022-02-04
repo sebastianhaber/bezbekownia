@@ -143,8 +143,8 @@ export default function Post({ data, removePostFromArray }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, user])
     useEffect(() => {
-        if (data.hashtags && data.hashtags[0]) {
-            let array = data.hashtags[0].value.replaceAll(" ", "").split("#");
+        if (data.hashtags) {
+            let array = data.hashtags.replaceAll(" ", "").split("#");
             array.map((hashtag, index) => {
                 if (hashtag.length === 0) {
                     return array.splice(index, 1)
