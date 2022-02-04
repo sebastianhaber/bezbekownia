@@ -42,7 +42,8 @@ export default function CommentsModal({ externalData, closeModal }) {
         deletingCommentID: null
     });
     const [shareModal, setShareModal] = useState(false);
-    const [hashtags, setHashtags] = useState({
+    const [hashtags, setHashtags] = useState([]);
+    const [shareHashtags, setShareHashtags] = useState({
         array: [],
         string: ''
     });
@@ -57,28 +58,30 @@ export default function CommentsModal({ externalData, closeModal }) {
         setDeletingComment({...deletingComment, deletingCommentID: id})
     }
     const handleUserAgreeToDeleteComment = async () => {
-        await deleteComment(deletingComment.deletingCommentID)
-            .then(() => {
-                const filteredComments = comments.filter(comment => {
-                    return comment.id !== deletingComment.deletingCommentID
-                });
-                setComments(filteredComments);
-
-                const slicedArray = filteredComments.slice(0, visibleComments.page * visibleComments.visible)
-                setVisibleComments({ content: slicedArray })
-                setDeletingComment({...deletingComment, deletingCommentID: null})
-                handleCloseAgreeModal();
-                posts.map(post => {
-                    if (post.id === data.id) {
-                        post.comments = filteredComments
-                        return true;
-                    }
-                    return false;
+        if (user && user.id) {
+            await deleteComment(deletingComment.deletingCommentID)
+                .then(() => {
+                    const filteredComments = comments.filter(comment => {
+                        return comment.id !== deletingComment.deletingCommentID
+                    });
+                    setComments(filteredComments);
+    
+                    const slicedArray = filteredComments.slice(0, visibleComments.page * visibleComments.visible)
+                    setVisibleComments({ content: slicedArray })
+                    setDeletingComment({...deletingComment, deletingCommentID: null})
+                    handleCloseAgreeModal();
+                    posts.map(post => {
+                        if (post.id === data.id) {
+                            post.comments = filteredComments
+                            return true;
+                        }
+                        return false;
+                    })
                 })
-            })
-            .catch(() => {
-                setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: true } })
-            })
+                .catch(() => {
+                    setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: true } })
+                })
+        }
     }
     const handleChange = (e) => {
         setCommentValue(e.target.value);
@@ -195,25 +198,27 @@ export default function CommentsModal({ externalData, closeModal }) {
         let hashtagArray = [];
         let hashtagString = '';
 
-        data.hashtags.map(hashtag => {
-            hashtagArray.push(`${hashtag.value}`)
+        hashtags.map(hashtag => {
+            hashtagArray.push(`${hashtag}`)
             return true;
         })
         hashtagString = '#' + hashtagArray.join(', #')
 
-        setHashtags({
+        setShareHashtags({
             array: hashtagArray,
             string: hashtagString
         })
     }
     const handleReportPost = () => {
-        submitReport(data.id, user.id).then(() => {
-            setFloatingNotification({
-                isActive: true,
-                message: 'Zgłoszono mema.',
-                type: 'success'
+        if (user && user.id) {
+            submitReport(data.id, user.id).then(() => {
+                setFloatingNotification({
+                    isActive: true,
+                    message: 'Zgłoszono mema.',
+                    type: 'success'
+                })
             })
-        })
+        }
     }
 
     useEffect(() => {
@@ -249,6 +254,21 @@ export default function CommentsModal({ externalData, closeModal }) {
         fetchThisMeme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    useEffect(() => {
+        if (data.hashtags) {
+            let array = data.hashtags
+                .replaceAll(" ", "")
+                // eslint-disable-next-line no-useless-escape
+                .replace(/[`~!@$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split("#");
+            array.map((hashtag, index) => {
+                if (hashtag.length === 0) {
+                    return array.splice(index, 1)
+                }
+                return false;
+            })
+            setHashtags(array)
+        }
+    }, [data])
 
     if (error.status) {
         return <Loader message={error.message} />
@@ -261,7 +281,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                 <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(false)} />
             )}
             {shareModal && (
-                <ShareModal data={data} hashtags={hashtags} onClose={()=>setShareModal(false)} />
+                <ShareModal data={data} hashtags={shareHashtags} onClose={()=>setShareModal(false)} />
             )}
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
@@ -296,10 +316,8 @@ export default function CommentsModal({ externalData, closeModal }) {
                     <div className="meme-data">
                         <p className="title">{ data.title }</p>
                         <ul className="hashtags">
-                            {data.hashtags.map((hashtag, index) => (
-                                <li
-                                    onClick={handleCloseModal}
-                                    key={index}><Link to={`/hashtag/${hashtag.value.trim()}`}>#{hashtag.value.trim()}</Link></li>
+                            {hashtags.map((hashtag, index) => (
+                                <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag }</Link></li>
                             ))}
                         </ul>
                     </div>

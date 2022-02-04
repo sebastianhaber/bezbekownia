@@ -59,7 +59,8 @@ export default function AddMeme({onClose}) {
             "image": {
                 "id": imageID
             },
-            "hashtags": `${data.hashtags}`
+            "hashtags": `${data.hashtags}`,
+            "slug": `${data.title.replaceAll(" ", "-")}${data.id}`
         }
 
         axios.post('/posts', uploadData, {

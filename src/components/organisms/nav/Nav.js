@@ -99,7 +99,7 @@ export default function Nav() {
                         onClose={()=>setPopNotification(false)}
                         notification={{
                             type: 'success',
-                            message: 'Udało się dodać mema!'
+                            message: 'Udało się dodać mema!',
                     }} />
                 )}
                 <div className="wrapper">

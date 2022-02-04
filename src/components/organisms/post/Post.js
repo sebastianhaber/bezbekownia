@@ -128,14 +128,16 @@ export default function Post({ data, removePostFromArray }) {
     }
     const refreshData = () => {
         if (user && user.id) {
-            data.likes.find((like) => {
-                if (like.user === user.id) {
-                    setLiked(true);
-                    return true;
-                }
-                setLiked(false);
-                return false;
-            });
+            if (data.likes.length > 0) {
+                data.likes.find((like) => {
+                    if (like.user === user.id) {
+                        setLiked(true);
+                        return true;
+                    }
+                    setLiked(false);
+                    return false;
+                });
+            }
         }
     }
     useEffect(() => {
