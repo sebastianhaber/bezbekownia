@@ -144,7 +144,10 @@ export default function Post({ data, removePostFromArray }) {
     }, [data, user])
     useEffect(() => {
         if (data.hashtags) {
-            let array = data.hashtags.replaceAll(" ", "").split("#");
+            let array = data.hashtags
+                .replaceAll(" ", "")
+                // eslint-disable-next-line no-useless-escape
+                .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split("#");
             array.map((hashtag, index) => {
                 if (hashtag.length === 0) {
                     return array.splice(index, 1)
