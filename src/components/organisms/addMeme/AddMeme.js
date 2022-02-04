@@ -60,7 +60,7 @@ export default function AddMeme({onClose}) {
                 "id": imageID
             },
             "hashtags": `${data.hashtags}`,
-            "slug": `${data.title.replaceAll(" ", "-")}${data.id}`
+            "slug": `${data.title.replaceAll(" ", "-")}${imageID}`
         }
 
         axios.post('/posts', uploadData, {
@@ -71,7 +71,7 @@ export default function AddMeme({onClose}) {
         }).then(() => {
                 fetchPosts();
                 onClose();
-            }).catch((error) => {
+            }).catch(() => {
                 axios.delete('/upload/files/' + imageID, {
                     headers: {
                         Authorization: `Bearer ${token}`,
