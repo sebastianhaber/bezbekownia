@@ -92,8 +92,15 @@ export default function AddMeme({onClose}) {
         setLoading(false);
     }
     const checkImage = (e) => {
-        if (e.target.files.length > 0) { 
-            compressImage(e.target.files[0])
+        if (e.target.files.length > 0) {
+            if (e.target.files[0].name.match(/.(jpg|jpeg|gif)$/i)) {
+                compressImage(e.target.files[0])
+                return true;
+            }
+            setError("image", {
+                type: "extension",
+                message: "Niedozwolone rozszerzenie pliku. Dozwolone typy: .jpg, .jpeg lub .gif",
+            });
         }
     }
     const previewImage = () => {
@@ -174,7 +181,7 @@ export default function AddMeme({onClose}) {
                     <label htmlFor="image-input" className={errors.image && `error`}>
                         <input 
                             id='image-input'
-                            accept="image/*"
+                            accept="image/gif, image/jpeg, image/jpg"
                             type="file"
                             {...register('image', {
                                 required: true,
