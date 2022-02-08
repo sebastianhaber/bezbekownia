@@ -18,7 +18,7 @@ import { useQuery } from "@apollo/client";
 import { GET_POSTS } from "./components/queries/Queries";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
-export const limitPosts = 2;
+export const limitPosts = 10;
 export const APP_URL = 'https://bezbekownia.pl';
 export const FLOATING_NOTIFICATION_INITIALS = {
   isActive: false,
