@@ -7,10 +7,13 @@ export const StyledNav = styled.nav`
     z-index: 4;
     background-color: ${({theme}) => theme.colors.background.dark};
     width: 100%;
-    height: 60px;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
+    transition: transform .2s ease;
+    .nav{
+        height: 60px;
+        display: grid;
+        place-items: center;
+        font-size: 14px;
+    }
     .wrapper{
         width: 100%;
         max-width: 1440px;

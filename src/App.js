@@ -13,6 +13,7 @@ import EditProfile from "./components/views/Profile/EditProfile";
 import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
+import TopNotification from "./components/molecules/top-notification/TopNotification";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
@@ -29,7 +30,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
-  const [page, setPage] = useState(null);
+  const [page, setPage] = useState(1);
+  const [topNotificationMessage, setTopNotificationMessage] = useState('');
 
   const fetchPosts = () => {
     axios.get(`/posts?_start=${(page-1)*limitPosts}&_limit=${limitPosts}&_sort=created_at:DESC`)
@@ -41,7 +43,6 @@ function App() {
       setTotalPostsLength(res.data);
     });
   }
-  
   const fetchMe = () => {
     const token = Cookies.get("token");
 
@@ -85,6 +86,12 @@ function App() {
       if (token) {
         fetchMe();
       }
+      axios.get(`/top-notification`)
+        .then(res => {
+            if (res.data.message.length !== 0) {
+                setTopNotificationMessage(res.data.message)
+            }
+        });
       setLoaderMessage('Pobieranie memów...')
       // fetchPosts();
     }
@@ -104,11 +111,13 @@ function App() {
       setUser,
       posts,
       setPosts,
-      fetchPosts
+      fetchPosts,
+      page
     }}>
       <Router>
         <Nav />
         <main>
+          <TopNotification message={topNotificationMessage} />
           <Routes>
             <Route path='/' element={
               <HomePage
