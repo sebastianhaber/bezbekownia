@@ -16,7 +16,7 @@ const MAX_FILESIZE_AFTER_COMPRESSION = 500; // KB
 export default function AddMeme({onClose}) {
     let { register, handleSubmit, formState: { errors }, setError } = useForm();
     const [compressedImage, setCompressedImage] = useState({});
-    const { user, fetchPosts } = useContext(AppContext);
+    const { user, refetch } = useContext(AppContext);
     const token = Cookies.get('token');
     const [isLoading, setLoading] = useState(false);
 
@@ -24,10 +24,11 @@ export default function AddMeme({onClose}) {
         if (!user) {
             return false;
         }
-
         setLoading(true);
 
-        const imageName = data.title.replaceAll(" ", "_") + "_by_" + user.username + "_bezbekownia";
+        // eslint-disable-next-line no-useless-escape
+        const noDiacriticsTitle = removeDiacritics(data.title).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+        const imageName = noDiacriticsTitle.replaceAll(" ", "_") + "_by_" + user.username + "_bezbekownia";
 
         // upload image
         let formData = new FormData();
@@ -51,7 +52,6 @@ export default function AddMeme({onClose}) {
             })
         
         // upload meme
-        const noDiacriticsTitle = removeDiacritics(data.title)
         const slug = `${noDiacriticsTitle.replaceAll(" ", "-")}${imageID}`;
         let uploadData = {
             "title": `${data.title}`,
@@ -62,7 +62,8 @@ export default function AddMeme({onClose}) {
             "image": {
                 "id": imageID
             },
-            "hashtags": `${data.hashtags}`,
+            // eslint-disable-next-line no-useless-escape
+            "hashtags": `${data.hashtags.replaceAll(" ", "").replace(/[`~!@$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')}`,
             "slug": slug
         }
 
@@ -72,8 +73,8 @@ export default function AddMeme({onClose}) {
                 'Content-Type': 'application/json; charset=utf-8',
             }
         }).then(() => {
-                fetchPosts();
-                onClose('success');
+            onClose('success');
+            refetch();
         }).catch(() => {
             setError('upload', {
                 type: 'upload',
