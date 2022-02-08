@@ -14,9 +14,11 @@ import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
 import TopNotification from "./components/molecules/top-notification/TopNotification";
+import { useQuery } from "@apollo/client";
+import { GET_POSTS } from "./components/queries/Queries";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
-export const limitPosts = 10;
+export const limitPosts = 2;
 export const APP_URL = 'https://bezbekownia.pl';
 export const FLOATING_NOTIFICATION_INITIALS = {
   isActive: false,
@@ -30,19 +32,29 @@ function App() {
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
-  const [page, setPage] = useState(1);
   const [topNotificationMessage, setTopNotificationMessage] = useState('');
   const [isNotificationHidden, setNotificationHidden] = useState(false);
-
-  const fetchPosts = () => {
-    axios.get(`/posts?_start=${(page-1)*limitPosts}&_limit=${limitPosts}&_sort=created_at:DESC`)
-    .then(res => {
-      setPosts(res.data);
-    });
-    axios.get(`/posts/count`)
-    .then(res => {
-      setTotalPostsLength(res.data);
-    });
+  const { loading, data, fetchMore, refetch } = useQuery(GET_POSTS, {
+    variables: {
+      start: 0,
+      limit: limitPosts
+    }
+  })
+  const onLoadMore = () => {
+    fetchMore({
+      variables: {
+        start: data.posts.length
+      },
+      updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+        return {
+          ...previousResult,
+          posts: [
+            ...previousResult.posts,
+            ...fetchMoreResult.posts,
+          ],
+        };
+      },
+    })
   }
   const fetchMe = () => {
     const token = Cookies.get("token");
@@ -67,8 +79,6 @@ function App() {
       .then(res => {
         if (res.data.isUnderMaintenance) {
           setLoaderMessage('Trwają prace administracyjne.');
-        } else {
-          setPage(1)
         }
         setMaintenance(res.data.isUnderMaintenance);
       });
@@ -82,6 +92,10 @@ function App() {
 
     setLoaderMessage('Łączenie z serwerem...')
     checkMaintenanceMode();
+    axios.get(`/posts/count?user.blocked=false`)
+      .then(res => {
+        setTotalPostsLength(res.data);
+      });
   }, []);
   useEffect(() => {
     const token = Cookies.get("token");
@@ -97,16 +111,15 @@ function App() {
             }
         });
       setLoaderMessage('Pobieranie memów...')
-      // fetchPosts();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUnderMaintenance])
   useEffect(() => {
-    if(page) fetchPosts()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page])
+    if (data) {
+      setPosts(data.posts)
+    }
+  }, [data])
 
-  if (posts.length === 0) return <Loader message={loaderMessage} />
+  if (loading) return <Loader message={loaderMessage} />
 
   return (
     <AppContext.Provider value={{
@@ -115,8 +128,8 @@ function App() {
       setUser,
       posts,
       setPosts,
-      fetchPosts,
-      page
+      onLoadMore,
+      refetch,
     }}>
       <Router>
         <Nav />
@@ -128,20 +141,7 @@ function App() {
           )}
           <Routes>
             <Route path='/' element={
-              <HomePage
-                posts={posts}
-                page={ page }
-                setPage={setPage}
-                totalPostsLength={totalPostsLength}
-                fetchPosts={fetchPosts} />
-            } />
-            <Route path='strona/:searchPage' element={
-              <HomePage
-                posts={posts}
-                page={ page }
-                setPage={setPage}
-                totalPostsLength={totalPostsLength}
-                fetchPosts={fetchPosts} />
+              <HomePage totalPostsLength={totalPostsLength} />
             } />
             <Route path='pomoc' element={<Helmet>
                   <title>Bezbekownia | Pomoc</title>

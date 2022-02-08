@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const POSTS = gql`
-    query getPosts{
-        posts(where:{
+export const GET_POSTS = gql`
+    query getPosts($start: Int!, $limit: Int!){
+        posts(start: $start, limit: $limit, sort: "created_at:DESC", where:{
             user:{
                 blocked_ne: true
             }
@@ -45,7 +45,7 @@ export const POSTS = gql`
 `
 export const SEARCH_POSTS_BY_HASHTAGS = gql`
     query SearchPostsByHashtag($hashtag: String!){
-        posts(where: {
+        posts(sort: "created_at:DESC", where: {
             hashtags_contains: $hashtag,
             user: {
                 blocked_ne: true

@@ -19,7 +19,7 @@ export default function Post({ data, removePostFromArray }) {
     const [shareModal, setShareModal] = useState(false);
     const [liked, setLiked] = useState(false);
     const [isHudVisible, setHudVisible] = useState(true);
-    const { user, fetchPosts, posts } = useContext(AppContext);
+    const { user, refresh, posts } = useContext(AppContext);
     const [isDeleteModalActive, setDeleteModalActive] = useState(false);
     const [deletingError, setDeletingError] = useState({
         isError: false,
@@ -40,7 +40,7 @@ export default function Post({ data, removePostFromArray }) {
     const handleCloseModal = () => {
         document.querySelector('html').classList.remove('no-scroll');
         setModalOpen(false)
-        fetchPosts();
+        refresh();
     }
     const handleToggleHud = (image) => {
         if (isHudVisible) {
@@ -63,7 +63,7 @@ export default function Post({ data, removePostFromArray }) {
 
         deletePost(data.id).then(() => {
             handleCloseAgreeModal();
-            fetchPosts();
+            refresh();
             if (removePostFromArray) {
                 removePostFromArray(data.id);
             }
@@ -115,7 +115,7 @@ export default function Post({ data, removePostFromArray }) {
                 })
             } else {
                 addLike(data.id, user.id).then(async (res) => {
-                    await fetchPosts();
+                    await refresh();
                 }).catch(err => {
                     return console.log(err);
                 })
@@ -158,10 +158,7 @@ export default function Post({ data, removePostFromArray }) {
     }, [data, user])
     useEffect(() => {
         if (data.hashtags) {
-            let array = data.hashtags
-                .replaceAll(" ", "")
-                // eslint-disable-next-line no-useless-escape
-                .replace(/[`~!@$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split("#");
+            let array = data.hashtags.split("#")
             array.map((hashtag, index) => {
                 if (hashtag.length === 0) {
                     return array.splice(index, 1)

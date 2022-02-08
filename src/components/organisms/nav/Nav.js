@@ -22,7 +22,7 @@ export default function Nav() {
     const [isSearchBoxOpen, setSearchBoxOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
-    const { user, setUser, page, fetchPosts } = useContext(AppContext);
+    const { user, setUser, refetch } = useContext(AppContext);
     const [modal, setModal] = useState(INIT_MODAL);
     const [searchModal, setSearchModal] = useState(false);
     const [addMemeModal, setMemeModal] = useState(false);
@@ -117,14 +117,7 @@ export default function Nav() {
                 )}
                 <div className='nav'>
                     <div className="wrapper">
-                        {page && page === 1 ? (
-                            <Link to='/strona/1' className='logo' onClick={() => {
-                                fetchPosts()
-                                window.scrollTo(0, 0)
-                            }}>Bezbekownia</Link>
-                        ) : (
-                            <Link to='/strona/1' className='logo'>Bezbekownia</Link>
-                        )}
+                        <Link to='/' className='logo' onClick={()=>refetch()}>Bezbekownia</Link>
                         <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                             <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                                 <div className="icon"><Icon icon="akar-icons:search" /></div>
