@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
 import { API_IP, limitPosts } from '../../../App';
 import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'

@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react/cjs/react.development';
 import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../App';
 import AppContext from '../../../context/AppContext';
 import { addLike, deletePost, removeLike, submitReport } from '../../../lib/auth';
