@@ -43,7 +43,7 @@ export const ModalWrapper = styled.div`
     width: 100%;
     min-height: 300px;
     height: ${({isCommentsModal}) => isCommentsModal ? '100vh' : 'auto'};
-    max-height: 100vh;
+    max-height: 90vh;
     background-color: ${({ theme }) => theme.colors.background.light};
     overflow: hidden;
     .heading{
@@ -57,18 +57,16 @@ export const ModalWrapper = styled.div`
         }
     }
     #simplebar{
+        max-height: 100vh;
         padding: 1rem;
-        max-height: 100%;
         .simplebar-scrollbar:before {
             background-color: ${({theme}) => theme.colors.gray};
         }
     }
-
     @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal ? '1000px' : '380px'}){
         border-radius: .5rem;
-        /* max-height: 80vh; */
     }
-    @media screen and (min-width: ${({isCommentsModal}) => isCommentsModal && '636px'}){
+    @media screen and (min-width: '636px'){
         max-height: 80vh;
     }
 `;

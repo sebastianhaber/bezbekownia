@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet-async";
 import Meme from "./components/views/Meme";
 import NotFound from "./components/views/NotFound";
 import Hashtag from "./components/views/Hashtag";
-import Search from "./components/organisms/search/Search";
 import Cookies from "js-cookie";
 import AppContext from "./context/AppContext";
 import Profile from "./components/views/Profile/Profile";
@@ -133,7 +132,6 @@ function App() {
             </Helmet>} />
             <Route path='/meme/:slug' element={<Meme />} />
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
-            <Route path='/search/:value' element={<Search />} />
             <Route path='/@:username' element={<Profile />} />
             <Route path='/@:username/edytuj' element={<EditProfile />} />
             <Route path='*' element={<NotFound />} />

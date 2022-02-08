@@ -12,6 +12,7 @@ import Login from '../auth/login/Login';
 import { logout as AuthLogout } from '../../../lib/auth'; 
 import AddMeme from '../addMeme/AddMeme';
 import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
+import SearchUserModal from '../searchUsers/SearchUsersModal'
 
 const INIT_MODAL = {
     isOpen: false,
@@ -23,6 +24,7 @@ export default function Nav() {
     const navigate = useNavigate();
     const { user, setUser, page, fetchPosts } = useContext(AppContext);
     const [modal, setModal] = useState(INIT_MODAL);
+    const [searchModal, setSearchModal] = useState(false);
     const [addMemeModal, setMemeModal] = useState(false);
     const [popNotification, setPopNotification] = useState(false);
 
@@ -38,60 +40,66 @@ export default function Nav() {
         if (searchValue.trim().length === 0) {
             return;
         }
-        navigate('search/' + searchValue)
-
-        setSearchValue('');
-        setSearchBoxOpen(false);
-    }
-    const handleOpenLoginModal = (type) => {
-        document.querySelector('html').classList.add('no-scroll');
-        setModal({
-            isOpen: true,
-            type: type
-        })
-    }
-    const handleOpenAddMemeModal= () => {
-        document.querySelector('html').classList.add('no-scroll');
-        setMemeModal(true)
-    }
-    const handleCloseLoginModal = () => {
-        document.querySelector('html').classList.remove('no-scroll');
-        setModal(INIT_MODAL)
-    }
-    const handleCloseAddMemeModal = (success) => {
-        document.querySelector('html').classList.remove('no-scroll');
-        setMemeModal(false)
-        if (success) {
-            setPopNotification(true)
-            setTimeout(() => {
-                setPopNotification(false)
-            }, 3000);
+        if (searchValue.startsWith('#')) {
+            setSearchValue('');
+            setSearchBoxOpen(false);
+            handleCloseModal('search');
+            return navigate(`/hashtag/${searchValue.substring(1)}`)
         }
+        setSearchBoxOpen(false);
+        handleOpenModal('search');
+    }
+    const handleOpenModal = (modal, type) => {
+        document.querySelector('html').classList.add('no-scroll');
+
+        if (modal === 'login') {
+            setModal({
+                isOpen: true,
+                type: type
+            })
+        } else if (modal === 'addmeme') {
+            setMemeModal(true)
+        } else if (modal === 'search') {
+            setSearchModal(true)
+        }
+    }
+    const handleCloseModal = (modal) => {
+        document.querySelector('html').classList.remove('no-scroll');
+
+        if (modal === 'login') {
+            setModal(INIT_MODAL)
+        } else if (modal === 'addmeme') {
+            setMemeModal(false)
+        } else if (modal === 'search') {
+            setSearchModal(false)
+            setSearchValue('');
+        }
+        
     }
     const changeModalType = () => {
         if (modal.type === 'register') {
-            handleCloseLoginModal();
-            handleOpenLoginModal('login')
+            handleCloseModal('login');
+            handleOpenModal('login', 'login')
         } else {
-            handleCloseLoginModal();
-            handleOpenLoginModal('register')
+            handleCloseModal('login');
+            handleOpenModal('login', 'register')
         }
     }
     return (
         <>
             <StyledNav>
                 {modal && modal.isOpen && (
-                    <Modal onClose={() => handleCloseLoginModal()}>
+                    <Modal onClose={() => handleCloseModal('login')}>
                         {modal.type === 'register' ? (
-                            <Register changeModalType={changeModalType} closeModal={handleCloseLoginModal} />
+                            <Register changeModalType={changeModalType} closeModal={handleCloseModal('login')} />
                         ) : (
-                            <Login changeModalType={changeModalType} closeModal={handleCloseLoginModal} />
+                            <Login changeModalType={changeModalType} closeModal={handleCloseModal('login')} />
                         )}
                     </Modal>
                 )}
                 {addMemeModal && (
-                    <Modal onClose={() => handleCloseAddMemeModal()}>
-                        <AddMeme onClose={() => handleCloseAddMemeModal()} />
+                    <Modal onClose={() => handleCloseModal('addmeme')}>
+                        <AddMeme onClose={() => handleCloseModal('addmeme')} />
                     </Modal>
                 )}
                 {popNotification && (
@@ -102,9 +110,19 @@ export default function Nav() {
                             message: 'Udało się dodać mema!',
                     }} />
                 )}
+                {searchModal && (
+                    <Modal onClose={() => handleCloseModal('search')}>
+                        <SearchUserModal username={searchValue} onClose={()=>handleCloseModal('search')} />
+                    </Modal>
+                )}
                 <div className="wrapper">
                     {page && page === 1 ? (
-                        <Link to='/strona/1' className='logo' onClick={()=>fetchPosts()}>Bezbekownia</Link>
+                        // page == undefined
+                        // fix this
+                        <Link to='/strona/1' className='logo' onClick={() => {
+                            fetchPosts()
+                            window.scrollTo(0, 0)
+                        }}>Bezbekownia</Link>
                     ) : (
                         <Link to='/strona/1' className='logo'>Bezbekownia</Link>
                     )}
@@ -129,7 +147,7 @@ export default function Nav() {
                         </li>
                         {user && user.username ? (
                             <>
-                                <li className="square plus" title='Dodaj mema' onClick={()=>handleOpenAddMemeModal()}>
+                                <li className="square plus" title='Dodaj mema' onClick={()=>handleOpenModal('addmeme')}>
                                     <Icon icon="akar-icons:plus" />
                                 </li>
                                 <li className="square profile">
@@ -149,8 +167,8 @@ export default function Nav() {
                             <li className="square buttons">
                                 <Icon icon="akar-icons:people-group" />
                                 <DropdownMenu centerItems>
-                                    <li onClick={()=>handleOpenLoginModal('login')}><p>Zaloguj się</p></li>
-                                    <li onClick={()=>handleOpenLoginModal('register')}><p>Zarejestruj się</p></li>
+                                    <li onClick={()=>handleOpenModal('login', 'login')}><p>Zaloguj się</p></li>
+                                    <li onClick={()=>handleOpenModal('login', 'register')}><p>Zarejestruj się</p></li>
                                 </DropdownMenu>
                             </li>
                         )}
