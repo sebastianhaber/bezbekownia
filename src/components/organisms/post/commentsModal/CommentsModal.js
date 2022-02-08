@@ -8,11 +8,12 @@ import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../../App'
 import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
 import { addLike, deleteComment, postComment, removeLike, submitReport } from '../../../../lib/auth'
-import axios from 'axios'
 import Loader from '../../../molecules/loader/Loader'
 import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgreeDisagree'
 import ShareModal from '../ShareModal'
 import FloatingNotification from '../../../molecules/floating-notification/FloatingNotification'
+import { useQuery } from '@apollo/client'
+import { GET_ONE_POST } from '../../../queries/Queries'
 
 export default function CommentsModal({ externalData, closeModal }) {
     const [data, setData] = useState(externalData);
@@ -24,11 +25,7 @@ export default function CommentsModal({ externalData, closeModal }) {
     });
     const [commentValue, setCommentValue] = useState('');
     const { user, posts } = useContext(AppContext);
-    const [author, setAuthor] = useState({});
-    const [error, setError] = useState({
-        status: false,
-        message: 'Nie można znaleźć nazwy użytkownika.'
-    });
+    const [author, setAuthor] = useState(data.user);
     const [isDeleteModalActive, setDeleteModalActive] = useState(false);
     const [deletingComment, setDeletingComment] = useState({
         loading: {
@@ -49,6 +46,11 @@ export default function CommentsModal({ externalData, closeModal }) {
     });
     const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const [liked, setLiked] = useState(false);
+    const { data: gqlData, refetch } = useQuery(GET_ONE_POST, {
+        variables: {
+            slug: data.slug
+        }
+    })
 
     const handleCloseModal = () => {
         if (closeModal) closeModal();
@@ -114,12 +116,6 @@ export default function CommentsModal({ externalData, closeModal }) {
             })
         }
     }
-    const fetchThisMeme = () => {
-        axios.get(`/posts/${data.slug}`)
-            .then(res => {
-                setData(res.data)
-            })
-    }
     const likePost = () => {
         if (user && user.id) {
             let likedIndex, likeId;
@@ -143,9 +139,9 @@ export default function CommentsModal({ externalData, closeModal }) {
                     return console.log(err);
                 })
             } else {
-                addLike(data.id, user.id).then((res) => {
+                addLike(data.id, user.id).then(() => {
                     updatePost('add')
-                    fetchThisMeme();
+                    refetch();
                     setLiked(true);
                 }).catch(err => {
                     return console.log(err);
@@ -234,26 +230,12 @@ export default function CommentsModal({ externalData, closeModal }) {
         }
     }, [data, user])
     useEffect(() => {
-        axios.get(`/users?username=${data.user.username}`)
-            .then(res => {
-                if (res.data.length > 0) {
-                    setAuthor(res.data[0]);
-                } else {
-                    setError({ ...error, status: true })
-                }
-            })
-    }, [error, data.user])
-    useEffect(() => {
         setComments(data.comments.reverse())
     }, [data])
     useEffect(() => {
         setVisibleComments({...visibleComments, content: data.comments.reverse().slice(0, visibleComments.visible)})
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.comments])
-    useEffect(() => {
-        fetchThisMeme();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
     useEffect(() => {
         if (data.hashtags) {
             let array = data.hashtags
@@ -269,10 +251,13 @@ export default function CommentsModal({ externalData, closeModal }) {
             setHashtags(array)
         }
     }, [data])
+    useEffect(() => {
+        if (gqlData) {
+            setData(gqlData.posts[0])
+            setAuthor(gqlData.posts[0].user)
+        }
+    }, [gqlData])
 
-    if (error.status) {
-        return <Loader message={error.message} />
-    }
     if (Object.keys(data).length === 0) return <Loader message='Pobieranie danych...' />
     
     return (

@@ -1,43 +1,42 @@
-import axios from 'axios';
+import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { API_IP } from '../../App';
 import Loader from '../molecules/loader/Loader';
 import CommentsModal from '../organisms/post/commentsModal/CommentsModal';
+import { GET_ONE_POST } from '../queries/Queries';
 
 export default function Meme() {
     const { slug } = useParams();
     const [post, setPost] = useState({});
-    const navigate = useNavigate();
+    const { data } = useQuery(GET_ONE_POST, {
+        variables: {
+            slug: slug
+        }
+    })
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        axios.get(`/posts/${slug}`)
-            .then(res => {
-                if (res.status === 404) {
-                    navigate('404');
-                } else {
-                    setPost(res.data);
-                }
-            })
-    }, [slug, navigate])
-
+        if (data) setPost(data.posts[0])
+    }, [data])
 
     if (!post || (Object.keys(post).length === 0)) return <Loader />;
     return (
         <Wrapper>
             {post && post.user && (
-                <Helmet>
-                    <title>Bezbekownia | {post.title}</title>
-                    <meta name="description" content={`Mem użytkownika ${post.user.username}: ${post.title}`} />
-                    <meta property="og:title" content={`Bezbekownia | ${post.title}`} />
-                    <meta property="og:type" content="image" />
-                    <meta property="og:image" content={`${API_IP}${post.image.url}`} />
-                    <meta property='og:image:alt' content={`Mem użytkownika ${post.user.username}`} />
-                    <meta property="og:url" content={`https://www.bezbekownia.pl/meme/${slug}/`} />
-                </Helmet>
+                <>
+                    <Helmet>
+                        <title>Bezbekownia | {post.title}</title>
+                        <meta name="description" content={`Mem użytkownika ${post.user.username}: ${post.title}`} />
+                        <meta property="og:title" content={`Bezbekownia | ${post.title}`} />
+                        <meta property="og:type" content="image" />
+                        <meta property="og:image" content={`${API_IP}${post.image.url}`} />
+                        <meta property='og:image:alt' content={`Mem użytkownika ${post.user.username}`} />
+                        <meta property="og:url" content={`https://www.bezbekownia.pl/meme/${slug}/`} />
+                    </Helmet>
+                </>
             )}
             <div className="wrapper">
                 <CommentsModal externalData={post} />

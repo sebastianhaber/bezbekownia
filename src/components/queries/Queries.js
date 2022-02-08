@@ -163,3 +163,50 @@ export const GET_USER_POSTS = gql`
         }
     }
 `
+export const GET_ONE_POST = gql`
+    query getPost($slug: String!){
+        posts(where:{
+            slug: $slug,
+            user:{
+                blocked_ne: true,
+            }
+        }){
+            id
+            created_at
+            title
+            slug
+            image{
+                id
+                name
+                url
+            }
+            hashtags
+            user{
+                id
+                username
+                image{
+                    url
+                }
+            }
+            likes{
+                value
+                user{
+                    id
+                }
+            }
+            comments{
+                id
+                created_at
+                message
+                user{
+                    id
+                    username
+                    blocked
+                    image{
+                        url
+                    }
+                }
+            }
+        }
+    }
+`
