@@ -40,9 +40,6 @@ const NotificationWrapper = styled.div`
         margin: 0 auto;
         max-width: 1440px;
         font-size: 14px;
-        p{
-            width: 100%;
-        }
     }
     span{
         display: grid;
