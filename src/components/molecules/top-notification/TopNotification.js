@@ -2,15 +2,22 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function TopNotification({ message }) {
-    const [isHidden, setHidden] = useState(false);
+export default function TopNotification({ message, onClose }) {
+    const [isHiding, setHiding] = useState(false);
+
+    const handleClose = () => {
+        setHiding(true);
+        setTimeout(() => {
+            onClose();
+        }, 200);
+    }
     if (message.length === 0) return null;
 
     return (
-        <NotificationWrapper id='top-notification' isHidden={isHidden}>
+        <NotificationWrapper id='top-notification' isHiding={isHiding}>
             <div>
                 <p>{ message }</p>
-                <span onClick={()=>setHidden(true)}>
+                <span onClick={()=>handleClose()}>
                     <Icon icon="akar-icons:cross" />
                 </span>
             </div>
@@ -26,9 +33,8 @@ const NotificationWrapper = styled.div`
     z-index: 3;
     background-color: ${({ theme }) => theme.colors.accent.light};
     padding: 1rem;
-    transition: transform .2s ease, opacity .2s ease .2s;
-    ${({ isHidden }) => isHidden && `
-        transform: translateY(0);
+    transition: opacity .2s ease;
+    ${({ isHiding }) => isHiding && `
         opacity: 0;
         pointer-events: none;
     `}

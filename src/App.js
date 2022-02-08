@@ -32,6 +32,7 @@ function App() {
   const [loaderMessage, setLoaderMessage] = useState('');
   const [page, setPage] = useState(1);
   const [topNotificationMessage, setTopNotificationMessage] = useState('');
+  const [isNotificationHidden, setNotificationHidden] = useState(false);
 
   const fetchPosts = () => {
     axios.get(`/posts?_start=${(page-1)*limitPosts}&_limit=${limitPosts}&_sort=created_at:DESC`)
@@ -71,6 +72,9 @@ function App() {
         }
         setMaintenance(res.data.isUnderMaintenance);
       });
+  }
+  const handleHideNotification = () => {
+    setNotificationHidden(true);
   }
 
   useEffect(() => {
@@ -117,7 +121,11 @@ function App() {
       <Router>
         <Nav />
         <main>
-          <TopNotification message={topNotificationMessage} />
+          {!isNotificationHidden && (
+            <TopNotification
+              onClose={handleHideNotification}
+              message={topNotificationMessage} />
+          )}
           <Routes>
             <Route path='/' element={
               <HomePage
