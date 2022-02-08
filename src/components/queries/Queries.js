@@ -10,6 +10,7 @@ export const POSTS = gql`
             id
             created_at
             title
+            slug
             image{
                 id
                 name
@@ -53,6 +54,7 @@ export const SEARCH_POSTS_BY_HASHTAGS = gql`
             id
             created_at
             title
+            slug
             image{
                 id
                 name

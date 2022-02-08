@@ -18,9 +18,6 @@ export default function Hashtag() {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
 
     if (error) {
         return (
