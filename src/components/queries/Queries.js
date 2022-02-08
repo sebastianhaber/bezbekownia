@@ -102,3 +102,64 @@ export const SEARCH_USER_QUERY = gql`
         }
     }
 `;
+export const GET_USER = gql`
+    query getUser($username: String!){
+        users(where: {
+            username: $username,
+            blocked_ne: true
+        }){
+            id
+            isAdmin
+            image{
+                url
+            }
+            backgroundImage{
+                url
+            }
+        }
+    }
+`;
+export const GET_USER_POSTS = gql`
+    query getUserPosts($start: Int!, $limit: Int!, $username: String!){
+        posts(start: $start, limit: $limit, sort: "created_at:DESC", where:{
+            user:{
+                blocked_ne: true,
+                username: $username
+            }
+        }){
+            id
+            created_at
+            title
+            slug
+            image{
+                id
+                name
+                url
+            }
+            hashtags
+            user{
+                id
+                username
+            }
+            likes{
+                value
+                user{
+                    id
+                }
+            }
+            comments{
+                id
+                created_at
+                message
+                user{
+                    id
+                    username
+                    blocked
+                    image{
+                        url
+                    }
+                }
+            }
+        }
+    }
+`

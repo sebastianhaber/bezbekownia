@@ -1,45 +1,76 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import React, { useState } from 'react'
+import { useParams } from 'react-router'
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react/cjs/react.development';
-import { API_IP } from '../../../App';
-import AppContext from '../../../context/AppContext';
+import { API_IP, limitPosts } from '../../../App';
 import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'
 import { Helmet } from 'react-helmet-async';
 import Post from '../../organisms/post/Post';
 import { Blocked, UserSection } from './Profile.styles';
 import axios from 'axios';
+import Pagination from '../../molecules/pagination/Pagination';
+import Button from '../../utils/Button';
+import { useQuery } from '@apollo/client';
+import { GET_USER, GET_USER_POSTS } from '../../queries/Queries';
 
 export default function Profile() {
     const { username } = useParams();
-    const appContext = useContext(AppContext);
+    const [totalUserPosts, setTotalUserPosts] = useState(null);
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const navigate = useNavigate();
+    const { data, fetchMore, refetch } = useQuery(GET_USER_POSTS, {
+        variables: {
+            start: 0,
+            limit: limitPosts,
+            username: username
+        }
+    })
+    const { data: userData } = useQuery(GET_USER, {
+        variables: {
+            username: username
+        }
+    })
 
-    useEffect(() => {
-        axios.get(`/users?username=${username}`)
-            .then(res => {
-                const user = res.data;
-                if (user.length === 0) {
-                    return navigate('/');
-                }
-                setUser(user[0]);
-            });
-    }, [appContext.user, username, navigate])
-
-    useEffect(() => {
-        axios.get(`/posts?user.username=${username}&_sort=created_at:DESC`)
-            .then(res => {
-                setPosts(res.data)
+    const loadMoreMemes = () => {
+        fetchMore({
+            variables: {
+                start: data.posts.length
+            },
+            updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+                return {
+                ...previousResult,
+                posts: [
+                    ...previousResult.posts,
+                    ...fetchMoreResult.posts,
+                ],
+                };
+            },
         })
-    }, [username])
-    const removePostFromArray = (id) => {
-        const filteredPosts = posts.filter(post => {
-            return post.id !== id
+    }
+    useEffect(() => {
+        axios.get(`/posts/count?user.username=${username}`)
+        .then(res => {
+            setTotalUserPosts(res.data);
         });
-        setPosts(filteredPosts);
+    }, [username])
+    useEffect(() => {
+        if (data) {
+            setPosts(data.posts);
+        }
+    }, [data])
+    useEffect(() => {
+        if (userData) {
+            setUser(userData.users[0]);
+        }
+    }, [userData])
+
+    const removePostFromArray = (id) => {
+        // const filteredPosts = posts.filter(post => {
+        //     return post.id !== id
+        // });
+        // setPosts(filteredPosts);
+        refetch();
     }
 
     if (!user) return <Loader />
@@ -75,7 +106,7 @@ export default function Profile() {
                 <div className="user">
                     <img src={(user.image && `${API_IP}${user.image.url}`) || UserImage} alt={user.username} className='profile' />
                     <div className="username">{ username }</div>
-                    <p className="posts">Memy: { posts.length }</p>
+                    <p className="posts">Memy: { totalUserPosts }</p>
                 </div>
             </UserSection>
             <section>
@@ -83,6 +114,11 @@ export default function Profile() {
                     <Post data={post} key={index} removePostFromArray={removePostFromArray} />
                 ))}
             </section>
+            {(totalUserPosts - posts.length) > 0 && (
+                <Pagination>
+                    <Button onClick={()=>loadMoreMemes()}>Dawej więcej memów</Button>
+                </Pagination>
+            )}
         </div>
     )
 }

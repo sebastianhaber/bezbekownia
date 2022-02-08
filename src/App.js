@@ -130,6 +130,7 @@ function App() {
       setPosts,
       onLoadMore,
       refetch,
+      totalPostsLength,
     }}>
       <Router>
         <Nav />
