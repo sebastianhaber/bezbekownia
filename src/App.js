@@ -15,7 +15,7 @@ import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
 import TopNotification from "./components/molecules/top-notification/TopNotification";
 import { useQuery } from "@apollo/client";
-import { GET_POSTS } from "./components/queries/Queries";
+import { GET_POSTS } from "./queries/Queries";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;

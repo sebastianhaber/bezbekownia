@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import Loader from '../molecules/loader/Loader';
 import Post from '../organisms/post/Post';
-import { SEARCH_POSTS_BY_HASHTAGS } from '../queries/Queries';
+import { SEARCH_POSTS_BY_HASHTAGS } from '../../queries/Queries';
 
 export default function Hashtag() {
     const { hashtag } = useParams();

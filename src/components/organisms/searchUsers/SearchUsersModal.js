@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'
 import { API_IP } from '../../../App';
-import { SEARCH_USER_QUERY } from '../../queries/Queries';
+import { SEARCH_USER_QUERY } from '../../../queries/Queries';
 import { SearchUsersWrapper } from './SearchUsersModal.styles';
 
 export default function SearchUsersModal({username, onClose}) {

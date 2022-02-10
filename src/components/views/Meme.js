@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { API_IP } from '../../App';
 import Loader from '../molecules/loader/Loader';
 import CommentsModal from '../organisms/post/commentsModal/CommentsModal';
-import { GET_ONE_POST } from '../queries/Queries';
+import { GET_ONE_POST } from '../../queries/Queries';
 
 export default function Meme() {
     const { slug } = useParams();

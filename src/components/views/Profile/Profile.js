@@ -11,7 +11,7 @@ import axios from 'axios';
 import Pagination from '../../molecules/pagination/Pagination';
 import Button from '../../utils/Button';
 import { useQuery } from '@apollo/client';
-import { GET_USER, GET_USER_POSTS } from '../../queries/Queries';
+import { GET_USER, GET_USER_POSTS } from '../../../queries/Queries';
 
 export default function Profile() {
     const { username } = useParams();

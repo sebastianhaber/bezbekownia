@@ -13,7 +13,7 @@ import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgr
 import ShareModal from '../ShareModal'
 import FloatingNotification from '../../../molecules/floating-notification/FloatingNotification'
 import { useQuery } from '@apollo/client'
-import { GET_ONE_POST } from '../../../queries/Queries'
+import { GET_ONE_POST } from '../../../../queries/Queries'
 
 export default function CommentsModal({ externalData, closeModal }) {
     const [data, setData] = useState(externalData);
