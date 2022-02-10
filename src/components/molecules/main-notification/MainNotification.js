@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function TopNotification({ message, onClose }) {
+export default function MainNotification({ message, onClose }) {
     const [isHiding, setHiding] = useState(false);
 
     const handleClose = () => {
@@ -26,17 +26,16 @@ export default function TopNotification({ message, onClose }) {
 }
 const NotificationWrapper = styled.div`
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
-    transform: translateY(60px);
     width: 100%;
     z-index: 3;
     background-color: ${({ theme }) => theme.colors.accent.light};
-    padding: 1rem;
-    transition: opacity .2s ease;
+    padding: 0.5rem 1rem;
+    transition: transform .2s ease;
     ${({ isHiding }) => isHiding && `
-        opacity: 0;
         pointer-events: none;
+        transform: translateY(100%);
     `}
     div{
         display: flex;

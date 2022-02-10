@@ -13,9 +13,9 @@ import EditProfile from "./components/views/Profile/EditProfile";
 import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
-import TopNotification from "./components/molecules/top-notification/TopNotification";
 import { useLazyQuery } from "@apollo/client";
 import { GET_POSTS } from "./queries/Queries";
+import MainNotification from "./components/molecules/main-notification/MainNotification";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
@@ -138,7 +138,7 @@ function App() {
         <Nav />
         <main>
           {!isNotificationHidden && (
-            <TopNotification
+            <MainNotification
               onClose={handleHideNotification}
               message={topNotificationMessage} />
           )}
