@@ -14,7 +14,7 @@ import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
 import TopNotification from "./components/molecules/top-notification/TopNotification";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_POSTS } from "./queries/Queries";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
@@ -25,6 +25,12 @@ export const FLOATING_NOTIFICATION_INITIALS = {
   message: '',
   type: 'success'
 }
+const POSTS_QUERY_VARIABLES = {
+    variables: {
+      start: 0,
+      limit: limitPosts
+    }
+  }
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -34,12 +40,7 @@ function App() {
   const [loaderMessage, setLoaderMessage] = useState('');
   const [topNotificationMessage, setTopNotificationMessage] = useState('');
   const [isNotificationHidden, setNotificationHidden] = useState(false);
-  const { loading, data, fetchMore, refetch } = useQuery(GET_POSTS, {
-    variables: {
-      start: 0,
-      limit: limitPosts
-    }
-  })
+  const [getPosts, { loading, data, fetchMore, refetch }] = useLazyQuery(GET_POSTS)
   const onLoadMore = () => {
     fetchMore({
       variables: {
@@ -92,10 +93,6 @@ function App() {
 
     setLoaderMessage('Łączenie z serwerem...')
     checkMaintenanceMode();
-    axios.get(`/posts/count?user.blocked=false`)
-      .then(res => {
-        setTotalPostsLength(res.data);
-      });
   }, []);
   useEffect(() => {
     const token = Cookies.get("token");
@@ -111,15 +108,20 @@ function App() {
             }
         });
       setLoaderMessage('Pobieranie memów...')
+      axios.get(`/posts/count?user.blocked=false`)
+      .then(res => {
+        setTotalPostsLength(res.data);
+      });
+      getPosts(POSTS_QUERY_VARIABLES)
     }
-  }, [isUnderMaintenance])
+  }, [isUnderMaintenance, getPosts])
   useEffect(() => {
     if (data) {
       setPosts(data.posts)
     }
   }, [data])
 
-  if (loading) return <Loader message={loaderMessage} />
+  if (loading || posts.length === 0) return <Loader message={loaderMessage} />
 
   return (
     <AppContext.Provider value={{
