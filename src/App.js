@@ -19,6 +19,7 @@ import MainNotification from "./components/molecules/main-notification/MainNotif
 import Rodo from "./components/views/legal/RODO/Rodo";
 import PolicyPrivacy from "./components/views/legal/policy-privacy/PolicyPrivacy";
 import Rules from "./components/views/legal/rules/Rules";
+import Footer from "./components/molecules/footer/Footer";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
@@ -163,6 +164,7 @@ function App() {
             <Route path='*' element={<NotFound />} />
           </Routes>
         </main>
+        <Footer />
       </Router>
     </AppContext.Provider>
   );
