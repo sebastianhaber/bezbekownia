@@ -24,6 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     main{
         margin-top: 60px;
+        min-height: calc(100vh - 60px);
     }
     button, input, textarea, select{
         outline: none;
