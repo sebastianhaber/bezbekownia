@@ -16,6 +16,9 @@ import 'simplebar/dist/simplebar.min.css';
 import { useLazyQuery } from "@apollo/client";
 import { GET_POSTS } from "./queries/Queries";
 import MainNotification from "./components/molecules/main-notification/MainNotification";
+import Rodo from "./components/views/legal/RODO/Rodo";
+import PolicyPrivacy from "./components/views/legal/policy-privacy/PolicyPrivacy";
+import Rules from "./components/views/legal/rules/Rules";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
@@ -154,6 +157,9 @@ function App() {
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
             <Route path='/@:username' element={<Profile />} />
             <Route path='/@:username/edytuj' element={<EditProfile />} />
+            <Route path='/legal/rodo' element={<Rodo />} />
+            <Route path='/legal/polityka-prywatnosci' element={<PolicyPrivacy />} />
+            <Route path='/legal/regulamin' element={<Rules />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </main>

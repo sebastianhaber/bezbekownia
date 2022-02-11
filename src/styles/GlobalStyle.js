@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
         border-radius: 0;
     }
     html, body{
-        font-size: 18px;
+        font-size: 16px;
         font-family: 'Inter', sans-serif;
         color: ${({theme}) => theme.colors.white};
         background-color: ${({theme}) => theme.colors.background.dark};
