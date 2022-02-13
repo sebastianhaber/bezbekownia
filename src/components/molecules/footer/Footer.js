@@ -4,7 +4,8 @@ import styled from "styled-components"
 export default function Footer() {
   return (
     <StyledFooter>
-        <div className="logo">Bezbekownia</div>
+          <div className="logo">Bezbekownia</div>
+          <p>Made with ❤️ by <a href="https://github.com/sebastianhaber" target="_blank" rel='noreferrer'>Sebastian Haber</a></p>
         <ul>
             <li><Link to='/legal/regulamin'>Regulamin</Link></li>
             <li><Link to='/legal/polityka-prywatnosci'>Polityka prywatności</Link></li>
@@ -26,6 +27,12 @@ const StyledFooter = styled.footer`
     .logo{
         font-weight: bold;
         font-size: 1.5rem;
+    }
+    p a{
+        color: ${({ theme }) => theme.colors.accent.light};
+        &:hover{
+            text-decoration: underline;
+        }
     }
     ul{
         display: flex;
