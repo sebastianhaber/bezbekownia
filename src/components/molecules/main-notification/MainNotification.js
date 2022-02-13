@@ -1,22 +1,34 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export default function MainNotification({ message, onClose }) {
+export default function MainNotification({ data, onClose }) {
     const [isHiding, setHiding] = useState(false);
+    const [wasShown, setShown] = useState(false);
 
     const handleClose = () => {
         setHiding(true);
         setTimeout(() => {
+            localStorage.setItem('notification-timestamp', Date.parse(data.updated_at))
             onClose();
         }, 200);
     }
-    if (message.length === 0) return null;
+    useEffect(() => {
+        if (Object.keys(data).length !== 0) {
+            if (localStorage.getItem('notification-timestamp') && (localStorage.getItem('notification-timestamp') === Date.parse(data.updated_at).toString())) {
+                setShown(true);
+            }
+        }
+    }, [data])
+
+    if(Object.keys(data).length === 0) return null;
+    if (data.message.length === 0) return null;
+    if (wasShown) return null;
 
     return (
         <NotificationWrapper id='top-notification' isHiding={isHiding}>
             <div>
-                <p>{ message }</p>
+                <p>{ data.message }</p>
                 <span onClick={()=>handleClose()}>
                     <Icon icon="akar-icons:cross" />
                 </span>

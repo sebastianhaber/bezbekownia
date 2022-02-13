@@ -42,7 +42,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
   const [loaderMessage, setLoaderMessage] = useState('');
-  const [topNotificationMessage, setTopNotificationMessage] = useState('');
+  const [mainNotification, setMainNotification] = useState({});
   const [isNotificationHidden, setNotificationHidden] = useState(false);
   const [getPosts, { loading, data, fetchMore, refetch }] = useLazyQuery(GET_POSTS)
   const onLoadMore = () => {
@@ -108,7 +108,7 @@ function App() {
       axios.get(`/top-notification`)
         .then(res => {
             if (res.data.message.length !== 0) {
-                setTopNotificationMessage(res.data.message)
+                setMainNotification(res.data)
             }
         });
       setLoaderMessage('Pobieranie memów...')
@@ -144,7 +144,7 @@ function App() {
           {!isNotificationHidden && (
             <MainNotification
               onClose={handleHideNotification}
-              message={topNotificationMessage} />
+              data={mainNotification} />
           )}
           <Routes>
             <Route path='/' element={
