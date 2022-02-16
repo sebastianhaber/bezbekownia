@@ -95,10 +95,14 @@ export default function Profile() {
             </Helmet>
             <UserSection>
                 <div className='background'>
-                    {user.backgroundImage && (
+                    {user.backgroundImage ? (
                         <div className='image'>
-                            <div className="hasImage"></div>
+                            <div className="gradient"></div>
                             <img src={`${API_IP}${user.backgroundImage.url}`} alt={`Tło użytkownika ${username}`} />
+                        </div>
+                    ) : (
+                        <div className='image'>
+                            <div className="gradient"></div>
                         </div>
                     )}
                 </div>
