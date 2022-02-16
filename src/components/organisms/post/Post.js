@@ -213,7 +213,7 @@ export default function Post({ data, removePostFromArray }) {
                     <Icon icon="akar-icons:more-vertical" />
                     <ul>
                         <li onClick={()=> handleOpenShareModal()}><Icon icon="akar-icons:arrow-forward-thick" /> Udostępnij</li>
-                        {user && ((user.id === data.user.id) || user.isAdmin) && <li onClick={()=>handleBeforeDeletingPost()}><Icon icon="akar-icons:trash-can" /> Usuń</li>}
+                        {user && ((user.id === parseInt(data.user.id)) || user.isAdmin) && <li onClick={()=>handleBeforeDeletingPost()}><Icon icon="akar-icons:trash-can" /> Usuń</li>}
                         <li onClick={()=>handleReportPost()}><Icon icon="akar-icons:flag" /> Zgłoś</li>
                     </ul>
                 </div>
