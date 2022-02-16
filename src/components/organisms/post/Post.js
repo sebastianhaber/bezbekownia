@@ -52,7 +52,7 @@ export default function Post({ data, removePostFromArray }) {
         navigate(`/meme/${data.slug}`)
     }
     const handleBeforeDeletingPost = () => {
-        if (user && ((user.id === data.user.id) || user.isAdmin)) {
+        if (user && ((user.id === parseInt(data.user.id)) || user.isAdmin)) {
             setDeleteModalActive(true);
         }
     }
