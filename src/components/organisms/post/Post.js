@@ -32,11 +32,9 @@ export default function Post({ data, removePostFromArray }) {
     })
 
     const handleOpenCommentsModal = () => {
-        document.querySelector('html').classList.add('no-scroll');
         setModalOpen(true)
     }
     const handleCloseModal = () => {
-        document.querySelector('html').classList.remove('no-scroll');
         setModalOpen(false)
         refetch();
     }

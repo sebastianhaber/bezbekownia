@@ -11,8 +11,10 @@ export default function Modal({children, onClose, isCommentsModal = false}) {
     useEffect(() => {
         modalElement.id = 'modal';
         modalContainer.appendChild(modalElement);
+        document.querySelector('html').classList.add('no-scroll');
 
         return () => {
+            document.querySelector('html').classList.remove('no-scroll');
             modalContainer.removeChild(modalElement);
         }
     }, [modalElement]);

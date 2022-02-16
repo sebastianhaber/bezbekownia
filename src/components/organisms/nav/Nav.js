@@ -48,8 +48,6 @@ export default function Nav() {
         handleOpenModal('search');
     }
     const handleOpenModal = (modal, type) => {
-        document.querySelector('html').classList.add('no-scroll');
-
         if (modal === 'login') {
             setModal({
                 isOpen: true,
@@ -62,8 +60,6 @@ export default function Nav() {
         }
     }
     const handleCloseModal = (modal) => {
-        document.querySelector('html').classList.remove('no-scroll');
-
         if (modal === 'login') {
             setModal(INIT_MODAL)
         } else if (modal === 'addmeme') {
