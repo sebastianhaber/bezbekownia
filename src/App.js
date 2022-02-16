@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
 export const APP_URL = 'https://bezbekownia.pl';
+export const MAX_FILESIZE_AFTER_COMPRESSION = 500; // in KB
 const POSTS_QUERY_VARIABLES = {
     variables: {
       start: 0,

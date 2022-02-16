@@ -10,8 +10,7 @@ import Cookies from 'js-cookie';
 import removeDiacritics from './RemoveDiacritics'
 import { StyledForm } from './AddMeme.styles';
 import { toast } from 'react-toastify'
-
-const MAX_FILESIZE_AFTER_COMPRESSION = 500; // KB
+import { MAX_FILESIZE_AFTER_COMPRESSION } from '../../../App'
 
 export default function AddMeme({onClose}) {
     let { register, handleSubmit, formState: { errors }, setError } = useForm();
