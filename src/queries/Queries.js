@@ -114,6 +114,7 @@ export const GET_USER = gql`
                 url
             }
             backgroundImage{
+                formats
                 url
             }
         }

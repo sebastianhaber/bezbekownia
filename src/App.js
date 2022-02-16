@@ -9,8 +9,6 @@ import Hashtag from "./components/views/Hashtag";
 import Cookies from "js-cookie";
 import AppContext from "./context/AppContext";
 import Profile from "./components/views/Profile/Profile";
-import EditProfile from "./components/views/Profile/EditProfile";
-import Loader from "./components/molecules/loader/Loader";
 import axios from "axios";
 import 'simplebar/dist/simplebar.min.css';
 import { useLazyQuery } from "@apollo/client";
@@ -20,6 +18,8 @@ import Rodo from "./components/views/legal/RODO/Rodo";
 import PolicyPrivacy from "./components/views/legal/policy-privacy/PolicyPrivacy";
 import Rules from "./components/views/legal/rules/Rules";
 import Footer from "./components/molecules/footer/Footer";
+import UserSettings from "./components/views/Profile/settings/UserSettings";
+import Loader from "./components/molecules/loader/Loader";
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
@@ -157,7 +157,7 @@ function App() {
             <Route path='/meme/:slug' element={<Meme />} />
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
             <Route path='/@:username' element={<Profile />} />
-            <Route path='/@:username/edytuj' element={<EditProfile />} />
+            <Route path='/@:username/ustawienia' element={<UserSettings />} />
             <Route path='/legal/rodo' element={<Rodo />} />
             <Route path='/legal/polityka-prywatnosci' element={<PolicyPrivacy />} />
             <Route path='/legal/regulamin' element={<Rules />} />

@@ -32,6 +32,10 @@ const Wrapper = styled.div`
         flex: 1;
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
+        transition: border-color .2s ease;
+        &.error{
+            border-color: ${({ theme }) => theme.colors.red.light};
+        }
         &.border{
             border: 1px solid ${({ theme }) => theme.colors.gray};
         }
@@ -41,6 +45,10 @@ const Wrapper = styled.div`
             color: ${({ theme }) => theme.colors.gray};
             cursor: not-allowed;
         }
+    }
+    div.error{
+        font-size: 14px;
+        color: ${({ theme }) => theme.colors.red.light};
     }
     button{
         background-color: transparent;

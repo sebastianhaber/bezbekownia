@@ -91,9 +91,9 @@ export default function Nav() {
                 {modal && modal.isOpen && (
                     <Modal onClose={() => handleCloseModal('login')}>
                         {modal.type === 'register' ? (
-                            <Register changeModalType={changeModalType} closeModal={handleCloseModal('login')} />
+                            <Register changeModalType={changeModalType} closeModal={()=>handleCloseModal('login')} />
                         ) : (
-                            <Login changeModalType={changeModalType} closeModal={handleCloseModal('login')} />
+                            <Login changeModalType={changeModalType} closeModal={()=>handleCloseModal('login')} />
                         )}
                     </Modal>
                 )}
@@ -147,7 +147,7 @@ export default function Nav() {
                                         <img src={user.image ? `${API_IP}${user.image?.url}` : UserImage} alt={user.username} />
                                         <DropdownMenu>
                                             <li><Link to={`/@${user.username}`}>Profil</Link></li>
-                                            <li><Link to={`/@${user.username}/edytuj`}>Ustawienia profilu</Link></li>
+                                            <li><Link to={`/@${user.username}/ustawienia`}>Ustawienia profilu</Link></li>
                                             <hr />
                                             <li><Link to='/moje-memy'>Moje memy</Link></li>
                                             <li><Link to='/moje-polubienia'>Moje polubienia</Link></li>
