@@ -3,12 +3,13 @@ import Input from "../../../molecules/input/Input"
 import Button from "../../../utils/Button"
 import { StyledTab } from "./UserSettings.styles"
 import axios from 'axios'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import AppContext from '../../../../context/AppContext';
 import Cookies from "js-cookie"
+import { toast } from 'react-toastify'
 
 export default function Security() {
-	const { register, handleSubmit, formState: { errors }, setError, clearErrors, reset, watch } = useForm();
+	const { register, handleSubmit, formState: { errors }, setError, clearErrors, reset } = useForm();
 	const { user, setUser } = useContext(AppContext);
 	
 	const onSubmit = async (data) => {
@@ -58,21 +59,14 @@ export default function Security() {
 				reset();
 				clearErrors();
 				setUser(res.data);
-				console.log("zmieniono hasło / tu będzie powiadomienie")
 				const newToken = res.config.headers.Authorization.replace('Bearer ', '');
 				Cookies.set('token', newToken)
+				toast.success('Udało się zmienić hasło!')
 			}).catch(err => {
-				setError('global', {
-					type: 'global',
-					message: err.response.data.message
-				})
+				toast.success(err.response.data.message)
 			})
 		}
 	}
-	useEffect(() => {
-		const subscription = watch((value, { name, type }) => console.log(value, name, type));
-		return () => subscription.unsubscribe();
-	  }, [watch]);
 
 	return (
 		<StyledTab onSubmit={handleSubmit(onSubmit)} autoComplete='off'>

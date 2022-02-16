@@ -4,16 +4,16 @@ import Button from '../../../utils/Button'
 import { StyledCommentsModal } from './CommentsModal.styles'
 import UserImage from '../../../../assets/user-image.png'
 import { Link } from 'react-router-dom'
-import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../../App'
+import { API_IP } from '../../../../App'
 import AppContext from '../../../../context/AppContext'
 import Input from '../../../molecules/input/Input'
 import { addLike, deleteComment, postComment, removeLike, submitReport } from '../../../../lib/auth'
 import Loader from '../../../molecules/loader/Loader'
 import ModalAgreeDisagree from '../../../molecules/modal-agree-disagree/ModalAgreeDisagree'
 import ShareModal from '../ShareModal'
-import FloatingNotification from '../../../molecules/floating-notification/FloatingNotification'
 import { useQuery } from '@apollo/client'
 import { GET_ONE_POST } from '../../../../queries/Queries'
+import { toast } from 'react-toastify'
 
 export default function CommentsModal({ externalData, closeModal }) {
     const [data, setData] = useState(externalData);
@@ -44,7 +44,6 @@ export default function CommentsModal({ externalData, closeModal }) {
         array: [],
         string: ''
     });
-    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const [liked, setLiked] = useState(false);
     const { data: gqlData, refetch } = useQuery(GET_ONE_POST, {
         variables: {
@@ -72,6 +71,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                     setVisibleComments({ content: slicedArray })
                     setDeletingComment({...deletingComment, deletingCommentID: null})
                     handleCloseAgreeModal();
+                    toast.success('Usunięto komentarz.');
                     posts.map(post => {
                         if (post.id === data.id) {
                             post.comments = filteredComments
@@ -82,6 +82,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                 })
                 .catch(() => {
                     setDeletingComment({ ...deletingComment, error: { ...deletingComment.error, isError: true } })
+                    toast.error(deletingComment.error);
                 })
         }
     }
@@ -208,11 +209,7 @@ export default function CommentsModal({ externalData, closeModal }) {
     const handleReportPost = () => {
         if (user && user.id) {
             submitReport(data.id, user.id).then(() => {
-                setFloatingNotification({
-                    isActive: true,
-                    message: 'Zgłoszono mema.',
-                    type: 'success'
-                })
+                toast.success('Zgłoszono mema.')
             })
         }
     }
@@ -262,9 +259,6 @@ export default function CommentsModal({ externalData, closeModal }) {
     
     return (
         <StyledCommentsModal>
-            {floatingNotification.isActive && (
-                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(false)} />
-            )}
             {shareModal && (
                 <ShareModal data={data} hashtags={shareHashtags} onClose={()=>setShareModal(false)} />
             )}

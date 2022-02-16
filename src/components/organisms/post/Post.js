@@ -1,17 +1,17 @@
 import { Icon } from '@iconify/react';
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { API_IP, FLOATING_NOTIFICATION_INITIALS } from '../../../App';
+import { API_IP } from '../../../App';
 import AppContext from '../../../context/AppContext';
 import { addLike, deletePost, removeLike, submitReport } from '../../../lib/auth';
 import ModalAgreeDisagree from '../../molecules/modal-agree-disagree/ModalAgreeDisagree';
 import Modal from '../modal/Modal';
-import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
 import CommentsModal from './commentsModal/CommentsModal';
 import { Wrapper } from './Post.styles'
 import ShareModal from './ShareModal';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify'
 
 export default function Post({ data, removePostFromArray }) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -24,7 +24,6 @@ export default function Post({ data, removePostFromArray }) {
         isError: false,
         message: 'Nie można usunąć mema. Spróbuj ponownie załadować stronę.'
     })
-    const [floatingNotification, setFloatingNotification] = useState(FLOATING_NOTIFICATION_INITIALS)
     const navigate = useNavigate();
     const [hashtags, setHashtags] = useState([])
     const [shareHashtags, setShareHashtags] = useState({
@@ -70,6 +69,8 @@ export default function Post({ data, removePostFromArray }) {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
+            }).then(()=>{
+                toast.success(`Usunięto mema: ${data.title} 🙄`);
             })
         })
     }
@@ -79,11 +80,7 @@ export default function Post({ data, removePostFromArray }) {
     }
     const handleReportPost = () => {
         submitReport(data.id, user.id).then(() => {
-            setFloatingNotification({
-                isActive: true,
-                message: 'Zgłoszono mema.',
-                type: 'success'
-            })
+            toast.success('Zgłoszono mema.');
         })
     }
     const handleLike = () => {
@@ -170,9 +167,6 @@ export default function Post({ data, removePostFromArray }) {
 
     return (
         <Wrapper>
-            {floatingNotification.isActive && (
-                <FloatingNotification notification={floatingNotification} onClose={()=>setFloatingNotification(false)} />
-            )}
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
                     title='Czy na pewno chcesz usunąć mema?'

@@ -9,6 +9,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 import removeDiacritics from './RemoveDiacritics'
 import { StyledForm } from './AddMeme.styles';
+import { toast } from 'react-toastify'
 
 const MAX_FILESIZE_AFTER_COMPRESSION = 500; // KB
 
@@ -42,10 +43,7 @@ export default function AddMeme({onClose}) {
             .then((res) => {
                 imageID = res.data[0].id;
             }).catch(() => {
-                setError('image', {
-                    type: 'upload',
-                    message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#001)'
-                })
+                toast.error('Nie można dodać pliku. Skontaktuj się z administratorem. (#001)');
                 setLoading(false);
                 return false;
             })
@@ -73,21 +71,16 @@ export default function AddMeme({onClose}) {
             }
         }).then(() => {
             onClose('success');
+            toast.success('Udało Ci się dodać mema! 🎉')
             refetch();
         }).catch(() => {
-            setError('upload', {
-                type: 'upload',
-                message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#002)'
-            })
+            toast.error('Nie można dodać pliku. Skontaktuj się z administratorem. (#002)')
             axios.delete('/upload/files/' + imageID, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             }).catch(() => {
-                setError('upload', {
-                    type: 'upload',
-                    message: 'Nie można dodać pliku. Skontaktuj się z administratorem. (#004)'
-                })
+                toast.error('Nie można dodać pliku. Skontaktuj się z administratorem. (#004)')
             })
             setLoading(false);
             return false;

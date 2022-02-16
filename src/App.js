@@ -20,15 +20,12 @@ import Rules from "./components/views/legal/rules/Rules";
 import Footer from "./components/molecules/footer/Footer";
 import UserSettings from "./components/views/Profile/settings/UserSettings";
 import Loader from "./components/molecules/loader/Loader";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
 export const limitPosts = 10;
 export const APP_URL = 'https://bezbekownia.pl';
-export const FLOATING_NOTIFICATION_INITIALS = {
-  isActive: false,
-  message: '',
-  type: 'success'
-}
 const POSTS_QUERY_VARIABLES = {
     variables: {
       start: 0,
@@ -138,6 +135,18 @@ function App() {
       refetch,
       totalPostsLength,
     }}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        />
       <Router>
         <Nav />
         <main>

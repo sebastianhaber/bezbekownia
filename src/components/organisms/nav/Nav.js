@@ -11,7 +11,6 @@ import Register from '../auth/register/Register';
 import Login from '../auth/login/Login';
 import { logout as AuthLogout } from '../../../lib/auth'; 
 import AddMeme from '../addMeme/AddMeme';
-import FloatingNotification from '../../molecules/floating-notification/FloatingNotification';
 import SearchUserModal from '../searchUsers/SearchUsersModal'
 
 const INIT_MODAL = {
@@ -26,7 +25,6 @@ export default function Nav() {
     const [modal, setModal] = useState(INIT_MODAL);
     const [searchModal, setSearchModal] = useState(false);
     const [addMemeModal, setMemeModal] = useState(false);
-    const [popNotification, setPopNotification] = useState(false);
 
     const logout = () => {
         AuthLogout();
@@ -101,14 +99,6 @@ export default function Nav() {
                     <Modal onClose={() => handleCloseModal('addmeme')}>
                         <AddMeme onClose={() => handleCloseModal('addmeme')} />
                     </Modal>
-                )}
-                {popNotification && (
-                    <FloatingNotification
-                        onClose={()=>setPopNotification(false)}
-                        notification={{
-                            type: 'success',
-                            message: 'Udało się dodać mema!',
-                    }} />
                 )}
                 {searchModal && (
                     <Modal onClose={() => handleCloseModal('search')}>
