@@ -89,6 +89,27 @@ export const StyledTab = styled.form`
             justify-content: flex-end;
             margin: 4rem 0;
         }
+        .label{
+            position: relative;
+            button{
+                width: 100%;
+            }
+            &.max{
+                width: 100%;
+            }
+            label{
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+                &:hover + button{
+                    background-color: ${({theme}) => theme.colors.accent.dark};
+                }
+            }
+        }
     }
     p.small{
         text-align: center;
