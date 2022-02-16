@@ -18,7 +18,7 @@ export default function Post({ data, removePostFromArray }) {
     const [shareModal, setShareModal] = useState(false);
     const [liked, setLiked] = useState(false);
     const [isHudVisible, setHudVisible] = useState(true);
-    const { user, refetch, posts } = useContext(AppContext);
+    const { user, refetch } = useContext(AppContext);
     const [isDeleteModalActive, setDeleteModalActive] = useState(false);
     const [deletingError, setDeletingError] = useState({
         isError: false,
@@ -83,11 +83,10 @@ export default function Post({ data, removePostFromArray }) {
     }
     const handleLike = () => {
         if (user && user.id) {
-            let likedIndex, likeId;
+            let likeId;
             const hasLiked = data.likes.find((like, index) => {
-                if (like.user === user.id) {
+                if (parseInt(like.user.id) === user.id) {
                     likeId = like.id;
-                    likedIndex = index;
                     return true;
                 }
                 return false;
@@ -95,14 +94,7 @@ export default function Post({ data, removePostFromArray }) {
 
             if (hasLiked) {
                 removeLike(likeId).then((res) => {
-                    data.likes.splice(likedIndex, 1);
-                    posts.map((post, i) => {
-                        if (post.id === data.id) {
-                            posts[i] = data;
-                            return true;
-                        }
-                        return false;
-                    })
+                    refetch();
                     setLiked(false);
                 }).catch(err => {
                     return console.log(err);
@@ -136,7 +128,7 @@ export default function Post({ data, removePostFromArray }) {
         if (user && user.id) {
             if (data.likes.length > 0) {
                 data.likes.find((like) => {
-                    if (like.user === user.id) {
+                    if (parseInt(like.user.id) === user.id) {
                         setLiked(true);
                         return true;
                     }

@@ -119,59 +119,29 @@ export default function CommentsModal({ externalData, closeModal }) {
     }
     const likePost = () => {
         if (user && user.id) {
-            let likedIndex, likeId;
+            let likeId;
             const hasLiked = data.likes.find((like, index) => {
-                if (like.user === user.id) {
+                if (parseInt(like.user.id) === user.id) {
                     likeId = like.id;
-                    likedIndex = index;
-                    setLiked(true);
                     return true;
                 }
-                setLiked(false);
                 return false;
             });
 
             if (hasLiked) {
                 removeLike(likeId).then((res) => {
-                    updatePost('remove', likedIndex);
-                    data.likes.splice(likedIndex, 1);
+                    refetch()
                     setLiked(false);
                 }).catch(err => {
                     return console.log(err);
                 })
             } else {
-                addLike(data.id, user.id).then(() => {
-                    updatePost('add')
-                    refetch();
-                    setLiked(true);
+                addLike(data.id, user.id).then(async (res) => {
+                    await refetch();
                 }).catch(err => {
                     return console.log(err);
                 })
             }
-        }
-    }
-    const updatePost = (action, index) => {
-        if (user && user.id) {
-            const date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString();
-            const likeObject = {
-                post: data.id,
-                user: user.id,
-                created_at: date,
-                updated_at: date,
-                value: 1,
-            }
-            if (action === 'add') {
-                data.likes.push(likeObject);
-            } else {
-                data.likes.splice(index, 1);
-            }
-            posts.map((post, i) => {
-                if (post.id === data.id) {
-                    posts[i] = data;
-                    return true;
-                }
-                return false;
-            })
         }
     }
     const handleCheckMoreComments = () => {
@@ -217,7 +187,7 @@ export default function CommentsModal({ externalData, closeModal }) {
     useEffect(() => {
         if (user && user.id) {
             data.likes.find((like) => {
-                if (like.user === user.id) {
+                if (parseInt(like.user.id) === user.id) {
                     setLiked(true);
                     return true;
                 }

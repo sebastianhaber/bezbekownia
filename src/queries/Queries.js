@@ -22,6 +22,7 @@ export const GET_POSTS = gql`
                 username
             }
             likes{
+                id
                 value
                 user{
                     id
@@ -66,6 +67,7 @@ export const SEARCH_POSTS_BY_HASHTAGS = gql`
             }
             hashtags
             likes{
+                id
                 value
                 user{
                     id
@@ -143,6 +145,7 @@ export const GET_USER_POSTS = gql`
                 username
             }
             likes{
+                id
                 value
                 user{
                     id
@@ -190,6 +193,7 @@ export const GET_ONE_POST = gql`
                 }
             }
             likes{
+                id
                 value
                 user{
                     id
