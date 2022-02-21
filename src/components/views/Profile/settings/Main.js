@@ -14,8 +14,8 @@ const COMPRESSED_IMAGE_INIT = {
     background: null
 }
 
-export default function Main({user}) {
-    const { user: contextUser } = useContext(AppContext);
+export default function Main() {
+    const { user } = useContext(AppContext);
     const [compressedImage, setCompressedImage] = useState(COMPRESSED_IMAGE_INIT);
     const profileRef = useRef(null);
 
@@ -25,7 +25,7 @@ export default function Main({user}) {
 
     const checkImage = (e) => {
         if (e.target.files.length && e.target.dataset.for) {
-            if (e.target.files[0].name.match(/.(jpg|jpeg|gif)$/i)) {
+            if (e.target.files[0].name.match(/.(jpg|jpeg|gif|png)$/i)) {
                 compressImage(e.target.files[0], e.target.dataset.for)
                 return true;
             }
@@ -67,7 +67,7 @@ export default function Main({user}) {
         });
     }
 
-    const onSubmit = (e)=>{
+    const onSubmit = (e) => {
         e.preventDefault();
         console.log(compressedImage)
     }
@@ -123,7 +123,7 @@ export default function Main({user}) {
                         <input 
                             id='profile-image-input'
                             data-for="profile"
-                            accept="image/gif, image/jpeg, image/jpg"
+                            accept="image/gif, image/jpeg, image/jpg, image/png"
                             type="file"
                             onChange={checkImage}
                             ref={profileRef}
@@ -145,10 +145,10 @@ export default function Main({user}) {
             <p className="small gray">Zalecana wielkość zdjęcia to 256x256px</p>
             <div className="wrapper">
                 <Input label='Nazwa użytkownika'>
-                    <input type="text" disabled defaultValue={`${contextUser.username}`} />
+                    <input type="text" disabled defaultValue={`${user.username}`} />
                 </Input>
                 <Input label='Email'>
-                    <input type="text" disabled defaultValue={`${contextUser.email}`} />
+                    <input type="text" disabled defaultValue={`${user.email}`} />
                 </Input>
             </div>
             <div className="buttons submit">
