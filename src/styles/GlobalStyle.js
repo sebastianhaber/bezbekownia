@@ -13,7 +13,6 @@ export const GlobalStyle = createGlobalStyle`
         color: ${({theme}) => theme.colors.white};
         background-color: ${({theme}) => theme.colors.background.dark};
         line-height: 1.5;
-        letter-spacing: -0.022rem;
         min-height: 100vh;
         min-width: 360px;
         overflow-x: hidden;
