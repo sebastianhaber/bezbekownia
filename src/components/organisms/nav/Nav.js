@@ -21,7 +21,7 @@ export default function Nav() {
     const [isSearchBoxOpen, setSearchBoxOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
-    const { user, setUser, refetch } = useContext(AppContext);
+    const { user, setUser, refetch, posts } = useContext(AppContext);
     const [modal, setModal] = useState(INIT_MODAL);
     const [searchModal, setSearchModal] = useState(false);
     const [addMemeModal, setMemeModal] = useState(false);
@@ -103,7 +103,11 @@ export default function Nav() {
                 )}
                 <div className='nav'>
                     <div className="wrapper">
-                        <Link to='/' className='logo' onClick={()=>refetch()}>Bezbekownia</Link>
+                        {posts.length ? (
+                            <Link to='/' className='logo' onClick={()=>refetch()}>Bezbekownia</Link>
+                            ) : (
+                            <Link to='/' className='logo'>Bezbekownia</Link>
+                        )}
                         <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                             <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
                                 <div className="icon"><Icon icon="akar-icons:search" /></div>
@@ -132,13 +136,27 @@ export default function Nav() {
                                     <li className="square profile">
                                         <img src={user.image ? `${API_IP}${user.image?.url}` : UserImage} alt={user.username} />
                                         <DropdownMenu>
-                                            <li><Link to={`/@${user.username}`}>Profil</Link></li>
-                                            <li><Link to={`/@${user.username}/ustawienia`}>Ustawienia profilu</Link></li>
+                                            <li>
+                                                <Link to={`/@${user.username}`}>
+                                                    <Icon icon="akar-icons:person" /> Pokaż profil
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to={`/ustawienia`}>
+                                                    <Icon icon="akar-icons:gear" /> Ustawienia
+                                                </Link>
+                                            </li>
                                             <hr />
-                                            <li><Link to='/moje-memy'>Moje memy</Link></li>
-                                            <li><Link to='/moje-polubienia'>Moje polubienia</Link></li>
+                                            <li>
+                                                <Link to='/moje-polubienia'>
+                                                    <Icon icon="akar-icons:thumbs-up" /> Moje polubienia
+                                                </Link>
+                                            </li>
                                             <hr />
-                                            <li onClick={()=>logout()}><Link to='/'>Wyloguj się</Link></li>
+                                            <li onClick={()=>logout()}>
+                                                <Link to='/'>
+                                                    <Icon icon="akar-icons:sign-out" /> Wyloguj się
+                                                </Link></li>
                                         </DropdownMenu>
                                     </li>
                                 </>

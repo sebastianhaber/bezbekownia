@@ -12,7 +12,6 @@ export const StyledNav = styled.nav`
         height: 60px;
         display: grid;
         place-items: center;
-        font-size: 14px;
     }
     .wrapper{
         width: 100%;
@@ -24,6 +23,14 @@ export const StyledNav = styled.nav`
         justify-content: space-between;
         li{
             cursor: pointer;
+            a{
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                svg{
+                    font-size: 1rem;
+                }
+            }
         }
     }
     .logo{
