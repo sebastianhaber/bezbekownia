@@ -23,12 +23,12 @@ import Loader from "./components/molecules/loader/Loader";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.8.101:1337';
+export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.0.45:1337';
 export const limitPosts = 10;
 export const APP_URL = 'https://bezbekownia.pl';
 export const MAX_FILESIZE_AFTER_COMPRESSION = 300;
 export const MAX_PROFILE_SIZE_AFTER_COMPRESSION = 50;
-const POSTS_QUERY_VARIABLES = {
+export const POSTS_QUERY_VARIABLES = {
     variables: {
       start: 0,
       limit: limitPosts
@@ -40,10 +40,9 @@ function App() {
   const [totalPostsLength, setTotalPostsLength] = useState(0);
   const [user, setUser] = useState(null);
   const [isUnderMaintenance, setMaintenance] = useState(null);
-  const [loaderMessage, setLoaderMessage] = useState('');
   const [mainNotification, setMainNotification] = useState({});
   const [isNotificationHidden, setNotificationHidden] = useState(false);
-  const [getPosts, { loading, data, fetchMore, refetch }] = useLazyQuery(GET_POSTS)
+  const [getPosts, { data, fetchMore, refetch }] = useLazyQuery(GET_POSTS)
   const onLoadMore = () => {
     fetchMore({
       variables: {
@@ -62,8 +61,6 @@ function App() {
   }
   const fetchMe = () => {
     const token = Cookies.get("token");
-
-    setLoaderMessage('Pobieranie danych urzytkownika...')
     axios.get(`/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -81,9 +78,6 @@ function App() {
   const checkMaintenanceMode = () => {
     axios.get(`/maintenance-mode`)
       .then(res => {
-        if (res.data.isUnderMaintenance) {
-          setLoaderMessage('Trwają prace administracyjne.');
-        }
         setMaintenance(res.data.isUnderMaintenance);
       });
   }
@@ -93,8 +87,6 @@ function App() {
 
   useEffect(() => {
     axios.defaults.baseURL = API_IP;
-
-    setLoaderMessage('Łączenie z serwerem...')
     checkMaintenanceMode();
   }, []);
   useEffect(() => {
@@ -105,26 +97,20 @@ function App() {
         fetchMe();
       }
       axios.get(`/top-notification`)
-        .then(res => {
-            if (res.data.message.length !== 0) {
-                setMainNotification(res.data)
-            }
-        });
-      setLoaderMessage('Pobieranie memów...')
-      axios.get(`/posts/count?user.blocked=false`)
       .then(res => {
-        setTotalPostsLength(res.data);
+        if (res.data.message.length !== 0) {
+          setMainNotification(res.data)
+        }
       });
-      getPosts(POSTS_QUERY_VARIABLES)
     }
-  }, [isUnderMaintenance, getPosts])
+  }, [isUnderMaintenance])
   useEffect(() => {
     if (data) {
       setPosts(data.posts)
     }
   }, [data])
 
-  if (loading || posts.length === 0) return <Loader message={loaderMessage} />
+  if(isUnderMaintenance) return <Loader message='Trwają prace administracyjne.' />
 
   return (
     <AppContext.Provider value={{
@@ -133,9 +119,13 @@ function App() {
       setUser,
       posts,
       setPosts,
+      getPosts,
       onLoadMore,
       refetch,
       totalPostsLength,
+      setTotalPostsLength,
+      fetchMe,
+      isUnderMaintenance
     }}>
       <ToastContainer
         position="top-right"
@@ -168,7 +158,7 @@ function App() {
             <Route path='/meme/:slug' element={<Meme />} />
             <Route path='/hashtag/:hashtag' element={<Hashtag />} />
             <Route path='/@:username' element={<Profile />} />
-            <Route path='/@:username/ustawienia' element={<UserSettings />} />
+            <Route path='/ustawienia' element={<UserSettings />} />
             <Route path='/legal/rodo' element={<Rodo />} />
             <Route path='/legal/polityka-prywatnosci' element={<PolicyPrivacy />} />
             <Route path='/legal/regulamin' element={<Rules />} />
