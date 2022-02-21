@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom';
 import { API_IP, limitPosts } from '../../../App';
@@ -12,12 +12,14 @@ import Pagination from '../../molecules/pagination/Pagination';
 import Button from '../../utils/Button';
 import { useQuery } from '@apollo/client';
 import { GET_USER, GET_USER_POSTS } from '../../../queries/Queries';
+import AppContext from '../../../context/AppContext';
 
 export default function Profile() {
     const { username } = useParams();
     const [totalUserPosts, setTotalUserPosts] = useState(null);
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
+    const { isUnderMaintenance } = useContext(AppContext);
     const { data, fetchMore, refetch } = useQuery(GET_USER_POSTS, {
         variables: {
             start: 0,
@@ -48,11 +50,13 @@ export default function Profile() {
         })
     }
     useEffect(() => {
-        axios.get(`/posts/count?user.username=${username}`)
-        .then(res => {
-            setTotalUserPosts(res.data);
-        });
-    }, [username])
+        if(!isUnderMaintenance && (isUnderMaintenance !== null)){
+            axios.get(`/posts/count?user.username=${username}`)
+            .then(res => {
+                setTotalUserPosts(res.data);
+            });
+        }
+    }, [isUnderMaintenance, username])
     useEffect(() => {
         if (data) {
             setPosts(data.posts);
