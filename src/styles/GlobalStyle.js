@@ -50,6 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     img{
         display: block;
+        overflow: hidden;
     }
     .bold{
         font-weight: bold;

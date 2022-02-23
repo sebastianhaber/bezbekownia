@@ -15,7 +15,7 @@ export const StyledCommentsModal = styled.div`
             img{
                 width: 2rem;
                 height: 2rem;
-                border-radius: 50%;
+                border-radius: 0.5rem;
             }
             .username{
                 margin-left: 1rem;
@@ -84,7 +84,7 @@ export const StyledCommentsModal = styled.div`
                     min-width: 2rem;
                     height: 2rem;
                     background-size: cover;
-                    border-radius: 50%;
+                    border-radius: .5rem;
                     margin-right: 1rem;
                 }
                 .author{

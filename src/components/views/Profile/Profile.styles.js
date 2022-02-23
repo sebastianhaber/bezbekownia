@@ -53,8 +53,8 @@ export const UserSection = styled.section`
             margin-top: .5rem;
         }
         img{
-            width: 4rem;
-            height: 4rem;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             object-position: center;

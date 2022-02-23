@@ -12,6 +12,9 @@ export default function HomePage({ totalPostsLength }) {
     const { onLoadMore, posts, isUnderMaintenance, setTotalPostsLength, getPosts } = useContext(AppContext)
 
     useEffect(()=>{
+        window.scrollTo(0,0)
+    }, [])
+    useEffect(()=>{
         if(!isUnderMaintenance && (isUnderMaintenance !== null)){
             axios.get(`/posts/count?user.blocked=false`)
                 .then(res => {

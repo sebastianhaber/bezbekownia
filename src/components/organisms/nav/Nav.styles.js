@@ -39,6 +39,7 @@ export const StyledNav = styled.nav`
     #search-box{
         position: relative;
         width: 100%;
+        max-width: 300px;
         margin: 0 1rem;
     }
     .search-box{
@@ -48,6 +49,7 @@ export const StyledNav = styled.nav`
         display: none;
         width: 100%;
         height: 3rem;
+        padding: 0 .5rem;
         background-color: ${({ theme }) => theme.colors.background.light};
         &.active{
             display: flex;
@@ -64,7 +66,6 @@ export const StyledNav = styled.nav`
             width: 100%;
             height: 100%;
             background-color: transparent;
-            font-weight: bold;
             color: inherit;
             transition: background-color .2s ease;
         }
