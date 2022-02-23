@@ -140,9 +140,9 @@ export const StyledAvatars = styled.div`
     gap: 1rem;
     div{
         position: relative;
-        width: 30%;
+        width: 100px;
         height: 100px;
-        background-size: cover;
+        background-size: 100px 100px;
         background-repeat: no-repeat;
         background-color: ${({theme}) => theme.colors.gray};
         border-radius: 0.5rem;

@@ -134,7 +134,7 @@ export default function Nav() {
                                         <Icon icon="akar-icons:plus" />
                                     </li>
                                     <li className="square profile">
-                                        <img src={user.image ? `${API_IP}${user.image?.url}` : UserImage} alt={user.username} />
+                                        <img src={user.avatar ? `${API_IP}${user.avatar.url}` : UserImage} alt={user.username} />
                                         <DropdownMenu>
                                             <li>
                                                 <Link to={`/@${user.username}`}>

@@ -29,7 +29,7 @@ export default function SearchUsersModal({username, onClose}) {
                         <ul>{data.users.map((user, index) => (
                             <Link to={`/@${user.username}`} key={index} onClick={onClose}>
                                 <li>
-                                    {user.image ? <img src={`${API_IP}${user.image.url}`} alt={user.username} />
+                                    {user.avatar ? <img src={`${API_IP}${user.avatar.url}`} alt={user.username} />
                                     : <img src={UserImage} alt={user.username} />}
                                     <p>{user.username}</p>
                                 </li>

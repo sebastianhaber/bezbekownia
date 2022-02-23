@@ -35,8 +35,8 @@ export default function Post({ data, removePostFromArray }) {
         setModalOpen(true)
     }
     const handleCloseModal = () => {
-        setModalOpen(false)
         refetch();
+        setModalOpen(false)
     }
     const handleToggleHud = (image) => {
         if (isHudVisible) {

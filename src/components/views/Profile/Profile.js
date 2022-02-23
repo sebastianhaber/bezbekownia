@@ -63,6 +63,9 @@ export default function Profile() {
         }
     }, [data])
     useEffect(() => {
+        window.scrollTo(0,0)
+    }, [])
+    useEffect(() => {
         if (userData) {
             setUser(userData.users[0]);
         }
@@ -111,7 +114,7 @@ export default function Profile() {
                     )}
                 </div>
                 <div className="user">
-                    <img src={(user.image && `${API_IP}${user.image.url}`) || UserImage} alt={user.username} className='profile' />
+                    <img src={user.avatar ? `${API_IP}${user.avatar.url}` : UserImage} alt={user.username} className='profile' />
                     <div className="username">{ username }</div>
                     <p className="posts">Memy: { totalUserPosts }</p>
                 </div>

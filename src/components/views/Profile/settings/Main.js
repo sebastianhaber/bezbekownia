@@ -97,6 +97,10 @@ export default function Main() {
             toast.success('Zmieniono avatar.')
         }).catch(()=>{
             toast.error('Coś poszło nie tak i nie można zmienić avatara 😟')
+            setAvatar({
+                choosen: false,
+                data: {}
+            })
         })
     }
 

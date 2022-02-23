@@ -79,12 +79,20 @@ export const StyledCommentsModal = styled.div`
             margin-top: 1rem;
             &_user{
                 display: flex;
+                margin-top: 1rem;
+                .comment-author-image{
+                    min-width: 2rem;
+                    height: 2rem;
+                    background-size: cover;
+                    border-radius: 50%;
+                    margin-right: 1rem;
+                }
                 .author{
                     font-weight: bold;
                     margin-right: .5rem;
                 }
                 .logged{
-                    color: ${({theme}) => theme.colors.accent};
+                    color: ${({theme}) => theme.colors.accent.light};
                 }
                 .box{
                     display: flex;

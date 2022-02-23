@@ -91,29 +91,12 @@ export default function CommentsModal({ externalData, closeModal }) {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        const date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString();
-        const newComment = {
-            author: user.username,
-            user: user.id,
-            created_at: date,
-            updated_at: date,
-            message: commentValue,
-            post: data.id,
-        }
         if (user && user.id) {
             postComment(data.id, commentValue).then(() => {
-                setComments([newComment, ...comments])
-                setVisibleComments({
-                    ...visibleComments, content: [newComment, ...visibleComments.content]
-                })
                 setCommentValue('');
-                posts.map(post => {
-                    if (post.id === data.id) {
-                        post.comments = [newComment, ...comments]
-                        return true;
-                    }
-                    return false;
-                })
+                refetch();
+            }).catch(()=>{
+                toast.error('Wystąpił błąd podczas dodawania komentarza.')
             })
         }
     }
@@ -197,10 +180,12 @@ export default function CommentsModal({ externalData, closeModal }) {
         }
     }, [data, user])
     useEffect(() => {
-        setComments(data.comments.reverse())
-    }, [data])
+        setComments(data.comments)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.comments])
     useEffect(() => {
-        setVisibleComments({...visibleComments, content: data.comments.reverse().slice(0, visibleComments.visible)})
+        let content = data.comments.slice(0, visibleComments.visible).reverse()
+        setVisibleComments({...visibleComments, content: content})
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.comments])
     useEffect(() => {
@@ -242,7 +227,7 @@ export default function CommentsModal({ externalData, closeModal }) {
             )}
             <div className="header">
                 <div className="user-info">
-                    <img src={(author.image && `${API_IP}${author.image?.url}`) || UserImage} alt={author.username} />
+                    <img src={(author.avatar && `${API_IP}${author.avatar.url}`) || UserImage} alt={author.username} />
                     <Link to={`/@${author.username}`} onClick={handleCloseModal} className="username">{author.username}</Link>
                 </div>
                 <div className="buttons">
@@ -283,16 +268,19 @@ export default function CommentsModal({ externalData, closeModal }) {
                         <p>Zaloguj się, by skomentować.</p>
                     )}
                     <div className="comments">
-                        {comments.length === 0 && (
+                        {!comments.length && (
                             <center><p>Brak komentarzy.</p></center>
                         )}
                         {visibleComments.content.map((comment, index) => (
                             <div key={index} className='comments_user'>
                                 <div className="box">
-                                    <Link to={`/@${comment.author}`} onClick={handleCloseModal} className={author.username === comment.author ? `author logged` : `author`}>
-                                        {comment.author}
-                                    </Link>
-                                    <p className="content">{comment.message}</p>
+                                    <div className="comment-author-image" style={{backgroundImage: `url(${comment.user.avatar ? `${API_IP}${comment.user.avatar.url}`: UserImage})`}}></div>
+                                    <p className="content">
+                                        <Link to={`/@${comment.user.username}`} onClick={handleCloseModal} className={(author.username === comment.user.username) ? `author logged` : `author`}>
+                                            {comment.user.username}
+                                        </Link>
+                                        {comment.message}
+                                    </p>
                                 </div>
                                 {user && ((user.username === comment.author) || user.isAdmin) && (
                                     <div className="delete" onClick={()=>handleDeleteComment(comment.id)}>
