@@ -36,9 +36,7 @@ export const GET_POSTS = gql`
                     id
                     username
                     blocked
-                    avatar{
-                        url
-                    }
+                    avatar
                 }
             }
         }
@@ -81,9 +79,7 @@ export const SEARCH_POSTS_BY_HASHTAGS = gql`
                     id
                     username
                     blocked
-                    avatar{
-                        url
-                    }
+                    avatar
                 }
             }
         }
@@ -98,9 +94,7 @@ export const SEARCH_USER_QUERY = gql`
             id
             username
             blocked
-            avatar{
-                url
-            }
+            avatar
         }
     }
 `;
@@ -112,9 +106,7 @@ export const GET_USER = gql`
         }){
             id
             isAdmin
-            avatar{
-                url
-            }
+            avatar
         }
     }
 `;
@@ -155,9 +147,7 @@ export const GET_USER_POSTS = gql`
                     id
                     username
                     blocked
-                    avatar{
-                        url
-                    }
+                    avatar
                 }
             }
         }
@@ -184,9 +174,7 @@ export const GET_ONE_POST = gql`
             user{
                 id
                 username
-                avatar{
-                    url
-                }
+                avatar
             }
             likes{
                 id
@@ -203,9 +191,7 @@ export const GET_ONE_POST = gql`
                     id
                     username
                     blocked
-                    avatar{
-                        url
-                    }
+                    avatar
                 }
             }
         }
