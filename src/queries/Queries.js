@@ -36,7 +36,7 @@ export const GET_POSTS = gql`
                     id
                     username
                     blocked
-                    image{
+                    avatar{
                         url
                     }
                 }
@@ -81,7 +81,7 @@ export const SEARCH_POSTS_BY_HASHTAGS = gql`
                     id
                     username
                     blocked
-                    image{
+                    avatar{
                         url
                     }
                 }
@@ -98,7 +98,7 @@ export const SEARCH_USER_QUERY = gql`
             id
             username
             blocked
-            image{
+            avatar{
                 url
             }
         }
@@ -112,11 +112,7 @@ export const GET_USER = gql`
         }){
             id
             isAdmin
-            image{
-                url
-            }
-            backgroundImage{
-                formats
+            avatar{
                 url
             }
         }
@@ -159,7 +155,7 @@ export const GET_USER_POSTS = gql`
                     id
                     username
                     blocked
-                    image{
+                    avatar{
                         url
                     }
                 }
@@ -188,7 +184,7 @@ export const GET_ONE_POST = gql`
             user{
                 id
                 username
-                image{
+                avatar{
                     url
                 }
             }
@@ -207,7 +203,7 @@ export const GET_ONE_POST = gql`
                     id
                     username
                     blocked
-                    image{
+                    avatar{
                         url
                     }
                 }
@@ -215,3 +211,29 @@ export const GET_ONE_POST = gql`
         }
     }
 `
+export const GET_AVATARS__FORALL = gql`
+    {
+        avatars(where:{
+            forAll: true
+        }){
+            image{
+                id
+                url
+                alternativeText
+            }
+        }
+    }
+`;
+export const GET_AVAILABLE_AVATARS = gql`
+    query getAvailableAvatars($id: ID!){
+        user(id: $id){
+            availableAvatars{
+                image{
+                    id
+                    url
+                    alternativeText
+                }
+            }
+        }
+    }
+`;

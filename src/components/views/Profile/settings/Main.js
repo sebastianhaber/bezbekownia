@@ -1,87 +1,135 @@
-import { API_IP, MAX_PROFILE_SIZE_AFTER_COMPRESSION } from "../../../../App";
-import { toast } from 'react-toastify'
+import { API_IP } from "../../../../App";
 import Button from "../../../utils/Button";
 import UserImage from '../../../../assets/user-image.png'
 import Input from "../../../molecules/input/Input";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../../context/AppContext";
-import { StyledTab } from "./UserSettings.styles";
-import Compressor from "compressorjs";
-import { MAX_FILESIZE_AFTER_COMPRESSION } from '../../../../App'
+import { useQuery } from "@apollo/client";
+import { GET_AVAILABLE_AVATARS, GET_AVATARS__FORALL } from "../../../../queries/Queries";
+import { StyledAvatars } from "./UserSettings.styles";
+import { Icon } from "@iconify/react";
+import {toast} from 'react-toastify'
+import axios from "axios";
+import Cookies from "js-cookie";
 
-const COMPRESSED_IMAGE_INIT = {
-    profile: null,
-    background: null
-}
+// todo: 
+//      > save choosen files
 
 export default function Main() {
-    const { user } = useContext(AppContext);
-    const [compressedImage, setCompressedImage] = useState(COMPRESSED_IMAGE_INIT);
-    const profileRef = useRef(null);
+    const { user, fetchMe } = useContext(AppContext);
+    const { data: data_forAllAvatars, error: error_forAllAvatars } = useQuery(GET_AVATARS__FORALL);
+    const { data: data_availableAvatars, error: error_availableAvatars } = useQuery(GET_AVAILABLE_AVATARS, {
+        variables: {
+            id: user.id
+        }
+    });
+    const [showAvatars, setShowAvatars] = useState(false);
+    const [avatar, setAvatar] = useState({
+        choosen: false,
+        data: {}
+    });
+    // const [showBackgrounds, setShowBackgrounds] = useState(false);
+    // const [background, setBackground] = useState({
+    //     choosen: false,
+    //     data: {}
+    // });
 
     useEffect(() => {
         window.scrollTo(0,0)
     }, []);
 
-    const checkImage = (e) => {
-        if (e.target.files.length && e.target.dataset.for) {
-            if (e.target.files[0].name.match(/.(jpg|jpeg|gif|png)$/i)) {
-                compressImage(e.target.files[0], e.target.dataset.for)
-                return true;
-            }
-            toast.error('Niedozwolone rozszerzenie pliku. Dozwolone typy: .jpg, .jpeg lub .gif');
+    useEffect(() => {
+        if(error_availableAvatars){
+            toast.error('Nie można załadować specjalnych awatarów.')
         }
-    }
-    const compressImage = (img, dataset) => {
-        new Compressor(img, {
-            quality: 0.8,
-            success: (compressedResult) => {
-                if(dataset && dataset === 'profile'){
-                    if (compressedResult.size > MAX_PROFILE_SIZE_AFTER_COMPRESSION*8192) {
-                        toast.error('Rozmiar pliku za duży! Spróbuj zmniejszyć profilowe do 256x256px');
-                        return false;
-                    }
-                    setCompressedImage({
-                        ...compressedImage,
-                        profile: compressedResult
+        if(error_forAllAvatars){
+            return toast.error('Nie można załadować awatarów.')
+        }
+    }, [error_availableAvatars, error_forAllAvatars]);
+
+    useEffect(() => {
+        if(data_forAllAvatars && data_availableAvatars && user.avatar){
+            data_forAllAvatars.avatars.map((element) => {
+                if(parseInt(element.image.id) === user.avatar.id){
+                    setAvatar({
+                        choosen: false,
+                        data: element.image
                     })
-                } else if(dataset && dataset === 'background'){
-                    if (compressedResult.size > MAX_FILESIZE_AFTER_COMPRESSION*8192) {
-                        toast.error('Rozmiar tła za duży! Spróbuj skomresować tło na https://tinypng.com/');
-                        return false;
-                    }
-                    setCompressedImage({
-                        ...compressedImage,
-                        background: compressedResult
-                    })
-                } else{
-                    toast.error('Coś poszło nie tak... Spróbuj ponownie.');
-                    return false;
                 }
                 return true;
-            },
-            error: () => {
-                toast.error('Wystąpił błąd podczas obróbki pliku.');
-                return false;
+            })
+            data_availableAvatars.user.availableAvatars.map((element) => {
+                if(parseInt(element.image.id) === user.avatar.id){
+                    setAvatar({
+                        choosen: false,
+                        data: element.image
+                    })
+                }
+                return true;
+            })
+        }
+    }, [data_forAllAvatars, user.avatar, data_availableAvatars]);
+
+    const handleSubmit = ()=>{
+        console.log(avatar)
+        const token = Cookies.get('token');
+
+        if(!user || !token) {
+            toast.error('Wychodzi na to, że nie jesteś zalogowany. Zaloguj się i spróbuj ponownie.')
+            return false;
+        }
+        if(!avatar) {
+            toast.error('Chyba było grzebane w kodzie i nie masz wybranego avatara 🤔')
+            return false;
+        }
+
+        axios.put(`/users/${user.id}`, {
+            avatar: {
+                "id": avatar.data.id,
+                "url": avatar.data.url,
             }
-        });
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(()=>{
+            fetchMe();
+            toast.success('Zmieniono avatar.')
+        }).catch(()=>{
+            toast.error('Coś poszło nie tak i nie można zmienić avatara 😟')
+        })
     }
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        console.log(compressedImage)
-    }
-    const trimString = (string) => {
-        if(string.length > 10){
-            return `${string.substring(0, 10)}...`
+    const handleRenderAvatars = (exist, array) => {
+        if(error_availableAvatars){
+            setShowAvatars(false);
+            return false;
         }
-        return string
+        if(exist){
+            return array.map((element, index) => {
+                return <div 
+                    onClick={()=>{
+                        if(avatar.data && (parseInt(avatar.data.id) === parseInt(element.image.id))){
+                            setAvatar({
+                                choosen: false,
+                                data: null
+                            });
+                        } else setAvatar({
+                            choosen: true,
+                            data: element.image
+                        });
+                    }}
+                    className={avatar.data && (parseInt(avatar.data.id) === parseInt(element.image.id)) ? `choosen` : ``}
+                    key={index} 
+                    style={{backgroundImage: `url(${API_IP}${element.image.url})`}}></div>
+            })
+        }
     }
 
     if(!user) return null;
 
     return (
-        <StyledTab onSubmit={onSubmit} autoComplete='off'>
+        <div id='settings-wrapper'>
             <div className="title">Ustawienia konta: Ogólne</div>
             <div className="wrapper background">
                 <div className="background">
@@ -92,57 +140,38 @@ export default function Main() {
                             <p>Nie masz ustawionego tła.</p>
                         </div>
                     )}
-                    <input
-                        id='background-image-input'
-                        data-for="background"
-                        accept="image/gif, image/jpeg, image/jpg"
-                        type="file"
-                        onChange={checkImage}
-                        style={{display: 'none'}}
-                    />
                 </div>
                 <div className="buttons">
-                    <div className="label max">
-                        <label htmlFor="background-image-input"></label>
-                        {compressedImage.background
-                            ? <Button>Wybrane tło: { trimString(compressedImage.background.name) }</Button>
-                            : <Button>Zmień tło</Button>}
-                    </div>
-                    {user.backgroundImage && (
-                        <Button variant='ghost'>Usuń tło</Button>
-                    )}
+                    <Button>Zmień tło</Button>
                 </div>
             </div>
             <div className="wrapper">
                 <div className="image">
-                    {user.image ? (
-                        <img src={`${API_IP}${user.image.formats?.small.url || user.image.url}`} alt={`Zdjęcie profilowe ${user.username}`} />
+                    {user.avatar ? (
+                        <img src={`${API_IP}${user.avatar.url}`} alt={`Awatar ${user.username}`} />
                     ) : (
-                        <img src={UserImage} alt={`Zdjęcie profilowe użytkownika ${user.username}`} />
+                        <img src={UserImage} alt={`Awatar ${user.username}`} />
                     )}
-                        <input 
-                            id='profile-image-input'
-                            data-for="profile"
-                            accept="image/gif, image/jpeg, image/jpg, image/png"
-                            type="file"
-                            onChange={checkImage}
-                            ref={profileRef}
-                            style={{display: 'none'}}
-                        />
                 </div>
                 <div className="buttons">
-                    <div className="label">
-                        <label htmlFor="profile-image-input"></label>
-                        {compressedImage.profile
-                            ? <Button>Wybrane zdjęcie: { trimString(compressedImage.profile.name) }</Button>
-                            : <Button>Zmień zdjęcie profilowe</Button>}
-                    </div>
-                    {user.image && (
-                        <Button variant='ghost'>Usuń zdjęcie profilowe</Button>
+                    <Button onClick={()=>setShowAvatars((prev) => !prev)}>
+                        {showAvatars ? (
+                            <p>Ukryj dostępne awatary</p>
+                        ) : (
+                            <p>Pokaż dostępne awatary</p>
+                        )}
+                        <Icon icon="akar-icons:chevron-down" className={showAvatars ? `rotating-arrow rotate` : `rotating-arrow`} />
+                    </Button>
+                </div>
+                <div className="avatars">
+                    {showAvatars && (
+                        <StyledAvatars>
+                            {handleRenderAvatars(data_availableAvatars, data_availableAvatars.user.availableAvatars)}
+                            {handleRenderAvatars(data_forAllAvatars, data_forAllAvatars.avatars)}
+                        </StyledAvatars>
                     )}
                 </div>
             </div>
-            <p className="small gray">Zalecana wielkość zdjęcia to 256x256px</p>
             <div className="wrapper">
                 <Input label='Nazwa użytkownika'>
                     <input type="text" disabled defaultValue={`${user.username}`} />
@@ -152,9 +181,8 @@ export default function Main() {
                 </Input>
             </div>
             <div className="buttons submit">
-                <Button type='reset' variant='ghost' onClick={()=>setCompressedImage(COMPRESSED_IMAGE_INIT)}>Anuluj</Button>
-                <Button type='submit'>Zapisz zmiany</Button>
+                <Button onClick={handleSubmit} disabled={!avatar.choosen}>Zapisz zmiany</Button>
             </div>
-        </StyledTab>
+        </div>
     )
 }

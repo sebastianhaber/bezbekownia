@@ -50,6 +50,14 @@ export const ModalWrapper = styled.div`
         font-size: 1.5rem;
         text-align: center;
     }
+    .header, .footer{
+        padding: 1rem 0;
+        .flex{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
     .top{
         p{
             text-align: center;

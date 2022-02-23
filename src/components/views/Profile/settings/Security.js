@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form"
 import Input from "../../../molecules/input/Input"
 import Button from "../../../utils/Button"
-import { StyledTab } from "./UserSettings.styles"
 import axios from 'axios'
 import { useContext } from 'react'
 import AppContext from '../../../../context/AppContext';
@@ -69,7 +68,7 @@ export default function Security() {
 	}
 
 	return (
-		<StyledTab onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
+		<form id='settings-wrapper' onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
 			<div className="wrapper">
 				{errors.global && (
 					<div className="error">{errors.global.message}</div>
@@ -115,6 +114,6 @@ export default function Security() {
 				}}>Resetuj</Button>
                 <Button type='submit'>Zapisz zmiany</Button>
             </div>
-		</StyledTab>
+		</form>
 	)
 }
