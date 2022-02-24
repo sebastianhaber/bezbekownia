@@ -1,8 +1,10 @@
 import styled from 'styled-components'
+import { renderScaleAnimation } from '../../../../styles/animations';
 
 export const StyledSettings = styled.div`
     max-width: 1440px;
     margin: 0 auto;
+    animation: ${renderScaleAnimation} .5s ease;
     .nav{
         display: flex;
         justify-content: center;
@@ -134,10 +136,15 @@ export const StyledLi = styled.li`
     }
 `;
 export const StyledAvatars = styled.div`
-    min-height: 100px;
+    height: 0;
+    ${({show}) => show && `
+        height: 100%;
+    `}
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    overflow: hidden;
+    transition: height .2s ease;
     div{
         position: relative;
         width: 100px;

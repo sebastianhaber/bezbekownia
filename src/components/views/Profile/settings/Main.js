@@ -148,12 +148,10 @@ export default function Main() {
                     </Button>
                 </div>
                 <div className="avatars">
-                    {showIcons && (
-                        <StyledAvatars>
-                            {data_availableIcons && handleRenderAvatars(data_availableIcons, data_availableIcons.user.availableIcons)}
-                            {data_forAllIcons && handleRenderAvatars(data_forAllIcons, data_forAllIcons.icons)}
-                        </StyledAvatars>
-                    )}
+                    <StyledAvatars show={showIcons}>
+                        {data_availableIcons && handleRenderAvatars(data_availableIcons, data_availableIcons.user.availableIcons)}
+                        {data_forAllIcons && handleRenderAvatars(data_forAllIcons, data_forAllIcons.icons)}
+                    </StyledAvatars>
                 </div>
             </div>
             <div className="wrapper">

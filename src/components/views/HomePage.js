@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import styled from 'styled-components';
 import { POSTS_QUERY_VARIABLES } from '../../App';
 import AppContext from '../../context/AppContext';
+import { opacityOnlyAnimation } from '../../styles/animations';
 import Loader from '../molecules/loader/Loader';
 import Pagination from '../molecules/pagination/Pagination';
 import Post from '../organisms/post/Post'
@@ -27,7 +29,7 @@ export default function HomePage({ totalPostsLength }) {
     if (!posts.length) return <Loader message='Pobieranie memów...' />
     
     return (
-        <div>
+        <StyledHomePage>
             <Helmet>
                 <title>Bezbekownia</title>
                 <meta name="description" content="Najlepsze memy na świecie" />
@@ -40,6 +42,9 @@ export default function HomePage({ totalPostsLength }) {
                     <Button onClick={()=>onLoadMore()}>Dawej więcej memów</Button>
                 </Pagination>
             )}
-        </div>
+        </StyledHomePage>
     )
 }
+const StyledHomePage = styled.div`
+    animation: ${opacityOnlyAnimation} .2s ease;
+`;

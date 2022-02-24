@@ -1,4 +1,9 @@
 import styled from "styled-components";
+import { opacityOnlyAnimation } from "../../../styles/animations";
+
+export const AnimatedProfile = styled.div`
+    animation: ${opacityOnlyAnimation} .2s ease;
+`;
 
 export const Blocked = styled.div`
     width: 100%;

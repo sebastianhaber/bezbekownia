@@ -6,7 +6,7 @@ import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'
 import { Helmet } from 'react-helmet-async';
 import Post from '../../organisms/post/Post';
-import { Blocked, UserSection } from './Profile.styles';
+import { AnimatedProfile, Blocked, UserSection } from './Profile.styles';
 import axios from 'axios';
 import Pagination from '../../molecules/pagination/Pagination';
 import Button from '../../utils/Button';
@@ -95,7 +95,7 @@ export default function Profile() {
         )
     }
     return (
-        <div>
+        <AnimatedProfile>
             <Helmet>
                 <title>Bezbekownia | Użytkownik { username }</title>
                 <meta name="description" content={`Profil użytkownika ${username} na Bezbekownia.pl`} />
@@ -129,6 +129,6 @@ export default function Profile() {
                     <Button onClick={()=>loadMoreMemes()}>Dawej więcej memów</Button>
                 </Pagination>
             )}
-        </div>
+        </AnimatedProfile>
     )
 }
