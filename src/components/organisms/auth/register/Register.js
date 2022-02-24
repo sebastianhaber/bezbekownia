@@ -71,11 +71,6 @@ export default function Register({ changeModalType, closeModal }) {
                 })
             })
     }
-    // useEffect(() => {
-    //     if (appContext.isAuthenticated) {
-    //         navigate('');
-    //     }
-    // }, [appContext.isAuthenticated, navigate]);
 
     return (
         <AuthWrapper>
