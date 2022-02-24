@@ -37,10 +37,17 @@ export const StyledNav = styled.nav`
         font-weight: bold;
     }
     #search-box{
-        position: relative;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         width: 100%;
         max-width: 300px;
         margin: 0 1rem;
+        @media screen and (max-width: 660px){
+            position: relative;
+            left: unset;
+            transform: unset;
+        }
     }
     .search-box{
         position: fixed;
