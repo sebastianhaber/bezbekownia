@@ -5,7 +5,7 @@ import Input from "../../../molecules/input/Input";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../../context/AppContext";
 import { useQuery } from "@apollo/client";
-import { GET_AVAILABLE_AVATARS, GET_AVATARS__FORALL } from "../../../../queries/Queries";
+import { GET_ICONS_AVAILABLE, GET_ICONS_FORALL } from "../../../../queries/Queries";
 import { StyledAvatars } from "./UserSettings.styles";
 import { Icon } from "@iconify/react";
 import {toast} from 'react-toastify'
@@ -17,50 +17,45 @@ import Cookies from "js-cookie";
 
 export default function Main() {
     const { user, fetchMe } = useContext(AppContext);
-    const { data: data_forAllAvatars, error: error_forAllAvatars } = useQuery(GET_AVATARS__FORALL);
-    const { data: data_availableAvatars, error: error_availableAvatars } = useQuery(GET_AVAILABLE_AVATARS, {
+    const { data: data_forAllIcons, error: error_forAllIcons } = useQuery(GET_ICONS_FORALL);
+    const { data: data_availableIcons, error: error_availableIcons } = useQuery(GET_ICONS_AVAILABLE, {
         variables: {
             id: user.id
         }
     });
-    const [showAvatars, setShowAvatars] = useState(false);
-    const [avatar, setAvatar] = useState({
+    const [showIcons, setShowIcons] = useState(false);
+    const [icon, setIcon] = useState({
         choosen: false,
         data: {}
     });
-    // const [showBackgrounds, setShowBackgrounds] = useState(false);
-    // const [background, setBackground] = useState({
-    //     choosen: false,
-    //     data: {}
-    // });
 
     useEffect(() => {
         window.scrollTo(0,0)
     }, []);
 
     useEffect(() => {
-        if(error_availableAvatars){
-            toast.error('Nie można załadować specjalnych awatarów.')
+        if(error_availableIcons){
+            toast.error('Nie można załadować specjalnych ikon.')
         }
-        if(error_forAllAvatars){
-            return toast.error('Nie można załadować awatarów.')
+        if(error_forAllIcons){
+            return toast.error('Nie można załadować ikon.')
         }
-    }, [error_availableAvatars, error_forAllAvatars]);
+    }, [error_availableIcons, error_forAllIcons]);
 
     useEffect(() => {
-        if(data_forAllAvatars && data_availableAvatars && user.avatar){
-            data_forAllAvatars.avatars.map((element) => {
-                if(parseInt(element.image.id) === user.avatar.id){
-                    setAvatar({
+        if(data_forAllIcons && data_availableIcons && user.icon){
+            data_forAllIcons.icons.map((element) => {
+                if(parseInt(element.image.id) === user.icon.id){
+                    setIcon({
                         choosen: false,
                         data: element.image
                     })
                 }
                 return true;
             })
-            data_availableAvatars.user.availableAvatars.map((element) => {
-                if(parseInt(element.image.id) === user.avatar.id){
-                    setAvatar({
+            data_availableIcons.user.availableIcons.map((element) => {
+                if(parseInt(element.image.id) === user.icon.id){
+                    setIcon({
                         choosen: false,
                         data: element.image
                     })
@@ -68,25 +63,24 @@ export default function Main() {
                 return true;
             })
         }
-    }, [data_forAllAvatars, user.avatar, data_availableAvatars]);
+    }, [data_forAllIcons, user.icon, data_availableIcons]);
 
     const handleSubmit = ()=>{
-        console.log(avatar)
         const token = Cookies.get('token');
 
         if(!user || !token) {
             toast.error('Wychodzi na to, że nie jesteś zalogowany. Zaloguj się i spróbuj ponownie.')
             return false;
         }
-        if(!avatar) {
+        if(!icon) {
             toast.error('Chyba było grzebane w kodzie i nie masz wybranego avatara 🤔')
             return false;
         }
 
         axios.put(`/users/${user.id}`, {
-            avatar: {
-                "id": avatar.data.id,
-                "url": avatar.data.url,
+            icon: {
+                "id": icon.data.id,
+                "url": icon.data.url,
             }
         }, {
             headers: {
@@ -97,7 +91,7 @@ export default function Main() {
             toast.success('Zmieniono avatar.')
         }).catch(()=>{
             toast.error('Coś poszło nie tak i nie można zmienić avatara 😟')
-            setAvatar({
+            setIcon({
                 choosen: false,
                 data: {}
             })
@@ -105,25 +99,25 @@ export default function Main() {
     }
 
     const handleRenderAvatars = (exist, array) => {
-        if(error_availableAvatars){
-            setShowAvatars(false);
+        if(error_availableIcons){
+            setShowIcons(false);
             return false;
         }
         if(exist){
             return array.map((element, index) => {
                 return <div 
                     onClick={()=>{
-                        if(avatar.data && (parseInt(avatar.data.id) === parseInt(element.image.id))){
-                            setAvatar({
+                        if(icon.data && (parseInt(icon.data.id) === parseInt(element.image.id))){
+                            setIcon({
                                 choosen: false,
                                 data: null
                             });
-                        } else setAvatar({
+                        } else setIcon({
                             choosen: true,
                             data: element.image
                         });
                     }}
-                    className={avatar.data && (parseInt(avatar.data.id) === parseInt(element.image.id)) ? `choosen` : ``}
+                    className={icon.data && (parseInt(icon.data.id) === parseInt(element.image.id)) ? `choosen` : ``}
                     key={index} 
                     style={{backgroundImage: `url(${API_IP}${element.image.url})`}}></div>
             })
@@ -135,43 +129,29 @@ export default function Main() {
     return (
         <div id='settings-wrapper'>
             <div className="title">Ustawienia konta: Ogólne</div>
-            <div className="wrapper background">
-                <div className="background">
-                    {user.backgroundImage ? (
-                        <img src={`${API_IP}${user.backgroundImage.formats?.small.url || user.backgroundImage.url}`} alt={`Tło użytkownika ${user.username}`} />
-                    ) : (
-                        <div className="bg-none">
-                            <p>Nie masz ustawionego tła.</p>
-                        </div>
-                    )}
-                </div>
-                <div className="buttons">
-                    <Button>Zmień tło</Button>
-                </div>
-            </div>
             <div className="wrapper">
                 <div className="image">
-                    {user.avatar ? (
-                        <img src={`${API_IP}${user.avatar.url}`} alt={`Awatar ${user.username}`} />
+                    {user.icon ? (
+                        <img src={`${API_IP}${user.icon.url}`} alt={`Ikona ${user.username}`} />
                     ) : (
                         <img src={UserImage} alt={`Awatar ${user.username}`} />
                     )}
                 </div>
                 <div className="buttons">
-                    <Button onClick={()=>setShowAvatars((prev) => !prev)}>
-                        {showAvatars ? (
+                    <Button onClick={()=>setShowIcons((prev) => !prev)}>
+                        {showIcons ? (
                             <p>Ukryj dostępne awatary</p>
                         ) : (
                             <p>Pokaż dostępne awatary</p>
                         )}
-                        <Icon icon="akar-icons:chevron-down" className={showAvatars ? `rotating-arrow rotate` : `rotating-arrow`} />
+                        <Icon icon="akar-icons:chevron-down" className={showIcons ? `rotating-arrow rotate` : `rotating-arrow`} />
                     </Button>
                 </div>
                 <div className="avatars">
-                    {showAvatars && (
+                    {showIcons && (
                         <StyledAvatars>
-                            {handleRenderAvatars(data_availableAvatars, data_availableAvatars.user.availableAvatars)}
-                            {handleRenderAvatars(data_forAllAvatars, data_forAllAvatars.avatars)}
+                            {data_availableIcons && handleRenderAvatars(data_availableIcons, data_availableIcons.user.availableIcons)}
+                            {data_forAllIcons && handleRenderAvatars(data_forAllIcons, data_forAllIcons.icons)}
                         </StyledAvatars>
                     )}
                 </div>
@@ -185,7 +165,7 @@ export default function Main() {
                 </Input>
             </div>
             <div className="buttons submit">
-                <Button onClick={handleSubmit} disabled={!avatar.choosen}>Zapisz zmiany</Button>
+                <Button onClick={handleSubmit} disabled={!icon.choosen}>Zapisz zmiany</Button>
             </div>
         </div>
     )

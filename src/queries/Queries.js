@@ -36,7 +36,7 @@ export const GET_POSTS = gql`
                     id
                     username
                     blocked
-                    avatar
+                    icon
                 }
             }
         }
@@ -79,7 +79,7 @@ export const SEARCH_POSTS_BY_HASHTAGS = gql`
                     id
                     username
                     blocked
-                    avatar
+                    icon
                 }
             }
         }
@@ -94,7 +94,7 @@ export const SEARCH_USER_QUERY = gql`
             id
             username
             blocked
-            avatar
+            icon
         }
     }
 `;
@@ -106,7 +106,7 @@ export const GET_USER = gql`
         }){
             id
             isAdmin
-            avatar
+            icon
         }
     }
 `;
@@ -147,7 +147,7 @@ export const GET_USER_POSTS = gql`
                     id
                     username
                     blocked
-                    avatar
+                    icon
                 }
             }
         }
@@ -174,7 +174,7 @@ export const GET_ONE_POST = gql`
             user{
                 id
                 username
-                avatar
+                icon
             }
             likes{
                 id
@@ -191,33 +191,31 @@ export const GET_ONE_POST = gql`
                     id
                     username
                     blocked
-                    avatar
+                    icon
                 }
             }
         }
     }
 `
-export const GET_AVATARS__FORALL = gql`
+export const GET_ICONS_FORALL = gql`
     {
-        avatars(where:{
+        icons(where:{
             forAll: true
         }){
             image{
                 id
                 url
-                alternativeText
             }
         }
     }
 `;
-export const GET_AVAILABLE_AVATARS = gql`
+export const GET_ICONS_AVAILABLE = gql`
     query getAvailableAvatars($id: ID!){
         user(id: $id){
-            availableAvatars{
+            availableIcons{
                 image{
                     id
                     url
-                    alternativeText
                 }
             }
         }

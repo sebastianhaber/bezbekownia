@@ -227,7 +227,7 @@ export default function CommentsModal({ externalData, closeModal }) {
             )}
             <div className="header">
                 <div className="user-info">
-                    <img src={(author.avatar && `${API_IP}${author.avatar.url}`) || UserImage} alt={author.username} />
+                    <img src={(author.icon && `${API_IP}${author.icon.url}`) || UserImage} alt={author.username} />
                     <Link to={`/@${author.username}`} onClick={handleCloseModal} className="username">{author.username}</Link>
                 </div>
                 <div className="buttons">
@@ -274,7 +274,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                         {visibleComments.content.map((comment, index) => (
                             <div key={index} className='comments_user'>
                                 <div className="box">
-                                    <div className="comment-author-image" style={{backgroundImage: `url(${comment.user.avatar ? `${API_IP}${comment.user.avatar.url}`: UserImage})`}}></div>
+                                    <div className="comment-author-image" style={{backgroundImage: `url(${comment.user.icon ? `${API_IP}${comment.user.icon.url}`: UserImage})`}}></div>
                                     <p className="content">
                                         <Link to={`/@${comment.user.username}`} onClick={handleCloseModal} className={(author.username === comment.user.username) ? `author logged` : `author`}>
                                             {comment.user.username}
