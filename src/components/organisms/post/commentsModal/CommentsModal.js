@@ -200,7 +200,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                 }
                 return false;
             })
-            setHashtags(array)
+            setHashtags(array.slice(0, 4))
         }
     }, [data])
     useEffect(() => {
@@ -251,7 +251,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                         <p className="title">{ data.title }</p>
                         <ul className="hashtags">
                             {hashtags.map((hashtag, index) => (
-                                <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag }</Link></li>
+                                <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag.length > 15 ? `${hashtag.substring(0, 15)}...` : hashtag }</Link></li>
                             ))}
                         </ul>
                     </div>
