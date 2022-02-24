@@ -159,9 +159,9 @@ export default function Post({ data, removePostFromArray }) {
         <Wrapper>
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
-                    title='Czy na pewno chcesz usunąć mema?'
+                    title='Czy usunąć tego mema?'
+                    subText='Tej czynności nie można confnąć.'
                     agreeText='Usuń'
-                    errorText={deletingError.isError && deletingError.message}
                     onAgree={() => handleDeletePost()}
                     onClose={() => handleCloseAgreeModal()} />
             )}

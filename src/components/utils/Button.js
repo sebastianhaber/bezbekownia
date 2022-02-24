@@ -61,7 +61,13 @@ const StyledButton = styled.button`
             background-color: ${theme.colors.background.dark};
         }`
     }
-    
+    ${({ variant, theme }) =>
+        variant && variant === 'red' &&
+        `background-color: ${theme.colors.red.dark};
+        &:hover{
+            background-color: ${theme.colors.red.dark};
+        }`
+    }
 `;
 
 export default function Button(props) {

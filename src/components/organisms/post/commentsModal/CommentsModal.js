@@ -219,9 +219,9 @@ export default function CommentsModal({ externalData, closeModal }) {
             )}
             {isDeleteModalActive && (
                 <ModalAgreeDisagree
-                    title='Czy na pewno chcesz usunąć komentarz?'
+                    title='Czy usunąć ten komentarz?'
+                    subText='Tej czynności nie można confnąć.'
                     agreeText='Usuń'
-                    errorText={deletingComment.error.isError && deletingComment.error.message}
                     onAgree={() => handleUserAgreeToDeleteComment()}
                     onClose={() => handleCloseAgreeModal()} />
             )}

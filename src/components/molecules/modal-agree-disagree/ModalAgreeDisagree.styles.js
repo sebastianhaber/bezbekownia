@@ -4,16 +4,19 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    justify-content: space-between;
     height: 250px;
+    .icon{
+        display: block;
+        font-size: 3rem;
+        margin: 0 auto;
+    }
     .heading{
-        font-weight: bold;
+        font-size: 1.25rem;
         text-align: center;
     }
-    .error{
-        font-size: 14px;
+    .sub{
         text-align: center;
-        margin-top: 1rem;
-        color: ${({theme}) => theme.colors.red.light};
     }
     .buttons{
         display: flex;
