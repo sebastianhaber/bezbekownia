@@ -6,11 +6,11 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../../context/AppContext";
 import { useQuery } from "@apollo/client";
 import { GET_ICONS_AVAILABLE, GET_ICONS_FORALL } from "../../../../queries/Queries";
-import { StyledAvatars } from "./UserSettings.styles";
 import { Icon } from "@iconify/react";
 import {toast} from 'react-toastify'
 import axios from "axios";
 import Cookies from "js-cookie";
+import { StyledIcons } from "./UserSettings.styles";
 
 // todo: 
 //      > save choosen files
@@ -73,7 +73,7 @@ export default function Main() {
             return false;
         }
         if(!icon) {
-            toast.error('Chyba było grzebane w kodzie i nie masz wybranego avatara 🤔')
+            toast.error('Chyba było grzebane w kodzie i nie masz wybranej ikony 🤔')
             return false;
         }
 
@@ -88,9 +88,9 @@ export default function Main() {
             }
         }).then(()=>{
             fetchMe();
-            toast.success('Zmieniono avatar.')
+            toast.success('Zmieniono ikonę.')
         }).catch(()=>{
-            toast.error('Coś poszło nie tak i nie można zmienić avatara 😟')
+            toast.error('Coś poszło nie tak i nie można zmienić ikony 😟')
             setIcon({
                 choosen: false,
                 data: {}
@@ -98,7 +98,7 @@ export default function Main() {
         })
     }
 
-    const handleRenderAvatars = (exist, array) => {
+    const handleRenderIcons = (exist, array) => {
         if(error_availableIcons){
             setShowIcons(false);
             return false;
@@ -134,24 +134,24 @@ export default function Main() {
                     {user.icon ? (
                         <img src={`${API_IP}${user.icon.url}`} alt={`Ikona ${user.username}`} />
                     ) : (
-                        <img src={UserImage} alt={`Awatar ${user.username}`} />
+                        <img src={UserImage} alt={`Ikona ${user.username}`} />
                     )}
                 </div>
                 <div className="buttons">
                     <Button onClick={()=>setShowIcons((prev) => !prev)}>
                         {showIcons ? (
-                            <p>Ukryj dostępne awatary</p>
+                            <p>Ukryj dostępne ikony</p>
                         ) : (
-                            <p>Pokaż dostępne awatary</p>
+                            <p>Pokaż dostępne ikony</p>
                         )}
                         <Icon icon="akar-icons:chevron-down" className={showIcons ? `rotating-arrow rotate` : `rotating-arrow`} />
                     </Button>
                 </div>
-                <div className="avatars">
-                    <StyledAvatars show={showIcons}>
-                        {data_availableIcons && handleRenderAvatars(data_availableIcons, data_availableIcons.user.availableIcons)}
-                        {data_forAllIcons && handleRenderAvatars(data_forAllIcons, data_forAllIcons.icons)}
-                    </StyledAvatars>
+                <div className="icons">
+                    <StyledIcons show={showIcons}>
+                        {data_availableIcons && handleRenderIcons(data_availableIcons, data_availableIcons.user.availableIcons)}
+                        {data_forAllIcons && handleRenderIcons(data_forAllIcons, data_forAllIcons.icons)}
+                    </StyledIcons>
                 </div>
             </div>
             <div className="wrapper">

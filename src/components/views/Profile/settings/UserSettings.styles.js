@@ -135,7 +135,7 @@ export const StyledLi = styled.li`
         color: ${({theme}) => theme.colors.white};
     }
 `;
-export const StyledAvatars = styled.div`
+export const StyledIcons = styled.div`
     height: 0;
     ${({show}) => show && `
         height: 100%;
