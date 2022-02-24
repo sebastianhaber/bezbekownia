@@ -57,7 +57,7 @@ export const StyledCommentsModal = styled.div`
             }
         }
         .comment-section{
-            margin: 1rem 0;
+            margin: 1rem 0 10rem;
             min-width: 300px;
             flex: 1;
             .meme-data{
