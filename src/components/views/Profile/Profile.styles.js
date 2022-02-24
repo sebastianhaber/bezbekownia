@@ -16,42 +16,23 @@ export const Blocked = styled.div`
 
 export const UserSection = styled.section`
     position: relative;
-    display: grid;
-    place-items: center;
-    height: 200px;
-    .background{
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        .image{
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        .gradient{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, ${({theme}) => theme.colors.rgba}, transparent);
-        }
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-    }
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: calc(60px + 2rem);
     .user{
         position: relative;
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        gap: 1rem;
         z-index: 1;
         font-size: 14px;
+        &_informations{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
         .username{
             font-size: 1rem;
             font-weight: bold;
@@ -64,5 +45,8 @@ export const UserSection = styled.section`
             object-fit: cover;
             object-position: center;
         }
+    }
+    @media screen and (max-width:  600px){
+        padding: 0 1rem;
     }
 `;

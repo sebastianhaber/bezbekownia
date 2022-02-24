@@ -101,34 +101,26 @@ export default function Profile() {
                 <meta name="description" content={`Profil użytkownika ${username} na Bezbekownia.pl`} />
             </Helmet>
             <UserSection>
-                <div className='background'>
-                    {user.backgroundImage ? (
-                        <div className='image'>
-                            <div className="gradient"></div>
-                            <img src={`${API_IP}${user.backgroundImage.url}`} alt={`Tło użytkownika ${username}`} />
-                        </div>
-                    ) : (
-                        <div className='image'>
-                            <div className="gradient"></div>
-                        </div>
-                    )}
-                </div>
                 <div className="user">
                     <img src={user.icon ? `${API_IP}${user.icon.url}` : UserImage} alt={user.username} className='profile' />
-                    <div className="username">{ username }</div>
-                    <p className="posts">Memy: { totalUserPosts }</p>
+                    <div className="user_informations">
+                        <p className="username">{ username }</p>
+                        <p className="posts">Memy: { totalUserPosts }</p>
+                    </div>
                 </div>
             </UserSection>
-            <section>
-                {posts.map((post, index) => (
-                    <Post data={post} key={index} removePostFromArray={removePostFromArray} />
-                ))}
-            </section>
-            {(totalUserPosts - posts.length) > 0 && (
-                <Pagination>
-                    <Button onClick={()=>loadMoreMemes()}>Dawej więcej memów</Button>
-                </Pagination>
-            )}
+            <>
+                <section id='memes'>
+                    {posts.map((post, index) => (
+                        <Post data={post} key={index} removePostFromArray={removePostFromArray} />
+                    ))}
+                </section>
+                {(totalUserPosts - posts.length) > 0 && (
+                    <Pagination>
+                        <Button onClick={()=>loadMoreMemes()}>Dawej więcej memów</Button>
+                    </Pagination>
+                )}
+            </>
         </AnimatedProfile>
     )
 }
