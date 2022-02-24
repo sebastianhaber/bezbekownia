@@ -258,7 +258,7 @@ export default function CommentsModal({ externalData, closeModal }) {
                     <p className='section-title'>Komentarze</p>
                     {user ? (
                         <form onSubmit={handleSubmit}>
-                            <Input>
+                            <Input className='withIcons'>
                                 <div className="icon"><Icon icon="akar-icons:comment" /></div>
                                 <input type="text" placeholder='Napisz komentarz' value={commentValue} onChange={handleChange} />
                                 <button className="icon send"><Icon icon="akar-icons:send" /></button>

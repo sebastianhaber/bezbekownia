@@ -15,9 +15,6 @@ export const StyledForm = styled.form`
         align-items: center;
         gap: 1rem;
         width: 100%;
-        input{
-            margin-left: 1rem;
-        }
     }
     .image{
         position: relative;

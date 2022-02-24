@@ -12,6 +12,7 @@ import Login from '../auth/login/Login';
 import { logout as AuthLogout } from '../../../lib/auth'; 
 import AddMeme from '../addMeme/AddMeme';
 import SearchUserModal from '../searchUsers/SearchUsersModal'
+import Input from '../../molecules/input/Input';
 
 const INIT_MODAL = {
     isOpen: false,
@@ -110,9 +111,11 @@ export default function Nav() {
                         )}
                         <form onSubmit={handleSearchSubmit} id="search-box" data-testid="search-box">
                             <div className={isSearchBoxOpen ? `search-box active` : `search-box`}>
-                                <div className="icon"><Icon icon="akar-icons:search" /></div>
-                                <input type="search" autoComplete='off' placeholder='Szukaj...' value={searchValue} onChange={handleChangeSearchValue} />
-                                <button type='submit'><Icon icon="akar-icons:send" /></button>
+                                <Input className='withIcons'>
+                                    <div className="icon"><Icon icon="akar-icons:search" /></div>
+                                    <input type="search" autoComplete='off' placeholder='Szukaj...' value={searchValue} onChange={handleChangeSearchValue} />
+                                    <button type='submit'><Icon icon="akar-icons:send" /></button>
+                                </Input>
                             </div>
                         </form>
                         <ul className="right">

@@ -45,6 +45,15 @@ const Wrapper = styled.div`
             cursor: not-allowed;
         }
     }
+    &.withIcons{
+        background-color: ${({theme}) => theme.colors.background.dark};
+        display: flex;
+        flex-direction: row;
+        border-radius: 0.5rem;
+        input{
+            padding: 0.5rem 0;
+        }
+    }
     div.error{
         font-size: 14px;
         color: ${({ theme }) => theme.colors.red.light};

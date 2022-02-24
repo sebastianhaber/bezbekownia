@@ -57,9 +57,11 @@ export const StyledNav = styled.nav`
         width: 100%;
         height: 3rem;
         padding: 0 .5rem;
-        background-color: ${({ theme }) => theme.colors.background.light};
         &.active{
             display: flex;
+        }
+        .withIcons{
+            background-color: ${({ theme }) => theme.colors.background.light};
         }
         .icon, button{
             display: grid;
