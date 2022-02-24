@@ -146,12 +146,12 @@ export default function Post({ data, removePostFromArray }) {
         if (data.hashtags) {
             let array = data.hashtags.split("#")
             array.map((hashtag, index) => {
-                if (hashtag.length === 0) {
+                if (!hashtag.length) {
                     return array.splice(index, 1)
                 }
                 return false;
             })
-            setHashtags(array)
+            setHashtags(array.slice(0, 4))
         }
     }, [data])
 
@@ -188,7 +188,7 @@ export default function Post({ data, removePostFromArray }) {
                 </div>
                 <ul className="hashtags">
                     {hashtags.map((hashtag, index) => (
-                        <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag }</Link></li>
+                        <li key={index}><Link to={`/hashtag/${hashtag}`}>#{ hashtag.length > 15 ? `${hashtag.substring(0, 15)}...` : hashtag }</Link></li>
                     ))}
                 </ul>
             </div>

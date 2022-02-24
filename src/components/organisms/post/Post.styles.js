@@ -40,9 +40,8 @@ export const Wrapper = styled.div`
         }
         .hashtags{
             display: flex;
-            li{
-                margin-right: .5rem;
-            }
+            flex-wrap: wrap;
+            gap: 0.3rem;
         }
     }
     .footer{
