@@ -73,7 +73,6 @@ function App() {
             return false;
           }
           setUser(res.data);
-          console.log(res.data)
       })
   }
   const checkMaintenanceMode = () => {
