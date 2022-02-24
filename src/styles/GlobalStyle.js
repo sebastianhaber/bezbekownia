@@ -55,6 +55,12 @@ export const GlobalStyle = createGlobalStyle`
     .bold{
         font-weight: bold;
     }
+    .small{
+        font-size: 14px;
+    }
+    .gray{
+        color: ${({theme}) => theme.colors.gray};
+    }
     .fontAccent{
         color: ${({ theme }) => theme.colors.accent.light};
     }

@@ -3,20 +3,17 @@ import styled from "styled-components";
 export const AuthWrapper = styled.div`
     user-select: none;
     form{
-        .errors{
-            color: ${({ theme }) => theme.colors.red.light};
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: .5rem;
-        }
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
     .heading{
         font-weight: bold;
         text-align: center;
         margin-bottom: 1rem;
     }
-    .input{
-        margin-bottom: .5rem;
+    img{
+        width: 200px;
     }
     button{
         width: 100%;

@@ -1,5 +1,5 @@
-import { Icon } from '@iconify/react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import AppContext from '../../../../context/AppContext'
 import { login } from '../../../../lib/auth'
 import Input from '../../../molecules/input/Input'
@@ -13,9 +13,8 @@ const INIT_VALUES = {
 export default function Login({ changeModalType, closeModal }) {
     const [values, setValues] = useState(INIT_VALUES);
     const [error, setError] = useState('');
-    const appContext = useContext(AppContext);
+    const { setUser } = useContext(AppContext);
     const [loading, setLoading] = useState('');
-    let errorArray = [];
 
     const handleChangeValue = (e) => {
         setValues({
@@ -27,17 +26,9 @@ export default function Login({ changeModalType, closeModal }) {
         e.preventDefault();
         setLoading('Logowanie')
 
-        if (errorArray.length > 0) {
-            setError(errorArray)
-            setLoading('')
-            return false;
-        }
-        errorArray = [];
         const loginUser = () => login(values.email, values.password)
             .then(res => {
-                setValues(INIT_VALUES);
-                setLoading('');
-                appContext.setUser(res.data.user);
+                setUser(res.data.user);
                 closeModal();
             }).catch(error => {
                 setValues({ ...values, password: '' })
@@ -50,6 +41,9 @@ export default function Login({ changeModalType, closeModal }) {
                         if (value.id === 'Auth.form.error.invalid') {
                             setError('Email lub hasło jest niepoprawne.')
                         }
+                        if (value.id === 'Auth.form.error.confirmed') {
+                            setError('Twój adres email nie został potwierdzony.')
+                        }
                         return error;
                     })
                     return false;
@@ -57,35 +51,30 @@ export default function Login({ changeModalType, closeModal }) {
             })
         return loginUser();
     }
+    useEffect(()=>{
+        if(error.length){
+            return toast.error(error)
+        }
+    }, [error])
+
     return (
         <AuthWrapper>
             <div className="heading">Logowanie</div>
             <form onSubmit={handleSubmit}>
-                {error.length > 0 && (
-                    <div className="errors">
-                        <div className="error">{ error }</div>
-                    </div>
-                )}
-                <Input>
-                    <div className="icon">
-                        <Icon icon="akar-icons:envelope" />
-                    </div>
+                <Input label='E-mail'>
                     <input
                         type="email"
-                        placeholder='Email'
                         name='email'
+                        placeholder='email@example.com'
                         value={values.email}
                         required
                         onChange={handleChangeValue} />
                 </Input>
-                <Input>
-                    <div className="icon">
-                        <Icon icon="akar-icons:lock-on" />
-                    </div>
+                <Input label='Hasło'>
                     <input
                         type="password"
-                        placeholder='Hasło'
                         name='password'
+                        placeholder='••••••••'
                         value={values.password}
                         required
                         onChange={handleChangeValue} />

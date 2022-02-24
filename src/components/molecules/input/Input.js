@@ -19,7 +19,6 @@ const Wrapper = styled.div`
     max-width: ${({maxWidth}) => maxWidth};
     border: 1px solid transparent;
     border-radius: 3px;
-    background-color: ${({ theme }) => theme.colors.background.dark};
     &.error{
         border-color: ${({ theme }) => theme.colors.red.dark};
     }
@@ -28,7 +27,7 @@ const Wrapper = styled.div`
         color: ${({ theme }) => theme.colors.gray};
     }
     input{
-        background-color: transparent;
+        background-color: ${({ theme }) => theme.colors.background.dark};
         flex: 1;
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
