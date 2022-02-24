@@ -19,7 +19,8 @@ export default function Register({ changeModalType, closeModal }) {
     const handleChangeValue = (e) => {
         setValues({
             ...values,
-            [e.target.name]: e.target.value.replace(/\s/g, "")
+            // eslint-disable-next-line no-useless-escape
+            [e.target.name]: e.target.value.replace(/\s/g, "").replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
         })
     }
     const handleSubmit = async (e) => {
