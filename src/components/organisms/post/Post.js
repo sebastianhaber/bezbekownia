@@ -17,6 +17,7 @@ export default function Post({ data, removePostFromArray }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [shareModal, setShareModal] = useState(false);
     const [liked, setLiked] = useState(false);
+    const [likePending, setLikePending] = useState(false);
     const [isHudVisible, setHudVisible] = useState(true);
     const { user, refetch } = useContext(AppContext);
     const [isDeleteModalActive, setDeleteModalActive] = useState(false);
@@ -83,6 +84,9 @@ export default function Post({ data, removePostFromArray }) {
     }
     const handleLike = () => {
         if (user && user.id) {
+            if(likePending) return false;
+
+            setLikePending(true)
             let likeId;
             const hasLiked = data.likes.find((like, index) => {
                 if (parseInt(like.user.id) === user.id) {
@@ -96,13 +100,16 @@ export default function Post({ data, removePostFromArray }) {
                 removeLike(likeId).then((res) => {
                     refetch();
                     setLiked(false);
+                    setLikePending(false)
                 }).catch(err => {
-                    return console.log(err);
+                    return setLikePending(false)
                 })
             } else {
                 addLike(data.id, user.id).then(async (res) => {
                     await refetch();
+                    setLikePending(false)
                 }).catch(err => {
+                    setLikePending(false)
                     return console.log(err);
                 })
             }
