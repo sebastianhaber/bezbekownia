@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { opacityOnlyAnimation } from "../../../styles/animations";
 
 export const AnimatedProfile = styled.div`
@@ -49,4 +49,58 @@ export const UserSection = styled.section`
     @media screen and (max-width:  600px){
         padding: 0 1rem;
     }
+`;
+
+const fromBottom = keyframes`
+    from{
+        transform: translate(-50%, 200%);
+    }
+    to{
+        transform: translate(-50%, 0);
+    }
+`;
+const toBottom = keyframes`
+    from{
+        transform: translate(-50%, 0);
+    }
+    to{
+        transform: translate(-50%, 200%);
+    }
+`;
+export const FloatingUserSection = styled.div`
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    background-color: ${({theme}) => theme.colors.background.dark};
+    border: 1px solid ${({theme}) => theme.colors.accent.light};
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    animation: ${toBottom} .2s ease forwards;
+    &.visible{
+        animation: ${fromBottom} .2s ease forwards;
+    }
+    .user{
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1;
+        font-size: 14px;
+        .username{
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        img{
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+    /* @media screen and (max-width:  600px){
+        padding: 0 1rem;
+    } */
 `;

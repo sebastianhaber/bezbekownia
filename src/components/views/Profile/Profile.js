@@ -6,7 +6,7 @@ import Loader from '../../molecules/loader/Loader';
 import UserImage from '../../../assets/user-image.png'
 import { Helmet } from 'react-helmet-async';
 import Post from '../../organisms/post/Post';
-import { AnimatedProfile, Blocked, UserSection } from './Profile.styles';
+import { AnimatedProfile, Blocked, FloatingUserSection, UserSection } from './Profile.styles';
 import axios from 'axios';
 import Pagination from '../../molecules/pagination/Pagination';
 import Button from '../../utils/Button';
@@ -32,6 +32,16 @@ export default function Profile() {
             username: username
         }
     })
+    const [isFloatingProfileInfoVisible, setFloatingProfileInfoVisible] = useState(false);
+    const listenScroll = ()=>{
+        if(window.pageYOffset > 200){
+            setFloatingProfileInfoVisible(true)
+        } else setFloatingProfileInfoVisible(false)
+    }
+    useEffect(()=>{
+        window.addEventListener('scroll', listenScroll)
+        return () => window.removeEventListener('scroll', listenScroll)
+    }, [])
 
     const loadMoreMemes = () => {
         fetchMore({
@@ -109,6 +119,12 @@ export default function Profile() {
                     </div>
                 </div>
             </UserSection>
+                <FloatingUserSection className={isFloatingProfileInfoVisible && 'visible'}>
+                    <div className="user">
+                        <img src={user.icon ? `${API_IP}${user.icon.url}` : UserImage} alt={user.username} className='profile' />
+                        <div className="username">{ username }</div>
+                    </div>
+                </FloatingUserSection>
             <>
                 <section id='memes'>
                     {posts.map((post, index) => (
