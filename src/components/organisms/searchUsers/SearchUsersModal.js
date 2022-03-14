@@ -37,7 +37,7 @@ export default function SearchUsersModal({username, onClose}) {
                         )) }</ul>
                     ) : (
                         <div className="notFound">
-                            <p>Nie znaleziono użytkownika o nazwie <div className="accent">${username}</div></p>
+                            <p>Nie znaleziono użytkownika o nazwie <div className="accent">{username}</div></p>
                         </div>
                     )}
                 </section>

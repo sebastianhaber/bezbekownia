@@ -77,6 +77,7 @@ export const FloatingUserSection = styled.div`
     border: 1px solid ${({theme}) => theme.colors.accent.light};
     border-radius: 1rem;
     padding: 0.5rem 1rem;
+    user-select: none;
     animation: ${toBottom} .2s ease forwards;
     &.visible{
         animation: ${fromBottom} .2s ease forwards;

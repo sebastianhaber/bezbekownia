@@ -122,15 +122,6 @@ export default function Nav() {
                             <li className={isSearchBoxOpen ? `square search active` : `square search`} onClick={() => setSearchBoxOpen(!isSearchBoxOpen)}>
                                 <Icon icon="akar-icons:search" />
                             </li>
-                            <li className="square more">
-                                <Icon icon="akar-icons:more-horizontal" />
-                                <DropdownMenu>
-                                    <li><Link to='/pomoc'>O Bezbekowni</Link></li>
-                                    <li><Link to='/legal/regulamin'>Regulamin</Link></li>
-                                    <li><Link to='/legal/polityka-prywatnosci'>Polityka prywatności</Link></li>
-                                    <li><Link to='/legal/rodo'>Rodo</Link></li>
-                                </DropdownMenu>
-                            </li>
                             {user && user.username ? (
                                 <>
                                     <li className="square plus" title='Dodaj mema' onClick={()=>handleOpenModal('addmeme')}>

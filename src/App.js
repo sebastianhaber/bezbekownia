@@ -23,7 +23,7 @@ import Loader from "./components/molecules/loader/Loader";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.0.45:1337';
+export const API_IP = process.env.REACT_STRAPI_PUBLIC_API_URL || 'http://192.168.43.238:1337';
 export const limitPosts = 10;
 export const APP_URL = 'https://bezbekownia.pl';
 export const MAX_FILESIZE_AFTER_COMPRESSION = 300;
