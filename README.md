@@ -18,7 +18,6 @@
 ## About The Project
 
 ![Screen Shot](images/screenshot.png)
-![Screen_Shot_Meme](images/meme.png)
 
 Another website with memes.
 I'm unable to finish this project due to no-skills in deploying Strapi API to for example Heroku.
