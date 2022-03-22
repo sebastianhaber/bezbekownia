@@ -15,7 +15,6 @@
   </p>
 </p>
 
-![License](https://img.shields.io/github/license/sebastianhaber/Bezbekownia) 
 
 ## About The Project
 
@@ -36,7 +35,7 @@ I'm unable to finish this project due to no-skills in deploying Strapi API to fo
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/sebastianhaber/Bezbekownia/blob/main/LICENSE.md) for more information.
+Distributed under the GNU General Public License v3.0. See [LICENSE](https://github.com/sebastianhaber/Bezbekownia/blob/main/LICENSE.md) for more information.
 
 ## Authors
 
