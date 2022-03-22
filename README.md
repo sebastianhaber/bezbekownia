@@ -11,7 +11,6 @@
     <br/>
     <br/>
     Demo cannot be shared because I have problems with deploying Strapi API 😐
-    .
   </p>
 </p>
 
